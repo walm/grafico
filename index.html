@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
   <head>
-    <title>Raphael Ico</title>
+    <title>Additional ICO charts</title>
     <script src="prototype.js" type="text/javascript" charset="utf-8"></script>
     <script src="raphael.js" type="text/javascript" charset="utf-8"></script>
     <script src="ico.js" type="text/javascript" charset="utf-8"></script>
@@ -18,67 +18,110 @@ p.example { color: #555; }
 
 .sparkline { display: inline-block; height: 14px; margin: 0 4px }
 .sparkline div { display: inline-block; }
-
-.linegraph, .linegraph_dark, .linegraph_small { width: 600px; height: 300px; background-color: #fff; margin-bottom: 20px; }
+.stackgraph {width: 610px; height: 200px; background-color: #eee; margin-bottom: 20px; }
+.linegraph, .linegraph_dark, .linegraph_small {width: 610px; height: 200px; background-color: #fff; margin-bottom: 20px; }
 .linegraph_dark { background-color: #999; }
 .linegraph_small { width: 400px; height: 200px; }
 
 .highlight { color: red; }
+.datalabelelem {position:absolute;width:120px;height:30px;line-height:30px;text-align:center;font-size:16px;-moz-border-radius:5px;opacity:0.9;border:2px solid #333;background:#fff;margin-left:-125px;margin-top:-35px;}
+#datalabelelem-linegraph{background: #000;color:#fff}
     </style>
   </head>
   <body>
-    <h2>Sparklines</h2>
-    <p>Sparklines are tiny graphs <span id="sparkline" class="sparkline"></span> that you can use inline.  You can use more than one <span id="sparkline_2" class="sparkline"></span> in a document.</p>
-
-    <p>Sometimes it's useful to highlight a value in a sparkline:</p>
-    
-    <p class="example">Today there were <span id="sparkline_3" class="sparkline"></span> <span class="highlight">5</span> daily defects.</p>
-
-    <p>That example also showed a range using a background colour.  This could represent a set of acceptable values.</p>
-
-    <h2>Bar Graph</h2>
-    <div id="bargraph" class="linegraph"></div>
-    <div id="bargraph_9" class="linegraph"></div>
-    
-    <h2>Line Graph</h2>
-    <div id="linegraph_4" class="linegraph"></div>
+    <h2>Categories stacked area chart</h2>
+    <div id="stackgraph" class="stackgraph"></div>
+    <h2>Todays software line chart</h3>
     <div id="linegraph" class="linegraph"></div>
-    <div id="linegraph_2" class="linegraph"></div>
-    <div id="linegraph_3" class="linegraph"></div>
-    <div id="linegraph_5" class="linegraph"></div>
-    
-    <h2>Horizontal Bar Graph</h2>
-    <div id="bargraph_5" class="linegraph"></div>
-    <div id="bargraph_6" class="linegraph"></div>
-    <div id="bargraph_7" class="linegraph"></div>
-    <div id="bargraph_8" class="linegraph"></div>
-    
-    <h2>Focused Data Ranges</h2>
-    
-    <p>Centre onto awkward data ranges:</p>
-    
-    <div id="linegraph_small_high" class="linegraph"></div>
-    <div id="linegraph_med_high" class="linegraph"></div>
-    <div id="linegraph_negative" class="linegraph"></div>
-    <div id="linegraph_negative_and_positive" class="linegraph"></div>
-    <div id="bar_negative_and_positive" class="linegraph"></div>
-    <div id="horizontal_negative_and_positive" class="linegraph"></div>
+    <h2>hmmpie?</h2>
+    <div id="piechart"></div>
     <script type="text/javascript">
-var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
+
+var data = [
+    [30, 5, 1, 10, 15, 18, 20, 25, 1],
+    [10, 9, 3, 50, 1, 10, 5, 33, 33],
+    [10, 19, 51, 3, 1, 10, 5, 33, 33],
+    [5, 4, 10, 1, 30, 11, 33, 12, 22],
+    [10, 9, 3, 50, 1, 10, 5, 33, 33]
+    ];
+
+function makeconsecutive(data){
+  for (var i=1;i<data.length;i++) {
+    for(var j=0;j<9; j++) {
+     data[i][j] += data[i-1][j] + 2;
+    }
+  }
+  return data;
+}
+data = makeconsecutive(data);
+// the above needs to be done server side, so we can keep a normal order
+// order: highest/last needs to be added into Ico first, due to stacking order
+
+var stackgraph =
+  new Ico.StackGraph($('stackgraph'),
+    {
+    one: data[4],
+    two: data[3],
+    three: data[2],
+    four: data[1],
+    five: data[0]
+    },
+    {
+      labels: ['last month', 'last week', '24 hours ago', '23 hours ago', '22 hours ago', '21 hours ago', 'seven', 'eight', 'nine'],
+      meanline: false,
+      grid: true,
+      plot_padding: 0,
+      show_vertical_labels: true,
+      curve_amount: 20,
+      background_colour: "#eeeeee",
+      stacked_fill: true,
+      draw_axis: false,
+      colours: {
+        one: '#4b80b6',
+        two: '#79af7b',
+        three: '#e2ba74',
+        four: '#dc504f',
+        five: '#a267a7'
+      },
+      datalabels: {one:'Internet', two:'Games', three:'Development', four:'Audio', five:'System Tools'}
+});
+var linegraph =
+  new Ico.LineGraph($('linegraph'),
+    {
+      one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
+      two: [10, 9, 3, 30, 1, 10, 5, 33, 33],
+      three: ["", "", "", 1, 30, 11, 33, 12, 22]
+    },
+    {
+      markers: 'circle',
+      curve_amount: 20,
+      colours: { one: '#4b80b6', two: '#79af7b', three: '#e2ba74'},
+      labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
+      meanline: false,
+      grid: true,
+      datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'}
+    });
+
+
+var piechart = Raphael("piechart", 700, 700),
+        values = [40,26,5,5,4,4,3,2,2,2],
+        labels = ["Firefox","G-edit","Wine","Pidgin","app","app","app","app","app","app"];
+    pieChart(350, 350, 200, values, labels, "#000");
+
+/* var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
 var sparkline_2 = new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
 var sparkline_3 = new Ico.SparkLine($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
 
-var bargraph = new Ico.BarGraph($('bargraph'), { one: $R(1, 25).collect(function() { return Math.random() }) });
+
 var bargraph = new Ico.BarGraph($('bargraph_9'),  {shoe_size: [1, 1, 1, 0, 2, 4, 6, 8, 3, 9, 6]}, { colours: {shoe_size: '#990000' }, grid: true });
 
-var linegraph = new Ico.LineGraph($('linegraph'), { one: [30, 5, 1, 10, 15, 18, 20, 25, 1], two: [10, 9, 3, 30, 1, 10, 5, 33, 33], three: [5, 4, 10, 1, 30, 11, 33, 12, 22]}, { markers: 'circle', colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], meanline: true, grid: true});
 var linegraph_2 = new Ico.LineGraph($('linegraph_2'), [100, 10, 90, 20, 80, 30, 70, 40, 60, 50, 55, 10, 9, 38, 65, 40, 79, 83, 48, 75, 14, 67, 20, 89, 48], { meanline: { stroke: '#AA0000' }, grid: true } );
 var linegraph_3 = new Ico.LineGraph($('linegraph_3'), $R(1, 25).collect(function() { return (Math.random() * 10000).round() } ));
 var linegraph_4 = new Ico.LineGraph($('linegraph_4'), $R(1, 25).collect(function() { return Math.random() } ));
 
 var linegraph_5 = new Ico.LineGraph($('linegraph_5'),{shoe_size: [11,10,5]},{ markers: 'circle', colours: {shoe_size: '#990000' }, grid: true });
 
-var bargraph_5 = new Ico.HorizontalBarGraph($('bargraph_5'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 20, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'seven', 'eight', 'nine'], colour: '#ff0099' });
+
 var bargraph_6 = new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
 var bargraph_7 = new Ico.HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
 var bargraph_8 = new Ico.HorizontalBarGraph($('bargraph_8'), [0.23, 0.1, 0.9, 0.95, 0.99, 0.3, 0.5, 0.35, 0.3], { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
@@ -88,7 +131,7 @@ var linegraph_med_high = new Ico.LineGraph($('linegraph_med_high'), $R(1, 25).co
 var linegraph_negative = new Ico.LineGraph($('linegraph_negative'), [57,-31,-87,-66,-30,-77,-88,75,-25,48,-56,-91,16,-41,87,69,65,-62,-58,15,-49,-75,42,-78,-79]);
 var linegraph_negative_and_positive = new Ico.LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77,-88,-75,-25,-48,-56,-91,-16,-41,-87,-69,-65,-62,-58,-15,-49,-75,-42,-78,-79]);
 var bar_negative_and_positive = new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
-var horizontal_negative_and_positive = new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
+var horizontal_negative_and_positive = new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]); */
     </script>
   </body>
 </html>
