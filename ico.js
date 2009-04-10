@@ -169,7 +169,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       y_padding_top:          20,
       stacked_fill:           false,                                 // fill the area in a stacked graph
       draw_axis:              true,
-      datalabels:             ''
+      datalabels:             '',
+      horizontalbar_grid:      false                                  // grid in horizontal bar graphs
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -296,7 +297,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   draw: function() {
-    if (this.options['grid']) {
+    if (this.options['grid'] || this.options["horizontalbar_grid"]) {
       this.drawGrid();
     }
 
@@ -341,10 +342,19 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if (this.options['show_horizontal_labels']) {
       var x = this.x_padding_left + this.options['plot_padding'] + this.grid_start_offset,
           x_labels = this.options['labels'].length;
+
+          if(this.options["horizontalbar_grid"]) {
+            x_step = this.graph_width / this.y_label_count;
+          } else {
+            x_step = this.step;
+          }
+
       for (i = 0; i < x_labels; i++) {
         path.moveTo(x, this.y_padding_top);
         path.lineTo(x, this.y_padding_top + this.graph_height);
-        x = x + this.step;
+
+        x = x + x_step;
+
       }
 
       x = x - this.options['plot_padding'] - 1;
@@ -708,55 +718,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   drawHorizontalLabels: function() {
     var x_step = this.graph_width / this.y_label_count,
         x_labels = this.makeValueLabels(this.y_label_count);
+        console.log(x_labels);
     this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options['font_size'] + 7) * -1]);
   }
 });
-
-pieChart = function (cx, cy, r, values, labels, stroke) {
-    var paper = this,
-        rad = Math.PI / 180;
-    function sector(cx, cy, r, startAngle, endAngle, params) {
-        var x1 = cx + r * Math.cos(-startAngle * rad),
-            x2 = cx + r * Math.cos(-endAngle * rad),
-            y1 = cy + r * Math.sin(-startAngle * rad),
-            y2 = cy + r * Math.sin(-endAngle * rad);
-        return path(params).moveTo(cx, cy).lineTo(x1, y1).arcTo(r, r, (endAngle - startAngle > 180 ? 1 : 0), 0, x2, y2).andClose();
-    }
-    var angle = 0,
-        total = 0;
-        process = function (j) {
-            var value = values[j],
-                angleplus = 360 * value / total,
-                popangle = angle + (angleplus / 2),
-                color = Raphael.getColor(.7),
-                ms = 200,
-                delta = 30,
-                p = sector(cx, cy, r, angle, angle + angleplus, {fill: color, stroke: stroke}),
-                bcolor = Raphael.rgb2hsb(color);
-            bcolor = Raphael.hsb2rgb(bcolor.h, bcolor.s, 1).hex;
-            var txt = paper.text(cx + (r + delta + 55) * Math.cos(-popangle * rad), cy + (r + delta + 25) * Math.sin(-popangle * rad), labels[j]).attr({fill: bcolor, stroke: "none", opacity: 0, "font-family": '"Arial"', "font-size": "20px"});
-            p.mouseover(function () {
-                var dt = (new Date()).getTime(),
-                    x = 0,
-                    y = 0,
-                    x1 = delta * Math.cos(-popangle * rad),
-                    y1 = delta * Math.sin(-popangle * rad);
-                p.animate({translation: [x1, y1].join(" "), fill: bcolor}, ms);
-                txt.animate({opacity: 1}, ms);
-            }).mouseout(function () {
-                var dt = (new Date()).getTime(),
-                    x = 0,
-                    y = 0,
-                    tr = p.attr("translation");
-                p.animate({translation: [-tr.x, -tr.y].join(" "), fill: color}, ms);
-                txt.animate({opacity: 0}, ms);
-            });
-            angle += angleplus;
-        };
-    for (var i = 0, ii = values.length; i < ii; i++) {
-        total += values[i];
-    }
-    for (var i = 0; i < ii; i++) {
-        process(i);
-    }
-};

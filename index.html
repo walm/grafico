@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
   <head>
     <title>Additional ICO charts</title>
@@ -16,15 +15,13 @@ h1, h2 { font-size: 2em; margin: 0.5em 0; }
 p { margin: 1em 0; }
 p.example { color: #555; }
 
-.sparkline { display: inline-block; height: 14px; margin: 0 4px }
-.sparkline div { display: inline-block; }
 .stackgraph {width: 610px; height: 200px; background-color: #eee; margin-bottom: 20px; }
-.linegraph, .linegraph_dark, .linegraph_small {width: 610px; height: 200px; background-color: #fff; margin-bottom: 20px; }
-.linegraph_dark { background-color: #999; }
-.linegraph_small { width: 400px; height: 200px; }
+.linegraph{width: 610px; height: 200px; background-color: #fff; margin-bottom: 20px; }
+#piechart {width:400px;height:400px;background:#eee;margin-bottom:20px}
+#bargraph_5{height:250px;}
 
-.highlight { color: red; }
 .datalabelelem {position:absolute;width:120px;height:30px;line-height:30px;text-align:center;font-size:16px;-moz-border-radius:5px;opacity:0.9;border:2px solid #333;background:#fff;margin-left:-125px;margin-top:-35px;}
+
 #datalabelelem-linegraph{background: #000;color:#fff}
     </style>
   </head>
@@ -33,8 +30,9 @@ p.example { color: #555; }
     <div id="stackgraph" class="stackgraph"></div>
     <h2>Todays software line chart</h3>
     <div id="linegraph" class="linegraph"></div>
-    <h2>hmmpie?</h2>
-    <div id="piechart"></div>
+    <h2>Horizontal bar graph</h2>
+    <div id="bargraph_5" class="linegraph"></div>
+
     <script type="text/javascript">
 
 var data = [
@@ -54,7 +52,7 @@ function makeconsecutive(data){
   return data;
 }
 data = makeconsecutive(data);
-// the above needs to be done server side, so we can keep a normal order
+// the above needs to be done server side, so we can keep clean javascript on the client
 // order: highest/last needs to be added into Ico first, due to stacking order
 
 var stackgraph =
@@ -101,37 +99,16 @@ var linegraph =
       grid: true,
       datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'}
     });
+var bargraph_5 =
+  new Ico.HorizontalBarGraph($('bargraph_5'),
+    [16,3,3,5,10,12,15,21,26,33],
+    {
+       font_size: 14,
+       labels: ["...and more", 'Nautilus', 'gnome-terminal', 'Pidgin', 'Banshee', 'Skype', 'Thunderbird', 'Wine', 'G-edit', 'Firefox'],
+       colour: '#a267a7',
+       horizontalbar_grid:true
+    });
 
-
-var piechart = Raphael("piechart", 700, 700),
-        values = [40,26,5,5,4,4,3,2,2,2],
-        labels = ["Firefox","G-edit","Wine","Pidgin","app","app","app","app","app","app"];
-    pieChart(350, 350, 200, values, labels, "#000");
-
-/* var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 30, height: 14, background_colour: '#ccc' });
-var sparkline_2 = new Ico.SparkBar($('sparkline_2'), [1, 5, 10, 15, 20, 15, 10, 15, 30, 15, 10], { width: 30, height: 14, background_colour: '#ccc' });
-var sparkline_3 = new Ico.SparkLine($('sparkline_3'), [10, 1, 12, 3, 4, 8, 5], { width: 60, height: 14, highlight: { colour: '#ff0000' }, acceptable_range: [5, 9], background_colour: '#ccc' });
-
-
-var bargraph = new Ico.BarGraph($('bargraph_9'),  {shoe_size: [1, 1, 1, 0, 2, 4, 6, 8, 3, 9, 6]}, { colours: {shoe_size: '#990000' }, grid: true });
-
-var linegraph_2 = new Ico.LineGraph($('linegraph_2'), [100, 10, 90, 20, 80, 30, 70, 40, 60, 50, 55, 10, 9, 38, 65, 40, 79, 83, 48, 75, 14, 67, 20, 89, 48], { meanline: { stroke: '#AA0000' }, grid: true } );
-var linegraph_3 = new Ico.LineGraph($('linegraph_3'), $R(1, 25).collect(function() { return (Math.random() * 10000).round() } ));
-var linegraph_4 = new Ico.LineGraph($('linegraph_4'), $R(1, 25).collect(function() { return Math.random() } ));
-
-var linegraph_5 = new Ico.LineGraph($('linegraph_5'),{shoe_size: [11,10,5]},{ markers: 'circle', colours: {shoe_size: '#990000' }, grid: true });
-
-
-var bargraph_6 = new Ico.BarGraph($('bargraph_6'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { labels: ['label one', 'label two', 'label three', 'label four', 'label five', 'label six', 'label seven', 'label eight', 'label nine'] });
-var bargraph_7 = new Ico.HorizontalBarGraph($('bargraph_7'), [2, 5, 1, 10, 15, 33, 20, 25, 1], { font_size: 14 });
-var bargraph_8 = new Ico.HorizontalBarGraph($('bargraph_8'), [0.23, 0.1, 0.9, 0.95, 0.99, 0.3, 0.5, 0.35, 0.3], { colours: { one: '#990000', two: '#009900', three: '#000099'}, labels: ['label one', 'label two', 'label three', 'four', 'five', 'six', 'longest label seven', 'eight', 'nine'] });
-
-var linegraph_small_high = new Ico.LineGraph($('linegraph_small_high'), $R(1, 25).collect(function() { return (Math.random() + 100) } ));
-var linegraph_med_high = new Ico.LineGraph($('linegraph_med_high'), $R(1, 25).collect(function() { return (Math.random() * 10).round() + 1000 } ));
-var linegraph_negative = new Ico.LineGraph($('linegraph_negative'), [57,-31,-87,-66,-30,-77,-88,75,-25,48,-56,-91,16,-41,87,69,65,-62,-58,15,-49,-75,42,-78,-79]);
-var linegraph_negative_and_positive = new Ico.LineGraph($('linegraph_negative_and_positive'), [-57,-31,-87,-66,-30,-77,-88,-75,-25,-48,-56,-91,-16,-41,-87,-69,-65,-62,-58,-15,-49,-75,-42,-78,-79]);
-var bar_negative_and_positive = new Ico.BarGraph($('bar_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
-var horizontal_negative_and_positive = new Ico.HorizontalBarGraph($('horizontal_negative_and_positive'), [-57,-31,-87,66,-30,-77,-88,-75,-25,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]); */
     </script>
   </body>
 </html>
