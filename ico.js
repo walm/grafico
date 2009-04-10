@@ -665,6 +665,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     this.bar_width = this.calculateBarHeight();
     this.options['plot_padding'] = 0;
     this.step = this.calculateStep();
+    this.options["horizontalbar_grid"] = true;
   },
 
   normalise: function(value) {
