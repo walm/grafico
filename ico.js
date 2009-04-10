@@ -80,7 +80,6 @@ Ico.SparkLine = Class.create(Ico.Base, {
 
   draw: function() {
     var data = this.normalisedData();
-
     this.drawLines('', this.options['colour'], data);
 
     if (this.options['highlight']) {
@@ -170,7 +169,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       stacked_fill:           false,                                 // fill the area in a stacked graph
       draw_axis:              true,
       datalabels:             '',
-      horizontalbar_grid:      false                                  // grid in horizontal bar graphs
+      percentages:            false                                  // opt for percentage in horizontal graph horizontal labels
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -297,7 +296,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   draw: function() {
-    if (this.options['grid'] || this.options["horizontalbar_grid"]) {
+    if (this.options['grid']) {
       this.drawGrid();
     }
 
@@ -330,7 +329,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawGrid: function() {
     var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
 
-    if (this.options['show_vertical_labels']) {
+    if (this.options['show_vertical_labels'] && !this.options['horizontalbar_grid']) {
       var y = this.graph_height + this.y_padding_top;
       for (i = 0; i < this.y_label_count; i++) {
         y = y - (this.graph_height / this.y_label_count);
@@ -686,15 +685,41 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     return (this.graph_height - (this.options['plot_padding'] * 2)) / (this.data_size);
   },
 
-  drawLines: function(label, colour, data) {
+  drawLines: function(label, colour, data, datalabel, element) {
     var x = this.x_padding_left + this.options['plot_padding'];
     var y = this.options['height'] - this.y_padding_bottom - (this.step / 2);
-    var cursor = this.paper.path({stroke: colour, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
 
-    $A(data).each(function(value) {;
+    $A(data).each(function(value, number) {;
+      if(value == $A(data).first()){    var colour2 = "#666666";}
+      else {                        colour2 = colour;}
+
+      var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
+
       cursor.lineTo(x + value - this.normalise(this.start_value), y);
       y = y - this.step;
       cursor.moveTo(x, y)
+
+      if(this.options["datalabels"]) {
+        cursor.node.onmouseover = function (e) {
+          cursor.attr({stroke: "#333333"});
+          var Xoffset = document.body.scrollLeft	+ document.documentElement.scrollLeft;
+          var Yoffset = document.body.scrollTop	+ document.documentElement.scrollTop;
+          var posx = e.clientX + Xoffset;
+	        var posy = e.clientY + Yoffset;
+          var datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel[number]+'</div>';
+          element.insert(datalabelelem);
+
+          cursor.node.onmousemove = function(e) {
+            var posx = e.clientX + Xoffset
+    		    var posy = e.clientY + Yoffset
+            $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
+          };
+        };
+        cursor.node.onmouseout = function (e) {
+          cursor.attr({stroke: colour2});
+           $('datalabelelem-'+element.id).remove();
+        };
+      }
     }.bind(this))
   },
 
@@ -719,7 +744,12 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   drawHorizontalLabels: function() {
     var x_step = this.graph_width / this.y_label_count,
         x_labels = this.makeValueLabels(this.y_label_count);
-        console.log(x_labels);
+
+        if(this.options["percentages"]) {
+          for(var i=0;i<x_labels.length;i++) {
+            x_labels[i] += "%";
+          }
+        }
     this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options['font_size'] + 7) * -1]);
   }
 });
