@@ -166,11 +166,12 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       marker_size:            5,
       meanline:               false,
       y_padding_top:          20,
-      stacked_fill:           false,                                 // fill the area in a stacked graph
+      stacked_fill:           false,                                // fill the area in a stacked graph
       draw_axis:              true,
       datalabels:             '',
-      percentages:            false,                                  // opt for percentage in horizontal graph horizontal labels
-      start_at_zero:          true
+      percentages:            false,                                // opt for percentage in horizontal graph horizontal labels
+      start_at_zero:          true,
+      horiz_bargraph_firstcolour: false                             // different colour for first value in horizontal graph
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -726,17 +727,20 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   drawLines: function(label, colour, data, datalabel, element) {
     var x = this.x_padding_left + this.options['plot_padding'];
     var y = this.options['height'] - this.y_padding_bottom - (this.step / 2);
+    var firstcolor = this.options['horiz_bargraph_firstcolour'];
+    var colour2;
+    $A(data).each(function(value, number) {
+      if(firstcolor && value == $A(data).first()){
+        colour2 = firstcolor;
+      } else {
+        colour2 = colour;
+      }
 
-    $A(data).each(function(value, number) {;
-      if(value == $A(data).first()){    var colour2 = "#666666";} // TODO add to api
-      else {                        colour2 = colour;}
 
       var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
 
       cursor.lineTo(x + value - this.normalise(this.start_value), y);
       y = y - this.step;
-      //cursor.moveTo(x, y)
-
       if(this.options["datalabels"]) {
         cursor.node.onmouseover = function (e) {
           cursor.attr({stroke: "#333333"});
