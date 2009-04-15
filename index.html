@@ -15,12 +15,15 @@ h1, h2 { font-size: 2em; margin: 0.5em 0; }
 p { margin: 1em 0; }
 p.example { color: #555; }
 
-.stackgraph {width: 610px; height: 200px; background-color: #eee; margin-bottom: 20px; }
+.stackgraph {width: 610px; height: 240px; background-color: #eee; margin-bottom: 20px;overflow:hidden; }
+.stackgraph div,
+.linegraph div,
+#barchart_5 div {overflow:hidden;}
 .linegraph{width: 610px; height: 200px; background-color: #fff; margin-bottom: 20px; }
 #piechart {width:400px;height:400px;background:#eee;margin-bottom:20px}
 #bargraph_5{height:200px;}
 
-.datalabelelem {position:absolute;width:120px;height:30px;line-height:30px;text-align:center;font-size:16px;-moz-border-radius:5px;opacity:0.9;border:2px solid #333;background:#fff;margin-left:-125px;margin-top:-35px;}
+.datalabelelem {position:absolute;width:120px;height:30px;line-height:30px;text-align:center;font-size:16px;-moz-border-radius:5px;opacity:0.9;border:2px solid #333;background:#fff;margin-left:-125px;margin-top:-35px;z-index:99;}
 
 #datalabelelem-linegraph{background: #000;color:#fff}
 #datalabelelem-bargraph_5{height:auto;line-height:1.5em;font-size:10px;font-style:italic;}
@@ -98,6 +101,7 @@ var linegraph =
       labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
       meanline: false,
       grid: true,
+      start_at_zero: false,
       datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'}
     });
 var bargraph_5 =

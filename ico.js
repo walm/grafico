@@ -169,7 +169,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       stacked_fill:           false,                                 // fill the area in a stacked graph
       draw_axis:              true,
       datalabels:             '',
-      percentages:            false                                  // opt for percentage in horizontal graph horizontal labels
+      percentages:            false,                                  // opt for percentage in horizontal graph horizontal labels
+      start_at_zero:          true
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -364,11 +365,22 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
   drawLines: function(label, colour, data, datalabel, element) {
     var coords = this.calculateCoords(data);
+    var y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
+
+    if(this.options["start_at_zero"] == false) {
+      var odd_horizontal_offset=0;
+      $A(coords).each(function(coord, index) {
+        if(coord[1] == y_offset) {odd_horizontal_offset++;}
+      });
+      if(odd_horizontal_offset>1) {
+        coords.splice(0,odd_horizontal_offset);
+      }
+    }
 
     if(this.options["stacked_fill"]) {
       var cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0px'});
-      coords.unshift([coords[0][0],170]);
-      coords.push([coords[coords.length-1][0],170]);
+      coords.unshift([coords[0][0],y_offset]);
+      coords.push([coords[coords.length-1][0],y_offset]);
     } else {
       var cursor = this.paper.path({stroke: colour, 'stroke-width': '5px'});
     }
@@ -407,12 +419,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       }
 
     }
-
     $A(coords).each(function(coord, index) {
       var x = coord[0],
           y = coord[1];
-
-      this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element);
+          this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element);
     }.bind(this))
   },
 
