@@ -171,7 +171,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       datalabels:             '',
       percentages:            false,                                // opt for percentage in horizontal graph horizontal labels
       start_at_zero:          true,
-      horiz_bargraph_firstcolour: false                             // different colour for first value in horizontal graph
+      horiz_bargraph_firstcolour: false,                            // different colour for first value in horizontal graph
+      hover_colour:           "#333333"                             // hover color if there are datalabels
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -389,10 +390,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if(this.options["datalabels"]) {
       var datalabelelem;
       var colorattr = (this.options["stacked_fill"]) ? "fill" : "stroke";
-
+      var hover_colour = this.options["hover_colour"];
       cursor.node.onmouseover = function (e) {
-        if(colorattr==="fill") { cursor.attr({fill: "#333333"});}
-        else {                   cursor.attr({stroke: "#333333"});}
+        if(colorattr==="fill") { cursor.attr({fill: hover_colour});}
+        else {                   cursor.attr({stroke: hover_colour});}
 
         var posx = 0;
 	      var posy = 0;
@@ -743,9 +744,11 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       cursor.lineTo(x + value - this.normalise(this.start_value), y);
       y = y - this.step;
 
+
       if(this.options["datalabels"]) {
+      var hover_colour = this.options["hover_colour"];
         cursor.node.onmouseover = function (e) {
-          cursor.attr({stroke: "#333333"});
+          cursor.attr({stroke: hover_colour});
 
           var posx = 0;
 	        var posy = 0;
