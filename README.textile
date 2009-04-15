@@ -1,4 +1,3 @@
 h2. Introduction
-This is a fork of http://github.com/alexyoung/ico/tree
 
-it adds hover effects and information and stacked area charts to the library, amongst a host of other things
+This is a fork of http://github.com/alexyoung/ico/tree. It adds hover effects and information and stacked area charts to the library, amongst a host of other things. more documentation later :)
