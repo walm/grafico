@@ -728,8 +728,9 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     var x = this.x_padding_left + this.options['plot_padding'];
     var y = this.options['height'] - this.y_padding_bottom - (this.step / 2);
     var firstcolor = this.options['horiz_bargraph_firstcolour'];
-    var colour2;
+
     $A(data).each(function(value, number) {
+      var colour2;
       if(firstcolor && value == $A(data).first()){
         colour2 = firstcolor;
       } else {
@@ -741,6 +742,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
       cursor.lineTo(x + value - this.normalise(this.start_value), y);
       y = y - this.step;
+
       if(this.options["datalabels"]) {
         cursor.node.onmouseover = function (e) {
           cursor.attr({stroke: "#333333"});
