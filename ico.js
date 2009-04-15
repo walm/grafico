@@ -378,7 +378,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     if(this.options["stacked_fill"]) {
-      var cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0px'});
+      var cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0'});
       coords.unshift([coords[0][0],y_offset]);
       coords.push([coords[coords.length-1][0],y_offset]);
     } else {
@@ -393,20 +393,33 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         if(colorattr==="fill") { cursor.attr({fill: "#333333"});}
         else {                   cursor.attr({stroke: "#333333"});}
 
-        var Xoffset = document.body.scrollLeft	+ document.documentElement.scrollLeft;
-        var Yoffset = document.body.scrollTop	+ document.documentElement.scrollTop;
-        var posx = e.clientX + Xoffset;
-		    var posy = e.clientY + Yoffset;
+        var posx = 0;
+	      var posy = 0;
+	      if (!e) var e = window.event;
+	      if (e.pageX || e.pageY) 	{
+		      posx = e.pageX;
+		      posy = e.pageY;
+	      }
+	      else if (e.clientX || e.clientY) 	{
+		      posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		      posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	      }
 
         datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
-
         element.insert(datalabelelem);
 
         cursor.node.onmousemove = function(e) {
-
-          var posx = e.clientX + Xoffset
-  		    var posy = e.clientY + Yoffset
-
+          var posx = 0;
+	        var posy = 0;
+	        if (!e) var e = window.event;
+	        if (e.pageX || e.pageY) 	{
+		        posx = e.pageX;
+		        posy = e.pageY;
+	        }
+	        else if (e.clientX || e.clientY) 	{
+		        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	        }
           $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
 
         };
@@ -551,19 +564,34 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         circle.node.onmouseover = function (e) {
           new_marker_size = parseInt(1.7*old_marker_size);
           circle.attr({r:new_marker_size});
-          var Xoffset = document.body.scrollLeft	+ document.documentElement.scrollLeft;
-          var Yoffset = document.body.scrollTop	+ document.documentElement.scrollTop;
 
-          var posx = e.clientX + Xoffset;
-		      var posy = e.clientY + Yoffset;
+          var posx = 0;
+	        var posy = 0;
+	        if (!e) var e = window.event;
+	        if (e.pageX || e.pageY) 	{
+		        posx = e.pageX;
+		        posy = e.pageY;
+	        }
+	        else if (e.clientX || e.clientY) 	{
+		        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	        }
 
           datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
           element.insert(datalabelelem);
 
           cursor.node.onmousemove = function(e) {
-            var posx = e.clientX + Xoffset;
-    		    var posy = e.clientY + Yoffset;
-
+            var posx = 0;
+	          var posy = 0;
+	          if (!e) var e = window.event;
+	          if (e.pageX || e.pageY) 	{
+		          posx = e.pageX;
+		          posy = e.pageY;
+	          }
+	          else if (e.clientX || e.clientY) 	{
+		          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	          }
             $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
 
           };
@@ -700,29 +728,47 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     var y = this.options['height'] - this.y_padding_bottom - (this.step / 2);
 
     $A(data).each(function(value, number) {;
-      if(value == $A(data).first()){    var colour2 = "#666666";}
+      if(value == $A(data).first()){    var colour2 = "#666666";} // TODO add to api
       else {                        colour2 = colour;}
 
       var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
 
       cursor.lineTo(x + value - this.normalise(this.start_value), y);
       y = y - this.step;
-      cursor.moveTo(x, y)
+      //cursor.moveTo(x, y)
 
       if(this.options["datalabels"]) {
         cursor.node.onmouseover = function (e) {
           cursor.attr({stroke: "#333333"});
-          var Xoffset = document.body.scrollLeft	+ document.documentElement.scrollLeft;
-          var Yoffset = document.body.scrollTop	+ document.documentElement.scrollTop;
-          var posx = e.clientX + Xoffset;
-	        var posy = e.clientY + Yoffset;
+
+          var posx = 0;
+	        var posy = 0;
+	        if (!e) var e = window.event;
+	        if (e.pageX || e.pageY) 	{
+		        posx = e.pageX;
+		        posy = e.pageY;
+	        }
+	        else if (e.clientX || e.clientY) 	{
+		        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	        }
           var datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel[number]+'</div>';
           element.insert(datalabelelem);
 
           cursor.node.onmousemove = function(e) {
-            var posx = e.clientX + Xoffset
-    		    var posy = e.clientY + Yoffset
-            $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
+            var posx = 0;
+	          var posy = 0;
+	          if (!e) var e = window.event;
+	          if (e.pageX || e.pageY) 	{
+		          posx = e.pageX;
+		          posy = e.pageY;
+	          }
+	          else if (e.clientX || e.clientY) 	{
+		          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	          }
+
+	          $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
           };
         };
         cursor.node.onmouseout = function (e) {
