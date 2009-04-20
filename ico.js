@@ -169,9 +169,9 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       y_padding_top:          20,
       stacked_fill:           false,                                // fill the area in a stacked graph
       draw_axis:              true,
-      datalabels:             '',
+      datalabels:             '',                                   // interactive, filled with same # of elements as graph items.
       percentages:            false,                                // opt for percentage in horizontal graph horizontal labels
-      start_at_zero:          true,
+      start_at_zero:          true,                                 // allow line graphs to start at a non-zero horizontal step
       horiz_bargraph_firstcolour: false,                            // different colour for first value in horizontal graph
       hover_colour:           "#333333"                             // hover color if there are datalabels
     };
