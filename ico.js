@@ -644,12 +644,8 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
       return this.startPlot(cursor, x, y, colour);
     }
 
-    if (this.options['curve_amount'] && index > 1) {
-      if(index < coords.length-1) {
-        cursor.cplineTo(x, y, this.options['curve_amount']);
-      } else {
-        cursor.lineTo(x, y);
-      }
+    if (this.options['curve_amount'] && index > 1 && (index < coords.length-1)) {
+      cursor.cplineTo(x, y, this.options['curve_amount']);
     } else {
       cursor.lineTo(x, y);
     }
