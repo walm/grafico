@@ -1,3 +1,14 @@
 h2. Introduction
 
-This is a fork of http://github.com/alexyoung/ico/tree. It adds hover effects and information and stacked area charts to the library, amongst a host of other things. more documentation later :)
+This is a fork of http://github.com/alexyoung/ico/tree. It adds hover effects and information and stacked area charts to the library, amongst a host of other things.
+
+This version still supports all of the original graphs and api options.
+
+h3. new options
+
+* added a stack graph, can be filled or can be lines
+* added google analytics-style extra information interactivity to all items
+* added an option to allow linegraphs to start at a non-zero horizontal steps
+* Added various api options to edit the new functionality, such as hover color, showing percentages in the horizontal bar graph labels, allowing the first item of a bar chart to be a different colour (todo: make working for standard bar graph)
+* fixed bug with vertical line drawing in horizontal bar graph
+* halved the amount of steps when above 100 for more spacious looking graphs

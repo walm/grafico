@@ -172,7 +172,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       datalabels:             '',                                   // interactive, filled with same # of elements as graph items.
       percentages:            false,                                // opt for percentage in horizontal graph horizontal labels
       start_at_zero:          true,                                 // allow line graphs to start at a non-zero horizontal step
-      horiz_bargraph_firstcolour: false,                            // different colour for first value in horizontal graph
+      bargraph_firstcolour:   false,                            // different colour for first value in horizontal graph
       hover_colour:           "#333333"                             // hover color if there are datalabels
     };
     Object.extend(this.options, this.chartDefaults() || { });
@@ -725,7 +725,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   drawLines: function(label, colour, data, datalabel, element) {
     var x = this.x_padding_left + this.options['plot_padding'];
     var y = this.options['height'] - this.y_padding_bottom - (this.step / 2);
-    var firstcolor = this.options['horiz_bargraph_firstcolour'];
+    var firstcolor = this.options['bargraph_firstcolour'];
 
     $A(data).each(function(value, number) {
       var colour2;
