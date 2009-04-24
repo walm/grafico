@@ -692,10 +692,15 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
   },
 
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
-    if (this.options['markers'] == 'circle' && index != 0 && index != coords.length-1) {
-      this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+    if(this.options['markers'] == 'circle') {
+      if(this.options['stacked_fill'] == true) {
+        if (index != 0 && index != coords.length-1) {
+          this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+        }
+      } else {
+         this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+      }
     }
-
     if (index == 0) {
       return this.startPlot(cursor, x, y, colour);
     }
