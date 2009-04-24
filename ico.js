@@ -553,60 +553,62 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   startPlot: function(cursor, x, y, colour) {
     cursor.moveTo(x, y);
   },
+  drawGraphMarkers: function(index,cursor,x,y,colour, datalabel, element) {
+    var circle = this.paper.circle(x, y, this.options['marker_size']);
+    circle.attr({ 'stroke-width': '1px', stroke: this.options['background_colour'], fill: colour });
 
-  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
+    if(this.options["datalabels"]) {
+      var datalabelelem;
+      var old_marker_size = this.options["marker_size"];
 
-    if (this.options['markers'] == 'circle') {
-      var circle = this.paper.circle(x, y, this.options['marker_size']);
-      circle.attr({ 'stroke-width': '1px', stroke: this.options['background_colour'], fill: colour });
+      circle.node.onmouseover = function (e) {
+        new_marker_size = parseInt(1.7*old_marker_size);
+        circle.attr({r:new_marker_size});
 
-      if(this.options["datalabels"]) {
-        var datalabelelem;
-        var old_marker_size = this.options["marker_size"];
-
-        circle.node.onmouseover = function (e) {
-          new_marker_size = parseInt(1.7*old_marker_size);
-          circle.attr({r:new_marker_size});
-
-          var posx = 0;
-	        var posy = 0;
-	        if (!e) var e = window.event;
-	        if (e.pageX || e.pageY) 	{
-		        posx = e.pageX;
-		        posy = e.pageY;
-	        }
-	        else if (e.clientX || e.clientY) 	{
-		        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-		        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-	        }
-
-          datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
-          element.insert(datalabelelem);
-
-          cursor.node.onmousemove = function(e) {
-            var posx = 0;
-	          var posy = 0;
-	          if (!e) var e = window.event;
-	          if (e.pageX || e.pageY) 	{
-		          posx = e.pageX;
-		          posy = e.pageY;
-	          }
-	          else if (e.clientX || e.clientY) 	{
-		          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-		          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-	          }
-            $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
-
-          };
-        };
-
-        circle.node.onmouseout = function () {
-          circle.attr({r:old_marker_size});
-          $('datalabelelem-'+element.id).remove();
+        var posx = 0;
+        var posy = 0;
+        if (!e) var e = window.event;
+        if (e.pageX || e.pageY) 	{
+	        posx = e.pageX;
+	        posy = e.pageY;
         }
+        else if (e.clientX || e.clientY) 	{
+	        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+	        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+
+        datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
+        element.insert(datalabelelem);
+
+        cursor.node.onmousemove = function(e) {
+          var posx = 0;
+          var posy = 0;
+          if (!e) var e = window.event;
+          if (e.pageX || e.pageY) 	{
+	          posx = e.pageX;
+	          posy = e.pageY;
+          }
+          else if (e.clientX || e.clientY) 	{
+	          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+	          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+          }
+          $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
+
+        };
+      };
+
+      circle.node.onmouseout = function () {
+        circle.attr({r:old_marker_size});
+        $('datalabelelem-'+element.id).remove();
       }
     }
 
+  },
+  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
+
+    if (this.options['markers'] == 'circle') {
+      this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+    }
     if (index == 0) {
       return this.startPlot(cursor, x, y, colour);
     }
@@ -638,8 +640,62 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
   startPlot: function(cursor, x, y, colour) {
     cursor.moveTo(x, y);
   },
+  drawGraphMarkers: function(index, cursor, x, y, colour, datalabel, element) {
+    var circle = this.paper.circle(x, y, this.options['marker_size']);
+    circle.attr({ 'stroke-width': '1px', stroke: this.options['background_colour'], fill: colour });
 
-  drawPlot: function(index, cursor, x, y, colour, coords) {
+    if(this.options["datalabels"]) {
+      var datalabelelem;
+      var old_marker_size = this.options["marker_size"];
+
+      circle.node.onmouseover = function (e) {
+        new_marker_size = parseInt(1.7*old_marker_size);
+        circle.attr({r:new_marker_size});
+
+        var posx = 0;
+        var posy = 0;
+        if (!e) var e = window.event;
+        if (e.pageX || e.pageY) 	{
+	        posx = e.pageX;
+	        posy = e.pageY;
+        }
+        else if (e.clientX || e.clientY) 	{
+	        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+	        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+
+        datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
+        element.insert(datalabelelem);
+
+        cursor.node.onmousemove = function(e) {
+          var posx = 0;
+          var posy = 0;
+          if (!e) var e = window.event;
+          if (e.pageX || e.pageY) 	{
+	          posx = e.pageX;
+	          posy = e.pageY;
+          }
+          else if (e.clientX || e.clientY) 	{
+	          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+	          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+          }
+          $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
+
+        };
+      };
+
+      circle.node.onmouseout = function () {
+        circle.attr({r:old_marker_size});
+        $('datalabelelem-'+element.id).remove();
+      }
+    }
+  },
+
+  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
+    if (this.options['markers'] == 'circle' && index != 0 && index != coords.length-1) {
+      this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+    }
+
     if (index == 0) {
       return this.startPlot(cursor, x, y, colour);
     }
