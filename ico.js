@@ -167,7 +167,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       marker_size:            5,
       meanline:               false,
       y_padding_top:          20,
-      stacked_fill:           false,                                // fill the area in a stacked graph
+      stacked_fill:           true,                                // fill the area in a stacked graph
       draw_axis:              true,
       datalabels:             '',                                   // interactive, filled with same # of elements as graph items.
       percentages:            false,                                // opt for percentage in horizontal graph horizontal labels
@@ -537,7 +537,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
 Ico.LineGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function() {
-    return { plot_padding: 10 };
+    return { plot_padding: 10, stacked_fill:false };
   },
 
   setChartSpecificOptions: function() {
