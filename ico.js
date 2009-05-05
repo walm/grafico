@@ -173,7 +173,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       percentages:            false,                                // opt for percentage in horizontal graph horizontal labels
       start_at_zero:          true,                                 // allow line graphs to start at a non-zero horizontal step
       bargraph_firstcolour:   false,                            // different colour for first value in horizontal graph
-      hover_colour:           "#333333"                             // hover color if there are datalabels
+      hover_colour:           "#333333",                             // hover color if there are datalabels
+      watermark:              false
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -328,8 +329,35 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if (this.start_value != 0) {
       this.drawFocusHint();
     }
-  },
 
+    if(this.options['watermark']) {
+      this.drawWatermark();
+    }
+  },
+  drawWatermark: function() {
+    var watermark = this.options['watermark'];
+
+    if (watermark.naturalWidth) {
+      var
+        width = watermark.naturalWidth,
+        height = watermark.naturalHeight;
+    } else {
+      var
+        hiddenimage = new Image();
+      hiddenimage.src = watermark.src;
+      var
+        width = hiddenimage.width,
+        height = hiddenimage.height;
+    }
+
+    if (this.options["horizontalbar_padding"]) {var right = this.graph_width - (width+this.x_padding_right*1.5) + this.x_padding_left;}
+    else {                                      var right = this.graph_width - width + this.x_padding_left;}
+
+    var
+      bottom = this.graph_height - height +this.y_padding_top,
+      image = this.paper.image(watermark.src, right, bottom, width, height);
+    image.attr({'opacity': '0.6'});
+  },
   drawGrid: function() {
     var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
 
@@ -763,6 +791,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     this.options['plot_padding'] = 0;
     this.step = this.calculateStep();
     this.options["horizontalbar_grid"] = true;
+    this.options["horizontalbar_padding"] = true;
   },
 
   normalise: function(value) {
@@ -782,7 +811,6 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   calculateStep: function() {
     return (this.graph_height - (this.options['plot_padding'] * 2)) / (this.data_size);
   },
-
   drawLines: function(label, colour, data, datalabel, element) {
     var x = this.x_padding_left + this.options['plot_padding'];
     var y = this.options['height'] - this.y_padding_bottom - (this.step / 2);
@@ -876,3 +904,4 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options['font_size'] + 7) * -1]);
   }
 });
+

@@ -35,6 +35,7 @@ p.example { color: #555; }
     <div id="linegraph" class="linegraph"></div>
     <h2>Horizontal bar graph</h2>
     <div id="bargraph_5" class="linegraph"></div>
+    <img id="watermark" src="logo.resized.png" alt="" style="display:none;">
 
     <script type="text/javascript">
 
@@ -57,7 +58,7 @@ function makeconsecutive(data){
 data = makeconsecutive(data);
 // the above needs to be done server side, so we can keep clean javascript on the client
 // order: highest/last needs to be added into Ico first, due to stacking order
-
+var watermark = document.getElementById("watermark");
 var stackgraph =
   new Ico.StackGraph($('stackgraph'),
     {
@@ -84,7 +85,8 @@ var stackgraph =
         four: '#dc504f',
         five: '#a267a7'
       },
-      datalabels: {one:'Internet', two:'Games', three:'Development', four:'Audio', five:'System Tools'}
+      datalabels: {one:'Internet', two:'Games', three:'Development', four:'Audio', five:'System Tools'},
+      watermark: watermark
 });
 var linegraph =
   new Ico.LineGraph($('linegraph'),
@@ -101,7 +103,8 @@ var linegraph =
       meanline: false,
       grid: true,
       start_at_zero: false,
-      datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'}
+      datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'},
+      watermark: watermark
     });
 var bargraph_5 =
   new Ico.HorizontalBarGraph($('bargraph_5'),
@@ -113,9 +116,11 @@ var bargraph_5 =
        grid:true,
        percentages:true,
        bargraph_firstcolour:"#666666",
-       datalabels: {one:['Used for 18 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 13 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds']}
+       datalabels: {one:['Used for 18 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 13 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds']},
+      watermark: watermark
     });
 
     </script>
   </body>
 </html>
+
