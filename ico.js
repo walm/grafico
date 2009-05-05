@@ -336,26 +336,28 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
   drawWatermark: function() {
     var watermark = this.options['watermark'];
-
-    if (watermark.naturalWidth) {
+    if (watermark.src && watermark.naturalWidth) {
       var
         width = watermark.naturalWidth,
-        height = watermark.naturalHeight;
+        height = watermark.naturalHeight,
+        imagesrc = watermark.src;
     } else {
       var
-        hiddenimage = new Image();
-      hiddenimage.src = watermark.src;
+        hiddenimage = new Image(),
+        oldimage = watermark.src || watermark;
+      hiddenimage.src = oldimage;
       var
         width = hiddenimage.width,
-        height = hiddenimage.height;
+        height = hiddenimage.height,
+        imagesrc = hiddenimage.src;
     }
-
+        console.log(width);
     if (this.options["horizontalbar_padding"]) {var right = this.graph_width - (width+this.x_padding_right*1.5) + this.x_padding_left;}
     else {                                      var right = this.graph_width - width + this.x_padding_left;}
 
     var
       bottom = this.graph_height - height +this.y_padding_top,
-      image = this.paper.image(watermark.src, right, bottom, width, height);
+      image = this.paper.image(imagesrc, right, bottom, width, height);
     image.attr({'opacity': '0.6'});
   },
   drawGrid: function() {
