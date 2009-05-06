@@ -335,30 +335,21 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
   },
   drawWatermark: function() {
-    var watermark = this.options['watermark'];
-    if (watermark.src && watermark.naturalWidth) {
-      var
-        width = watermark.naturalWidth,
-        height = watermark.naturalHeight,
-        imagesrc = watermark.src;
-    } else {
-      var
-        hiddenimage = new Image(),
-        oldimage = watermark.src || watermark;
-      hiddenimage.src = oldimage;
-      var
-        width = hiddenimage.width,
-        height = hiddenimage.height,
-        imagesrc = hiddenimage.src;
+    var watermark = this.options['watermark'],
+        watermarkimg = new Image(),
+        thisgraph = this;
+    watermarkimg.onload = function(){
+      if (thisgraph.options["horizontalbar_padding"]) {
+        var right = thisgraph.graph_width - (watermarkimg.width+thisgraph.x_padding_right*1.5) + thisgraph.x_padding_left;
+      } else {
+        var right = thisgraph.graph_width - watermarkimg.width + thisgraph.x_padding_left;
+      }
+      var bottom = thisgraph.graph_height - watermarkimg.height +thisgraph.y_padding_top,
+          image = thisgraph.paper.image(watermarkimg.src, right, bottom, watermarkimg.width, watermarkimg.height);
+      image.toFront();//make it immediatelly visible in safari
+      image.attr({'opacity': '0.6'});
     }
-        console.log(width);
-    if (this.options["horizontalbar_padding"]) {var right = this.graph_width - (width+this.x_padding_right*1.5) + this.x_padding_left;}
-    else {                                      var right = this.graph_width - width + this.x_padding_left;}
-
-    var
-      bottom = this.graph_height - height +this.y_padding_top,
-      image = this.paper.image(imagesrc, right, bottom, width, height);
-    image.attr({'opacity': '0.6'});
+    watermarkimg.src = watermark.src || watermark;
   },
   drawGrid: function() {
     var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
