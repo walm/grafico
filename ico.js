@@ -418,32 +418,32 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         else {                   cursor.attr({stroke: hover_colour});}
 
         var posx = 0;
-	      var posy = 0;
-	      if (!e) var e = window.event;
-	      if (e.pageX || e.pageY) 	{
-		      posx = e.pageX;
-		      posy = e.pageY;
-	      }
-	      else if (e.clientX || e.clientY) 	{
-		      posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-		      posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-	      }
+        var posy = 0;
+        if (!e) var e = window.event;
+        if (e.pageX || e.pageY)   {
+          posx = e.pageX;
+          posy = e.pageY;
+        }
+        else if (e.clientX || e.clientY)   {
+          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
 
         datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
         element.insert(datalabelelem);
 
         cursor.node.onmousemove = function(e) {
           var posx = 0;
-	        var posy = 0;
-	        if (!e) var e = window.event;
-	        if (e.pageX || e.pageY) 	{
-		        posx = e.pageX;
-		        posy = e.pageY;
-	        }
-	        else if (e.clientX || e.clientY) 	{
-		        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-		        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-	        }
+          var posy = 0;
+          if (!e) var e = window.event;
+          if (e.pageX || e.pageY)   {
+            posx = e.pageX;
+            posy = e.pageY;
+          }
+          else if (e.clientX || e.clientY)   {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+          }
           $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
 
         };
@@ -589,13 +589,13 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         var posx = 0;
         var posy = 0;
         if (!e) var e = window.event;
-        if (e.pageX || e.pageY) 	{
-	        posx = e.pageX;
-	        posy = e.pageY;
+        if (e.pageX || e.pageY)   {
+          posx = e.pageX;
+          posy = e.pageY;
         }
-        else if (e.clientX || e.clientY) 	{
-	        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-	        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        else if (e.clientX || e.clientY)   {
+          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
 
         datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
@@ -605,13 +605,13 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
           var posx = 0;
           var posy = 0;
           if (!e) var e = window.event;
-          if (e.pageX || e.pageY) 	{
-	          posx = e.pageX;
-	          posy = e.pageY;
+          if (e.pageX || e.pageY)   {
+            posx = e.pageX;
+            posy = e.pageY;
           }
-          else if (e.clientX || e.clientY) 	{
-	          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-	          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+          else if (e.clientX || e.clientY)   {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
           }
           $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
 
@@ -676,13 +676,13 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
         var posx = 0;
         var posy = 0;
         if (!e) var e = window.event;
-        if (e.pageX || e.pageY) 	{
-	        posx = e.pageX;
-	        posy = e.pageY;
+        if (e.pageX || e.pageY)   {
+          posx = e.pageX;
+          posy = e.pageY;
         }
-        else if (e.clientX || e.clientY) 	{
-	        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-	        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        else if (e.clientX || e.clientY)   {
+          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
 
         datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
@@ -692,13 +692,13 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
           var posx = 0;
           var posy = 0;
           if (!e) var e = window.event;
-          if (e.pageX || e.pageY) 	{
-	          posx = e.pageX;
-	          posy = e.pageY;
+          if (e.pageX || e.pageY)   {
+            posx = e.pageX;
+            posy = e.pageY;
           }
-          else if (e.clientX || e.clientY) 	{
-	          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-	          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+          else if (e.clientX || e.clientY)   {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
           }
           $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
 
@@ -830,33 +830,33 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
           cursor.attr({stroke: hover_colour});
 
           var posx = 0;
-	        var posy = 0;
-	        if (!e) var e = window.event;
-	        if (e.pageX || e.pageY) 	{
-		        posx = e.pageX;
-		        posy = e.pageY;
-	        }
-	        else if (e.clientX || e.clientY) 	{
-		        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-		        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-	        }
+          var posy = 0;
+          if (!e) var e = window.event;
+          if (e.pageX || e.pageY)   {
+            posx = e.pageX;
+            posy = e.pageY;
+          }
+          else if (e.clientX || e.clientY)   {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+          }
           var datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel[number]+'</div>';
           element.insert(datalabelelem);
 
           cursor.node.onmousemove = function(e) {
             var posx = 0;
-	          var posy = 0;
-	          if (!e) var e = window.event;
-	          if (e.pageX || e.pageY) 	{
-		          posx = e.pageX;
-		          posy = e.pageY;
-	          }
-	          else if (e.clientX || e.clientY) 	{
-		          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-		          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-	          }
+            var posy = 0;
+            if (!e) var e = window.event;
+            if (e.pageX || e.pageY)   {
+              posx = e.pageX;
+              posy = e.pageY;
+            }
+            else if (e.clientX || e.clientY)   {
+              posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+              posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+            }
 
-	          $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
+            $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
           };
         };
         cursor.node.onmouseout = function (e) {

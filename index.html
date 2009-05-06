@@ -35,7 +35,7 @@ p.example { color: #555; }
     <div id="linegraph" class="linegraph"></div>
     <h2>Horizontal bar graph</h2>
     <div id="bargraph_5" class="linegraph"></div>
-    <img id="watermark" src="logo.resized.png" alt="" style="display:none;">
+    <img id="watermark" src="logo.png" alt="" style="display:none;">
 
     <script type="text/javascript">
 
@@ -104,7 +104,7 @@ var linegraph =
       grid: true,
       start_at_zero: false,
       datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'},
-      watermark: watermark
+      watermark: "logo.png"
     });
 var bargraph_5 =
   new Ico.HorizontalBarGraph($('bargraph_5'),
