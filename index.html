@@ -41,6 +41,7 @@ p.example { color: #555; }
     </style>
   </head>
   <body>
+  <p>sparklines lol! <span id="sparkline" class="sparkline"></span> </p>
     <h2>Categories stacked area chart</h2>
     <div id="stackgraph" class="stackgraph"></div>
     <h2>Todays software line chart</h2>
@@ -161,7 +162,7 @@ var bargraph_5 =
        bargraph_firstcolour:"#666666",
        datalabels: {one:['Used for 18 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 13 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds']},
     });
-
+var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 90, height: 15, colour: "#a267a7"  });
     </script>
   </body>
 </html>
