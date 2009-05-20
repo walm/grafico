@@ -160,6 +160,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       font_size:              10,                                   // Label font size
       show_horizontal_labels: true,
       show_vertical_labels:   true,
+      vertical_label_unit:    false,
       colours:                this.makeRandomColours(),             // Line colours
       background_colour:      element.getStyle('backgroundColor'),
       label_colour:           '#666',                               // Label text colour
