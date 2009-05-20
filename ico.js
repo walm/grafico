@@ -160,6 +160,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       font_size:              10,                                   // Label font size
       show_horizontal_labels: true,
       show_vertical_labels:   true,
+      vertical_label_unit:    false,
       colours:                this.makeRandomColours(),             // Line colours
       background_colour:      element.getStyle('backgroundColor'),
       label_colour:           '#666',                               // Label text colour
@@ -181,8 +182,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     Object.extend(this.options, options || { });
 
     /* Padding around the graph area to make room for labels */
-    this.x_padding_left = 10 + this.paddingLeftOffset();
-    this.x_padding_right = 20;
+    this.x_padding_left = 20 + this.paddingLeftOffset();
+    this.x_padding_right = 30;
     this.x_padding = this.x_padding_left + this.x_padding_right;
     this.y_padding_top = this.options['y_padding_top'];
     this.y_padding_bottom = 20 + this.paddingBottomOffset();
@@ -514,6 +515,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         label = this.start_value,
         labels = [];
 
+
     for (var i = 0; i < steps; i++) {
       label = this.roundValue((label + step), 2);
       labels.push(label);
@@ -552,6 +554,12 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
   drawVerticalLabels: function() {
     var y_step = this.graph_height / this.y_label_count;
+    var vertical_label_unit = (this.options["vertical_label_unit"]) ? " "+this.options["vertical_label_unit"] : "";
+    for (var i = 0; i < this.value_labels.length; i++) {
+      this.value_labels[i] += vertical_label_unit;
+    }
+
+
     this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
 
