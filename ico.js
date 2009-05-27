@@ -171,7 +171,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       stacked_fill:           false,                                 // fill the area in a stacked graph
       draw_axis:              true,
       datalabels:             '',                                   // interactive, filled with same # of elements as graph items.
-      percentages:            false,                                // opt for percentage in horizontal graph horizontal labels
       start_at_zero:          true,                                 // allow line graphs to start at a non-zero horizontal step
       bargraph_firstcolour:   false,                                // different colour for first value in horizontal graph
       hover_colour:           "#333333",                            // hover color if there are datalabels
@@ -911,9 +910,9 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     var x_step = this.graph_width / this.y_label_count,
         x_labels = this.makeValueLabels(this.y_label_count);
 
-        if(this.options["percentages"]) {
+        if(this.options["vertical_label_unit"]) {
           for(var i=0;i<x_labels.length;i++) {
-            x_labels[i] += "%";
+            x_labels[i] += this.options["vertical_label_unit"];
           }
         }
     this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options['font_size'] + 7) * -1]);
