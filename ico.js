@@ -170,12 +170,13 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       y_padding_top:          20,
       stacked_fill:           false,                                 // fill the area in a stacked graph
       draw_axis:              true,
-      datalabels:             '',                                   // interactive, filled with same # of elements as graph items.
-      start_at_zero:          true,                                 // allow line graphs to start at a non-zero horizontal step
-      bargraph_firstcolour:   false,                                // different colour for first value in horizontal graph
-      hover_colour:           "#333333",                            // hover color if there are datalabels
+      datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
+      start_at_zero:          true,                                  // allow line graphs to start at a non-zero horizontal step
+      bargraph_firstcolour:   false,                                 // different colour for first value in horizontal graph
+      hover_colour:           "#333333",                             // hover color if there are datalabels
       watermark:              false,
-      watermark_orientation:  false                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
+      watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
+      horizontal_rounded:     false                                  // show rounded endings on horizontal bar charts if true
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -840,15 +841,18 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       }
 
 
-//      var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
-//      cursor.lineTo(x + value - this.normalise(this.start_value), y).attr({ 'stroke-linecap':'round'});
-
-      var cursor = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value), this.bar_width, this.bar_width/2);
-      var cursor2 = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value)-this.bar_width/2, this.bar_width);
+//    var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
+//    cursor.lineTo(x + value - this.normalise(this.start_value), y).attr({ 'stroke-linecap':'round'});
+      var horizontal_rounded = this.options["horizontal_rounded"] ? this.bar_width/2 : 0;
+      var cursor = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value), this.bar_width, horizontal_rounded);
       cursor.attr({fill: colour2, 'stroke-width': 0});
-      cursor2.attr({fill: colour2, 'stroke-width': 0});
-      cursor.toFront();
-      cursor.secondnode = cursor2;
+      if(horizontal_rounded){
+        var cursor2 = this.paper.rect(x, (y-this.bar_width/2)-0.5, x + value - this.normalise(this.start_value)-this.bar_width/2, this.bar_width+0.5);
+            cursor2.attr({fill: colour2, 'stroke-width': 0});
+        cursor.toFront();
+        cursor.secondnode = cursor2;
+      }
+
       y = y - this.step;
 
 
@@ -856,7 +860,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       var hover_colour = this.options["hover_colour"];
         cursor.node.onmouseover = function (e) {
           cursor.attr({fill: hover_colour});
-          cursor.secondnode.attr({fill: hover_colour});
+          if(horizontal_rounded){cursor.secondnode.attr({fill: hover_colour});}
           var posx = 0;
           var posy = 0;
           if (!e) var e = window.event;
@@ -889,8 +893,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
         };
         cursor.node.onmouseout = function (e) {
           cursor.attr({fill: colour2});
-          cursor.secondnode.attr({fill: colour2});
-           $('datalabelelem-'+element.id).remove();
+          if(horizontal_rounded){cursor.secondnode.attr({fill: colour2});}
+          $('datalabelelem-'+element.id).remove();
         };
       }
     }.bind(this))
