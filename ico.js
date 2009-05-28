@@ -800,6 +800,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
     this.x_padding_left = 12 + this.longestLabel() * (this.options['font_size'] / 2);
+    this.graph_width = this.options["width"] - this.x_padding_right - this.x_padding_left;
     this.bar_padding = 5;
     this.bar_width = this.calculateBarHeight();
     this.options['plot_padding'] = 0;
@@ -839,17 +840,23 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       }
 
 
-      var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
+//      var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
+//      cursor.lineTo(x + value - this.normalise(this.start_value), y).attr({ 'stroke-linecap':'round'});
 
-      cursor.lineTo(x + value - this.normalise(this.start_value), y);
+      var cursor = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value), this.bar_width, this.bar_width/2);
+      var cursor2 = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value)-this.bar_width/2, this.bar_width);
+      cursor.attr({fill: colour2, 'stroke-width': 0});
+      cursor2.attr({fill: colour2, 'stroke-width': 0});
+      cursor.toFront();
+      cursor.secondnode = cursor2;
       y = y - this.step;
 
 
       if(this.options["datalabels"]) {
       var hover_colour = this.options["hover_colour"];
         cursor.node.onmouseover = function (e) {
-          cursor.attr({stroke: hover_colour});
-
+          cursor.attr({fill: hover_colour});
+          cursor.secondnode.attr({fill: hover_colour});
           var posx = 0;
           var posy = 0;
           if (!e) var e = window.event;
@@ -881,7 +888,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
           };
         };
         cursor.node.onmouseout = function (e) {
-          cursor.attr({stroke: colour2});
+          cursor.attr({fill: colour2});
+          cursor.secondnode.attr({fill: colour2});
            $('datalabelelem-'+element.id).remove();
         };
       }
