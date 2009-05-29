@@ -141,7 +141,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.range = this.calculateRange();
     this.data_size = this.longestDataSetLength();
     var stacked = this.chartDefaults()["stacked"];
-    console.log(stacked);
     this.start_value = this.calculateStartValue(stacked);
 
     if (this.start_value == 0) {
