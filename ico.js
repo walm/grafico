@@ -27,6 +27,8 @@ Ico.Base = Class.create({
       step = 0.5;
     } else if (range < 11) {
       step = 1;
+    } else if (range < 21) {
+      step = 2;
     } else if (range < 50) {
       step = 5;
     } else if (range < 100) {
@@ -138,7 +140,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1] }).flatten();
     this.range = this.calculateRange();
     this.data_size = this.longestDataSetLength();
-    this.start_value = this.calculateStartValue();
+    var stacked = options["stacked_fill"];
+    this.start_value = this.calculateStartValue(stacked);
 
     if (this.start_value == 0) {
       this.range = this.max;
@@ -236,8 +239,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     /* Define in child classes */
   },
 
-  calculateStartValue: function() {
+  calculateStartValue: function(stacked) {
     var min = this.flat_data.min();
+    if(stacked) {
+      return this.range < min || min < 0 ? min.floor() : 0;
+    }
     return this.range < min || min < 0 ? min.round() : 0;
   },
 
@@ -405,6 +411,9 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawLines: function(label, colour, data, datalabel, element) {
     var coords = this.calculateCoords(data);
     var y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
+    if(this.options["stacked_fill"]) {
+      var y_offset = (this.graph_height + this.y_padding_top);
+    }
 
     if(this.options["start_at_zero"] == false) {
       var odd_horizontal_offset=0;
