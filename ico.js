@@ -140,7 +140,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1] }).flatten();
     this.range = this.calculateRange();
     this.data_size = this.longestDataSetLength();
-    var stacked = options["stacked_fill"];
+    var stacked = this.chartDefaults()["stacked"];
+    console.log(stacked);
     this.start_value = this.calculateStartValue(stacked);
 
     if (this.start_value == 0) {
@@ -171,8 +172,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       marker_size:            5,
       meanline:               false,
       y_padding_top:          20,
-      stacked_fill:           false,                                 // fill the area in a stacked graph
       draw_axis:              true,
+      stacked_fill:           false,                                 // if true, show stacked lines instead of area's
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
       start_at_zero:          true,                                  // allow line graphs to start at a non-zero horizontal step
       bargraph_firstcolour:   false,                                 // different colour for first value in horizontal graph
@@ -676,7 +677,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 Ico.StackGraph = Class.create(Ico.BaseGraph, {
 
   chartDefaults: function() {
-    return { plot_padding: 10, stacked_fill:true };
+    return { plot_padding: 10, stacked_fill:true, stacked:true };
   },
 
   setChartSpecificOptions: function() {
@@ -758,6 +759,8 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
     }
 
     if (this.options['curve_amount'] && index > 1 && (index < coords.length-1)) {
+      cursor.cplineTo(x, y, this.options['curve_amount']);
+    } else if (this.options['curve_amount'] && !this.options["stacked_fill"] && (index = 1 || (index = coords.length-1))) {
       cursor.cplineTo(x, y, this.options['curve_amount']);
     } else {
       cursor.lineTo(x, y);
