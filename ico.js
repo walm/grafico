@@ -13,8 +13,8 @@ var Ico = {
 
 Ico.Base = Class.create({
   /* Returns a suitable set of labels for given data points on the Y axis */
-  labelStep: function(data) {
-    var min = data.min(),
+  labelStep: function(data,stacked) {
+    var min = (stacked) ? 0 : data.min(),
         max = data.max(),
         range = max - min,
         step = 0;
@@ -197,7 +197,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.graph_height = this.options['height'] - (this.y_padding);
 
     this.step = this.calculateStep();
-    this.label_step = this.labelStep(this.flat_data);
+    this.label_step = this.labelStep(this.flat_data, stacked);
 
     /* Calculate how many labels are required */
     this.y_label_count = (this.range / this.label_step).round();
