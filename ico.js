@@ -334,7 +334,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     if(!this.options['watermark']) {
-        this.drawLinesInit(this, data);
+        this.drawLinesInit(this, this.data);
     }
 
     if (this.start_value != 0) {
