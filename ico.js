@@ -356,9 +356,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
           var right = (thisgraph.graph_width - watermarkimg.width)/2 + thisgraph.x_padding_left;
           var bottom = (thisgraph.graph_height - watermarkimg.height)/2 + thisgraph.y_padding_top;
       } else {
-        if (thisgraph.options["horizontalbar_padding"]) { var right = thisgraph.graph_width - (watermarkimg.width+thisgraph.x_padding_right*1.5) + thisgraph.x_padding_left;
-        } else { var right = thisgraph.graph_width - watermarkimg.width + thisgraph.x_padding_left - 2;
-        }
+        var right = thisgraph.graph_width - watermarkimg.width + thisgraph.x_padding_left - 2;
         var bottom = thisgraph.graph_height - watermarkimg.height + thisgraph.y_padding_top - 2;
       }
       var image = thisgraph.paper.image(watermarkimg.src, right, bottom, watermarkimg.width, watermarkimg.height);
