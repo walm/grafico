@@ -436,7 +436,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       var colorattr = (this.options["stacked_fill"]) ? "fill" : "stroke";
       var hover_colour = this.options["hover_colour"];
       cursor.node.onmouseover = function (e) {
-        if(colorattr==="fill") { cursor.attr({fill: hover_colour});}
+        if(colorattr==="fill") { cursor.attr({fill: hover_colour,stroke:hover_colour});}
         else {                   cursor.attr({stroke: hover_colour});}
 
         var posx = 0;
@@ -471,7 +471,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         };
       };
       cursor.node.onmouseout = function () {
-        if(colorattr==="fill") { cursor.attr({fill: colour});}
+        if(colorattr==="fill") { cursor.attr({fill: colour,stroke:colour});}
         else {                   cursor.attr({stroke: colour});}
 
         $('datalabelelem-'+element.id).remove();
@@ -868,8 +868,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       if(this.options["datalabels"]) {
       var hover_colour = this.options["hover_colour"];
         cursor.node.onmouseover = function (e) {
-          cursor.attr({fill: hover_colour});
-          if(horizontal_rounded){cursor.secondnode.attr({fill: hover_colour});}
+          cursor.attr({fill: hover_colour,stroke:hover_colour});
+          if(horizontal_rounded){cursor.secondnode.attr({fill: hover_colour,stroke:hover_colour});}
           var posx = 0;
           var posy = 0;
           if (!e) var e = window.event;
@@ -901,8 +901,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
           };
         };
         cursor.node.onmouseout = function (e) {
-          cursor.attr({fill: colour2});
-          if(horizontal_rounded){cursor.secondnode.attr({fill: colour2});}
+          cursor.attr({fill: colour2,stroke:colour2});
+          if(horizontal_rounded){cursor.secondnode.attr({fill: colour2,stroke:colour2});}
           $('datalabelelem-'+element.id).remove();
         };
       }
