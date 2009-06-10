@@ -854,10 +854,10 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 //    cursor.lineTo(x + value - this.normalise(this.start_value), y).attr({ 'stroke-linecap':'round'});
       var horizontal_rounded = this.options["horizontal_rounded"] ? this.bar_width/2 : 0;
       var cursor = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value), this.bar_width, horizontal_rounded);
-      cursor.attr({fill: colour2, 'stroke-width': 0});
+      cursor.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
       if(horizontal_rounded){
         var cursor2 = this.paper.rect(x, (y-this.bar_width/2)-0.5, x + value - this.normalise(this.start_value)-this.bar_width/2, this.bar_width+0.5);
-            cursor2.attr({fill: colour2, 'stroke-width': 0});
+            cursor2.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
         cursor.toFront();
         cursor.secondnode = cursor2;
       }
