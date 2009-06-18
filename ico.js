@@ -576,7 +576,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
 
-    this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, 0], { "text-anchor": 'end' });
+    this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
 
   drawHorizontalLabels: function() {
@@ -971,7 +971,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
   drawVerticalLabels: function() {
     var y_start = (this.step / 2);
-    this.drawMarkers(this.options['labels'].reverse(), [0, -1], this.step, y_start, [-8, -(this.options['font_size'] / 5)+(this.bar_padding)], { "text-anchor": 'end' });
+    this.drawMarkers(this.options['labels'].reverse(), [0, -1], this.step, y_start, [-8, -(this.options['font_size'] / 5)], { "text-anchor": 'end' });
   },
 
   drawHorizontalLabels: function() {
