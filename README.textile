@@ -9,11 +9,13 @@ h3. new options
 * added a stack graph, can be filled or can be lines
 * added google analytics-style extra information interactivity to all items
 * added an option to allow linegraphs to start at a non-zero horizontal steps
-* Added various api options to edit the new functionality, such as hover color, showing percentages in the horizontal bar graph labels, allowing the first item of a bar chart to be a different colour (todo: make working for standard bar graph)
+* Added various api options to edit the new functionality, such as hover color, allowing the last item of a bar chart to be a different colour (todo: make working for standard bar graph)
 * fixed bug with vertical line drawing in horizontal bar graph
 * halved the amount of steps when above 100 for more spacious looking graphs
 * added the option to add a watermark over your graph, via a link or an img element
-* added the option to show a unit in the vertical labels
+* added the option to show a unit in the vertical labels (or horizontal labels in the horizontal bar chart)
+* added the option to have rounded endings for the horizontal barchart
+*
 
 Made at Wakoopa (wakoopa.com)
 

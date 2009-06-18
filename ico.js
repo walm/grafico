@@ -175,11 +175,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       stacked_fill:           false,                                 // if true, show stacked lines instead of area's
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
       start_at_zero:          true,                                  // allow line graphs to start at a non-zero horizontal step
-      bargraph_firstcolour:   false,                                 // different colour for first value in horizontal graph
+      bargraph_lastcolour:   false,                                 // different colour for first value in horizontal graph
       hover_colour:           "#333333",                             // hover color if there are datalabels
       watermark:              false,
       watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
-      horizontal_rounded:     false                                  // show rounded endings on horizontal bar charts if true
+      horizontal_rounded:     false,                                  // show rounded endings on horizontal bar charts if true,
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -227,7 +227,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     /* Define in child class */
   },
 
-  drawPlot: function(index, cursor, x, y, colour) {
+  drawPlot: function(index, cursor, x, y, colour, datalabel, element) {
     /* Define in child class */
   },
 
@@ -576,7 +576,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
 
-    this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
+    this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, 0], { "text-anchor": 'end' });
   },
 
   drawHorizontalLabels: function() {
@@ -788,14 +788,61 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     return (this.graph_width - (this.options['plot_padding'] * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
   },
 
-  drawPlot: function(index, cursor, x, y, colour) {
+  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
     var start_y = this.options['height'] - this.y_padding_bottom;
     x = x + this.bar_padding;
-    cursor.moveTo(x, start_y);
-    cursor.attr({stroke: colour, 'stroke-width': this.bar_width + 'px'});
-    cursor.lineTo(x, y);
+    var firstcolor = this.options['bargraph_lastcolour'];
+    var colour2;
+    if(firstcolor && coords[coords.length-1][1] == y){
+      colour2 = firstcolor;
+    } else {
+      colour2 = colour;
+    }
+    var cursor = this.paper.rect(x-(this.bar_width/2), start_y-(this.options['height']-y-this.y_padding_bottom), this.bar_width, (this.options['height']-this.y_padding_bottom)-y);
+    cursor.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+
+    if(this.options["datalabels"]) {
+      var hover_colour = this.options["hover_colour"];
+        cursor.node.onmouseover = function (e) {
+          cursor.attr({fill: hover_colour,stroke:hover_colour});
+          var posx = 0;
+          var posy = 0;
+          if (!e) var e = window.event;
+          if (e.pageX || e.pageY)   {
+            posx = e.pageX;
+            posy = e.pageY;
+          }
+          else if (e.clientX || e.clientY)   {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+          }
+          var datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel[index]+'</div>';
+          element.insert(datalabelelem);
+
+          cursor.node.onmousemove = function(e) {
+            var posx = 0;
+            var posy = 0;
+            if (!e) var e = window.event;
+            if (e.pageX || e.pageY)   {
+              posx = e.pageX;
+              posy = e.pageY;
+            }
+            else if (e.clientX || e.clientY)   {
+              posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+              posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+            }
+
+            $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
+          };
+        };
+        cursor.node.onmouseout = function (e) {
+          cursor.attr({fill: colour2,stroke:colour2});
+          $('datalabelelem-'+element.id).remove();
+        };
+      }
+
     x = x + this.step;
-    cursor.moveTo(x, start_y);
+    this.options["count"]++;
   },
 
   /* Change the standard options to correctly offset against the bars */
@@ -838,12 +885,12 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   },
   drawLines: function(label, colour, data, datalabel, element) {
     var x = this.x_padding_left + this.options['plot_padding'];
-    var y = this.options['height'] - this.y_padding_bottom - (this.step / 2);
-    var firstcolor = this.options['bargraph_firstcolour'];
+    var y = this.y_padding_top+(this.bar_width/2)+(this.bar_padding/2);
+    var firstcolor = this.options['bargraph_lastcolour'];
 
     $A(data).each(function(value, number) {
       var colour2;
-      if(firstcolor && value == $A(data).first()){
+      if(firstcolor && value == $A(data).last()){
         colour2 = firstcolor;
       } else {
         colour2 = colour;
@@ -862,7 +909,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
         cursor.secondnode = cursor2;
       }
 
-      y = y - this.step;
+      y = y + this.step;
 
 
       if(this.options["datalabels"]) {
@@ -923,8 +970,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   },
 
   drawVerticalLabels: function() {
-    var y_start = (this.step / 2) - this.options['plot_padding'];
-    this.drawMarkers(this.options['labels'], [0, -1], this.step, y_start, [-8, -(this.options['font_size'] / 5)], { "text-anchor": 'end' });
+    var y_start = (this.step / 2);
+    this.drawMarkers(this.options['labels'].reverse(), [0, -1], this.step, y_start, [-8, -(this.options['font_size'] / 5)+(this.bar_padding)], { "text-anchor": 'end' });
   },
 
   drawHorizontalLabels: function() {

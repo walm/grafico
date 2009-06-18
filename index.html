@@ -132,16 +132,14 @@ var linegraph3 =
       datalabels: {firefox:'Firefox', chrome:'Google Chrome'},
     });
 var bargraph_5 =
-  new Ico.HorizontalBarGraph($('bargraph_5'),
-    [16,12,15,21,26,33],
+  new Ico.BarGraph($('bargraph_5'),
+    [12,15,21,26,33,16],
     {
-       font_size: 14,
-       labels: ['...and more', 'Skype', 'Thunderbird', 'Wine', 'G-edit', 'Firefox'],
+       labels: ['Skype', 'Thunderbird', 'Wine', 'G-edit', 'Firefox','...and more'],
        colour: '#a267a7',
        grid:true,
        vertical_label_unit:"%",
-       horizontal_rounded:true,
-       bargraph_firstcolour:"#666666",
+       bargraph_lastcolour:"#666666",
        datalabels: {one:['Used for 18 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds', 'Used for 13 hours, 53 minutes and 21 seconds', 'Used for 15 hours, 53 minutes and 21 seconds']},
     });
 var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 5, 32, 10, 23], { width: 90, height: 15, colour: "#a267a7"  });
