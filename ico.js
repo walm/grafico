@@ -9,7 +9,7 @@ var Ico = {
   StackGraph: {},
   BarGraph: {},
   HorizontalBarGraph: {}
-}
+};
 
 Ico.Base = Class.create({
   /* Returns a suitable set of labels for given data points on the Y axis */
@@ -74,7 +74,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
   normalisedData: function() {
     return $A(this.data).collect(function(value) {
       return this.normalise(value);
-    }.bind(this))
+    }.bind(this));
   },
 
   normalise: function(value) {
@@ -96,7 +96,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
     data.slice(1).each(function(value) {
       x = x + this.step;
       line.lineTo(x, this.options['height'] - value);
-    }.bind(this))
+    }.bind(this));
   },
 
   showHighlight: function(data) {
@@ -111,7 +111,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
     }
 
     var circle = this.paper.circle(x, this.options['height'] - y, size);
-    circle.attr({ stroke: false, fill: this.options['highlight']['colour']})
+    circle.attr({ stroke: false, fill: this.options['highlight']['colour']});
   }
 });
 
@@ -125,19 +125,19 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
     var x = width;
     var line = this.paper.path({ stroke: colour, 'stroke-width': width });
     data.each(function(value) {
-      line.moveTo(x, this.options['height'] - value)
+      line.moveTo(x, this.options['height'] - value);
       line.lineTo(x, this.options['height']);
       x = x + this.step;
-    }.bind(this))
+    }.bind(this));
   }
-})
+});
 
 Ico.BaseGraph = Class.create(Ico.Base, {
   initialize: function(element, data, options) {
     this.element = element;
 
     this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
-    this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1] }).flatten();
+    this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1]; }).flatten();
     this.range = this.calculateRange();
     this.data_size = this.longestDataSetLength();
     var stacked = this.chartDefaults()["stacked"];
@@ -179,7 +179,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       hover_colour:           "#333333",                             // hover color if there are datalabels
       watermark:              false,
       watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
-      horizontal_rounded:     false,                                  // show rounded endings on horizontal bar charts if true,
+      horizontal_rounded:     false                                  // show rounded endings on horizontal bar charts if true,
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -250,7 +250,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   makeRandomColours: function(number) {
     var colours = {};
     this.data_sets.each(function(data) {
-      colours[data[0]] = Raphael.hsb2rgb(Math.random(), 1, .75).hex;
+      colours[data[0]] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
     });
     return colours;
   },
@@ -271,7 +271,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   roundValues: function(data, length) {
-    return $A(data).collect(function(value) { return this.roundValue(value, length) }.bind(this));
+    return $A(data).collect(function(value) { return this.roundValue(value, length); }.bind(this));
   },
 
   paddingLeftOffset: function() {
@@ -281,7 +281,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     // Round values
     data = this.roundValues(data, 2);
 
-    var longest_label_length = $A(data).sort(function(a, b) { return a.toString().length < b.toString().length }).first().toString().length;
+    var longest_label_length = $A(data).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
     longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
     return longest_label_length * this.options['font_size'];
   },
@@ -301,7 +301,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   normaliseData: function(data) {
     return $A(data).collect(function(value) {
       return this.normalise(value);
-    }.bind(this))
+    }.bind(this));
   },
 
   normalise: function(value) {
@@ -342,7 +342,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
   },
   drawLinesInit: function(thisgraph, data) {
-    var thisgraph = thisgraph;
     thisgraph.data_sets.each(function(data, index) {
       thisgraph.drawLines(data[0], thisgraph.options['colours'][data[0]], thisgraph.normaliseData(data[1]), thisgraph.options['datalabels'][data[0]], thisgraph.element);
     }.bind(thisgraph));
@@ -352,12 +351,13 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         watermarkimg = new Image(),
         thisgraph = this;
     watermarkimg.onload = function(){
+      var right, bottom;
       if(thisgraph.options["watermark_orientation"] == "middle") {
-          var right = (thisgraph.graph_width - watermarkimg.width)/2 + thisgraph.x_padding_left;
-          var bottom = (thisgraph.graph_height - watermarkimg.height)/2 + thisgraph.y_padding_top;
+          right = (thisgraph.graph_width - watermarkimg.width)/2 + thisgraph.x_padding_left;
+          bottom = (thisgraph.graph_height - watermarkimg.height)/2 + thisgraph.y_padding_top;
       } else {
-        var right = thisgraph.graph_width - watermarkimg.width + thisgraph.x_padding_left - 2;
-        var bottom = thisgraph.graph_height - watermarkimg.height + thisgraph.y_padding_top - 2;
+        right = thisgraph.graph_width - watermarkimg.width + thisgraph.x_padding_left - 2;
+        bottom = thisgraph.graph_height - watermarkimg.height + thisgraph.y_padding_top - 2;
       }
       var image = thisgraph.paper.image(watermarkimg.src, right, bottom, watermarkimg.width, watermarkimg.height);
       image.attr({'opacity': '0.4'});
@@ -367,7 +367,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       if(thisgraph.options["stacked_fill"]) {
         image.toFront();
       }
-    }
+    };
     watermarkimg.src = watermark.src || watermark;
   },
   drawGrid: function() {
@@ -410,7 +410,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var coords = this.calculateCoords(data);
     var y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
     if(this.options["stacked_fill"]) {
-      var y_offset = (this.graph_height + this.y_padding_top);
+      y_offset = (this.graph_height + this.y_padding_top);
     }
 
     if(this.options["start_at_zero"] == false) {
@@ -422,13 +422,13 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         coords.splice(0,odd_horizontal_offset);
       }
     }
-
+    var cursor;
     if(this.options["stacked_fill"]) {
-      var cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0'});
+      cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0'});
       coords.unshift([coords[0][0],y_offset]);
       coords.push([coords[coords.length-1][0],y_offset]);
     } else {
-      var cursor = this.paper.path({stroke: colour, 'stroke-width': '5px'});
+      cursor = this.paper.path({stroke: colour, 'stroke-width': '5px'});
     }
 
     if(this.options["datalabels"]) {
@@ -441,7 +441,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
         var posx = 0;
         var posy = 0;
-        if (!e) var e = window.event;
+        if (!e) {var e = window.event;}
         if (e.pageX || e.pageY)   {
           posx = e.pageX;
           posy = e.pageY;
@@ -457,7 +457,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         cursor.node.onmousemove = function(e) {
           var posx = 0;
           var posy = 0;
-          if (!e) var e = window.event;
+          if (!e) {var e = window.event;}
           if (e.pageX || e.pageY)   {
             posx = e.pageX;
             posy = e.pageY;
@@ -475,14 +475,14 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         else {                   cursor.attr({stroke: colour});}
 
         $('datalabelelem-'+element.id).remove();
-      }
+      };
 
     }
     $A(coords).each(function(coord, index) {
       var x = coord[0],
           y = coord[1];
           this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element);
-    }.bind(this))
+    }.bind(this));
   },
 
   calculateCoords: function(data) {
@@ -493,7 +493,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       var y = y_offset - value;
       x = x + this.step;
       return [x, y];
-    }.bind(this))
+    }.bind(this));
   },
 
   drawFocusHint: function() {
@@ -510,7 +510,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
   drawMeanLine: function(data) {
     var cursor = this.paper.path(this.options['meanline']);
-    var offset = $A(data).inject(0, function(value, sum) { return sum + value }) / data.length;
+    var offset = $A(data).inject(0, function(value, sum) { return sum + value; }) / data.length;
 
     cursor.moveTo(this.x_padding_left - 1, this.options['height'] - this.y_padding_bottom - offset);
     cursor.lineTo(this.graph_width + this.x_padding_left, this.options['height'] - this.y_padding_bottom - offset);
@@ -592,7 +592,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 
   setChartSpecificOptions: function() {
     if (typeof(this.options['curve_amount']) == 'undefined') {
-      this.options['curve_amount'] = 10
+      this.options['curve_amount'] = 10;
     }
   },
 
@@ -617,7 +617,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 
         var posx = 0;
         var posy = 0;
-        if (!e) var e = window.event;
+        if (!e) {var e = window.event;}
         if (e.pageX || e.pageY)   {
           posx = e.pageX;
           posy = e.pageY;
@@ -633,7 +633,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         cursor.node.onmousemove = function(e) {
           var posx = 0;
           var posy = 0;
-          if (!e) var e = window.event;
+          if (!e) {var e = window.event;}
           if (e.pageX || e.pageY)   {
             posx = e.pageX;
             posy = e.pageY;
@@ -650,7 +650,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       circle.node.onmouseout = function () {
         circle.attr({r:old_marker_size});
         $('datalabelelem-'+element.id).remove();
-      }
+      };
     }
 
   },
@@ -679,7 +679,7 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
 
   setChartSpecificOptions: function() {
     if (typeof(this.options['curve_amount']) == 'undefined') {
-      this.options['curve_amount'] = 10
+      this.options['curve_amount'] = 10;
     }
   },
 
@@ -704,7 +704,7 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
 
         var posx = 0;
         var posy = 0;
-        if (!e) var e = window.event;
+        if (!e) {var e = window.event;}
         if (e.pageX || e.pageY)   {
           posx = e.pageX;
           posy = e.pageY;
@@ -720,7 +720,7 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
         cursor.node.onmousemove = function(e) {
           var posx = 0;
           var posy = 0;
-          if (!e) var e = window.event;
+          if (!e) {var e = window.event;}
           if (e.pageX || e.pageY)   {
             posx = e.pageX;
             posy = e.pageY;
@@ -737,7 +737,7 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
       circle.node.onmouseout = function () {
         circle.attr({r:old_marker_size});
         $('datalabelelem-'+element.id).remove();
-      }
+      };
     }
   },
 
@@ -807,7 +807,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
           cursor.attr({fill: hover_colour,stroke:hover_colour});
           var posx = 0;
           var posy = 0;
-          if (!e) var e = window.event;
+          if (!e) {var e = window.event;}
           if (e.pageX || e.pageY)   {
             posx = e.pageX;
             posy = e.pageY;
@@ -822,7 +822,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
           cursor.node.onmousemove = function(e) {
             var posx = 0;
             var posy = 0;
-            if (!e) var e = window.event;
+            if (!e) {var e = window.event;}
             if (e.pageX || e.pageY)   {
               posx = e.pageX;
               posy = e.pageY;
@@ -872,7 +872,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   },
 
   longestLabel: function() {
-    return $A(this.options['labels']).sort(function(a, b) { return a.toString().length < b.toString().length }).first().toString().length;
+    return $A(this.options['labels']).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
   },
 
   /* Height */
@@ -919,7 +919,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
           if(horizontal_rounded){cursor.secondnode.attr({fill: hover_colour,stroke:hover_colour});}
           var posx = 0;
           var posy = 0;
-          if (!e) var e = window.event;
+          if (!e) {var e = window.event;}
           if (e.pageX || e.pageY)   {
             posx = e.pageX;
             posy = e.pageY;
@@ -934,7 +934,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
           cursor.node.onmousemove = function(e) {
             var posx = 0;
             var posy = 0;
-            if (!e) var e = window.event;
+            if (!e) {var e = window.event;}
             if (e.pageX || e.pageY)   {
               posx = e.pageX;
               posy = e.pageY;
@@ -953,7 +953,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
           $('datalabelelem-'+element.id).remove();
         };
       }
-    }.bind(this))
+    }.bind(this));
   },
 
   /* Horizontal version */
