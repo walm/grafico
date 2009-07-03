@@ -57,9 +57,9 @@ Ico.SparkLine = Class.create(Ico.Base, {
 
     this.step = this.calculateStep();
     this.paper = Raphael(this.element, this.options.width, this.options.height);
-    if (this.options['acceptable_range']) {
-      this.background = this.paper.rect(0, this.options.height - this.normalise(this.options['acceptable_range'][1]),
-                                        this.options.width, this.options.height - this.normalise(this.options['acceptable_range'][0]));
+    if (this.options.acceptable_range) {
+      this.background = this.paper.rect(0, this.options.height - this.normalise(this.options.acceptable_range[1]),
+                                        this.options.width, this.options.height - this.normalise(this.options.acceptable_range[0]));
     } else {
       this.background = this.paper.rect(0, 0, this.options.width, this.options.height);
     }
@@ -83,9 +83,9 @@ Ico.SparkLine = Class.create(Ico.Base, {
 
   draw: function() {
     var data = this.normalisedData();
-    this.drawLines('', this.options['colour'], data);
+    this.drawLines('', this.options.colour, data);
 
-    if (this.options['highlight']) {
+    if (this.options.highlight) {
       this.showHighlight(data);
     }
   },
@@ -102,16 +102,16 @@ Ico.SparkLine = Class.create(Ico.Base, {
   showHighlight: function(data) {
     var size = 2,
         x = this.options.width - size,
-        i = this.options['highlight']['index'] || data.length - 1,
+        i = this.options.highlight.index || data.length - 1,
         y = data[i] + ((size / 2).round());
 
     // Find the x position if it's not the last value
-    if (typeof(this.options['highlight']['index']) != 'undefined') {
-      x = this.step * this.options['highlight']['index'];
+    if (typeof(this.options.highlight['index']) != 'undefined') {
+      x = this.step * this.options.highlight['index'];
     }
 
     var circle = this.paper.circle(x, this.options.height - y, size);
-    circle.attr({ stroke: false, fill: this.options['highlight']['colour']});
+    circle.attr({ stroke: false, fill: this.options.highlight['colour']});
   }
 });
 
