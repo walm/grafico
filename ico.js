@@ -56,19 +56,19 @@ Ico.SparkLine = Class.create(Ico.Base, {
     Object.extend(this.options, options || { });
 
     this.step = this.calculateStep();
-    this.paper = Raphael(this.element, this.options['width'], this.options['height']);
+    this.paper = Raphael(this.element, this.options.width, this.options.height);
     if (this.options['acceptable_range']) {
-      this.background = this.paper.rect(0, this.options['height'] - this.normalise(this.options['acceptable_range'][1]),
-                                        this.options['width'], this.options['height'] - this.normalise(this.options['acceptable_range'][0]));
+      this.background = this.paper.rect(0, this.options.height - this.normalise(this.options['acceptable_range'][1]),
+                                        this.options.width, this.options.height - this.normalise(this.options['acceptable_range'][0]));
     } else {
-      this.background = this.paper.rect(0, 0, this.options['width'], this.options['height']);
+      this.background = this.paper.rect(0, 0, this.options.width, this.options.height);
     }
-    this.background.attr({fill: this.options['background_colour'], stroke: 'none' });
+    this.background.attr({fill: this.options.background_colour, stroke: 'none' });
     this.draw();
   },
 
   calculateStep: function() {
-    return this.options['width'] / (this.data.length - 1);
+    return this.options.width / (this.data.length - 1);
   },
 
   normalisedData: function() {
@@ -78,7 +78,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
   },
 
   normalise: function(value) {
-    return (this.options['height'] / this.data.max()) * value;
+    return (this.options.height / this.data.max()) * value;
   },
 
   draw: function() {
@@ -91,17 +91,17 @@ Ico.SparkLine = Class.create(Ico.Base, {
   },
 
   drawLines: function(label, colour, data) {
-    var line = this.paper.path({ stroke: colour }).moveTo(0, this.options['height'] - data.first());
+    var line = this.paper.path({ stroke: colour }).moveTo(0, this.options.height - data.first());
     var x = 0;
     data.slice(1).each(function(value) {
       x = x + this.step;
-      line.lineTo(x, this.options['height'] - value);
+      line.lineTo(x, this.options.height - value);
     }.bind(this));
   },
 
   showHighlight: function(data) {
     var size = 2,
-        x = this.options['width'] - size,
+        x = this.options.width - size,
         i = this.options['highlight']['index'] || data.length - 1,
         y = data[i] + ((size / 2).round());
 
@@ -110,14 +110,14 @@ Ico.SparkLine = Class.create(Ico.Base, {
       x = this.step * this.options['highlight']['index'];
     }
 
-    var circle = this.paper.circle(x, this.options['height'] - y, size);
+    var circle = this.paper.circle(x, this.options.height - y, size);
     circle.attr({ stroke: false, fill: this.options['highlight']['colour']});
   }
 });
 
 Ico.SparkBar = Class.create(Ico.SparkLine, {
   calculateStep: function() {
-    return this.options['width'] / this.data.length;
+    return this.options.width / this.data.length;
   },
 
   drawLines: function(label, colour, data) {
@@ -125,8 +125,8 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
     var x = width;
     var line = this.paper.path({ stroke: colour, 'stroke-width': width });
     data.each(function(value) {
-      line.moveTo(x, this.options['height'] - value);
-      line.lineTo(x, this.options['height']);
+      line.moveTo(x, this.options.height - value);
+      line.lineTo(x, this.options.height);
       x = x + this.step;
     }.bind(this));
   }
@@ -186,15 +186,15 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     /* Padding around the graph area to make room for labels */
     this.x_padding_left = 10 + this.paddingLeftOffset();
-    this.x_padding_left += (this.options["vertical_label_unit"] && !this.options["horizontalbar_padding"]) ? 10 : 0;
+    this.x_padding_left += (this.options.vertical_label_unit && !this.options.horizontalbar_padding) ? 10 : 0;
     this.x_padding_right = 20;
     this.x_padding = this.x_padding_left + this.x_padding_right;
-    this.y_padding_top = this.options['y_padding_top'];
+    this.y_padding_top = this.options.y_padding_top;
     this.y_padding_bottom = 20 + this.paddingBottomOffset();
     this.y_padding = this.y_padding_top + this.y_padding_bottom;
 
-    this.graph_width = this.options['width'] - (this.x_padding);
-    this.graph_height = this.options['height'] - (this.y_padding);
+    this.graph_width = this.options.width - (this.x_padding);
+    this.graph_height = this.options.height - (this.y_padding);
 
     this.step = this.calculateStep();
     this.label_step = this.labelStep(this.flat_data, stacked);
@@ -211,12 +211,12 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.grid_start_offset = -1;
 
     /* Drawing */
-    this.paper = Raphael(this.element, this.options['width'], this.options['height']);
+    this.paper = Raphael(this.element, this.options.width, this.options.height);
     this.background = this.paper.rect(this.x_padding_left, this.y_padding_top, this.graph_width, this.graph_height);
-    this.background.attr({fill: this.options['background_colour'], stroke: 'none' });
+    this.background.attr({fill: this.options.background_colour, stroke: 'none' });
 
-    if (this.options['meanline'] === true) {
-      this.options['meanline'] = { 'stroke-width': '2px', stroke: '#BBBBBB' };
+    if (this.options.meanline === true) {
+      this.options.meanline = { 'stroke-width': '2px', stroke: '#BBBBBB' };
     }
 
     this.setChartSpecificOptions();
@@ -283,12 +283,12 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     var longest_label_length = $A(data).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
     longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
-    return longest_label_length * this.options['font_size'];
+    return longest_label_length * this.options.font_size;
   },
 
   paddingBottomOffset: function() {
     /* Find the longest label and multiply it by the font size */
-    return this.options['font_size'];
+    return this.options.font_size;
   },
 
   /* Subtract the largest and smallest values from the data sets */
@@ -310,30 +310,30 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   draw: function() {
-    if (this.options['grid']) {
+    if (this.options.grid) {
       this.drawGrid();
-        if(this.options['watermark']) {
+        if(this.options.watermark) {
           this.drawWatermark();
         }
     }
 
-    if (this.options['meanline']) {
+    if (this.options.meanline) {
       this.drawMeanLine(this.normaliseData(this.flat_data));
     }
 
-    if(this.options['draw_axis']) {
+    if(this.options.draw_axis) {
       this.drawAxis();
     }
 
-    if (this.options['show_vertical_labels']) {
+    if (this.options.show_vertical_labels) {
       this.drawVerticalLabels();
     }
 
-    if (this.options['show_horizontal_labels']) {
+    if (this.options.show_horizontal_labels) {
       this.drawHorizontalLabels();
     }
 
-    if(!this.options['watermark']) {
+    if(!this.options.watermark) {
         this.drawLinesInit(this, this.data);
     }
 
@@ -347,7 +347,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }.bind(thisgraph));
   },
   drawWatermark: function() {
-    var watermark = this.options['watermark'],
+    var watermark = this.options.watermark,
         watermarkimg = new Image(),
         thisgraph = this;
     watermarkimg.onload = function(){
@@ -373,7 +373,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawGrid: function() {
     var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
 
-    if (this.options['show_vertical_labels'] && !this.options['horizontalbar_grid']) {
+    if (this.options.show_vertical_labels && !this.options.horizontalbar_grid) {
       var y = this.graph_height + this.y_padding_top;
       for (i = 0; i < this.y_label_count; i++) {
         y = y - (this.graph_height / this.y_label_count);
@@ -382,11 +382,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       }
     }
 
-    if (this.options['show_horizontal_labels']) {
-      var x = this.x_padding_left + this.options['plot_padding'] + this.grid_start_offset,
-          x_labels = this.options['labels'].length;
+    if (this.options.show_horizontal_labels) {
+      var x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset,
+          x_labels = this.options.labels.length;
 
-          if(this.options["horizontalbar_grid"]) {
+          if(this.options.horizontalbar_grid) {
             x_step = this.graph_width / this.y_label_count;
           } else {
             x_step = this.step;
@@ -400,7 +400,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
       }
 
-      x = x - this.options['plot_padding'] - 1;
+      x = x - this.options.plot_padding - 1;
       path.moveTo(x, this.y_padding_top);
       path.lineTo(x, this.y_padding_top + this.graph_height);
     }
@@ -409,11 +409,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawLines: function(label, colour, data, datalabel, element) {
     var coords = this.calculateCoords(data);
     var y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
-    if(this.options["stacked_fill"]) {
+    if(this.options.stacked_fill) {
       y_offset = (this.graph_height + this.y_padding_top);
     }
 
-    if(this.options["start_at_zero"] == false) {
+    if(this.options.start_at_zero == false) {
       var odd_horizontal_offset=0;
       $A(coords).each(function(coord, index) {
         if(coord[1] == y_offset) {odd_horizontal_offset++;}
@@ -423,7 +423,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       }
     }
     var cursor;
-    if(this.options["stacked_fill"]) {
+    if(this.options.stacked_fill) {
       cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0'});
       coords.unshift([coords[0][0],y_offset]);
       coords.push([coords[coords.length-1][0],y_offset]);
@@ -431,10 +431,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       cursor = this.paper.path({stroke: colour, 'stroke-width': '5px'});
     }
 
-    if(this.options["datalabels"]) {
+    if(this.options.datalabels) {
       var datalabelelem;
-      var colorattr = (this.options["stacked_fill"]) ? "fill" : "stroke";
-      var hover_colour = this.options["hover_colour"];
+      var colorattr = (this.options.stacked_fill) ? "fill" : "stroke";
+      var hover_colour = this.options.hover_colour;
       cursor.node.onmouseover = function (e) {
         if(colorattr==="fill") { cursor.attr({fill: hover_colour,stroke:hover_colour});}
         else {                   cursor.attr({stroke: hover_colour});}
@@ -486,7 +486,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   calculateCoords: function(data) {
-    var x = this.x_padding_left + this.options['plot_padding'] - this.step;
+    var x = this.x_padding_left + this.options.plot_padding - this.step;
     var y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
 
     return $A(data).collect(function(value) {
@@ -499,8 +499,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawFocusHint: function() {
     var length = 5,
         x = this.x_padding_left + (length / 2) - 1,
-        y = this.options['height'] - this.y_padding_bottom;
-    var cursor = this.paper.path({stroke: this.options['label_colour'], 'stroke-width': 2});
+        y = this.options.height - this.y_padding_bottom;
+    var cursor = this.paper.path({stroke: this.options.label_colour, 'stroke-width': 2});
 
     cursor.moveTo(x, y);
     cursor.lineTo(x - length, y - length);
@@ -509,20 +509,20 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   drawMeanLine: function(data) {
-    var cursor = this.paper.path(this.options['meanline']);
+    var cursor = this.paper.path(this.options.meanline);
     var offset = $A(data).inject(0, function(value, sum) { return sum + value; }) / data.length;
 
-    cursor.moveTo(this.x_padding_left - 1, this.options['height'] - this.y_padding_bottom - offset);
-    cursor.lineTo(this.graph_width + this.x_padding_left, this.options['height'] - this.y_padding_bottom - offset);
+    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset);
+    cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom - offset);
   },
 
   drawAxis: function() {
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
+    var cursor = this.paper.path({stroke: this.options.label_colour});
 
-    cursor.moveTo(this.x_padding_left - 1, this.options['height'] - this.y_padding_bottom);
-    cursor.lineTo(this.graph_width + this.x_padding_left, this.options['height'] - this.y_padding_bottom);
+    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom);
+    cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom);
 
-    cursor.moveTo(this.x_padding_left - 1, this.options['height'] - this.y_padding_bottom);
+    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom);
     cursor.lineTo(this.x_padding_left - 1, this.y_padding_top);
   },
 
@@ -551,11 +551,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     /* Start at the origin */
     var x = this.x_padding_left - 1 + x_offset(start_offset),
-        y = this.options['height'] - this.y_padding_bottom + y_offset(start_offset);
+        y = this.options.height - this.y_padding_bottom + y_offset(start_offset);
 
-    var cursor = this.paper.path({stroke: this.options['label_colour']});
+    var cursor = this.paper.path({stroke: this.options.label_colour});
 
-    font_options = {"font": this.options['font_size'] + 'px "Arial"', stroke: "none", fill: "#000"};
+    font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: "#000"};
     Object.extend(font_options, extra_font_options || {});
 
     labels.each(function(label) {
@@ -570,7 +570,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
   drawVerticalLabels: function() {
     var y_step = this.graph_height / this.y_label_count;
-    var vertical_label_unit = (this.options["vertical_label_unit"]) ? " "+this.options["vertical_label_unit"] : "";
+    var vertical_label_unit = (this.options.vertical_label_unit) ? " "+this.options.vertical_label_unit : "";
     for (var i = 0; i < this.value_labels.length; i++) {
       this.value_labels[i] += vertical_label_unit;
     }
@@ -580,7 +580,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   drawHorizontalLabels: function() {
-    this.drawMarkers(this.options['labels'], [1, 0], this.step, this.options['plot_padding'], [0, (this.options['font_size'] + 7) * -1]);
+    this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
   }
 });
 
@@ -591,25 +591,25 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   },
 
   setChartSpecificOptions: function() {
-    if (typeof(this.options['curve_amount']) == 'undefined') {
-      this.options['curve_amount'] = 10;
+    if (typeof(this.options.curve_amount) == 'undefined') {
+      this.options.curve_amount = 10;
     }
   },
 
   calculateStep: function() {
-    return (this.graph_width - (this.options['plot_padding'] * 2)) / (this.data_size - 1);
+    return (this.graph_width - (this.options.plot_padding * 2)) / (this.data_size - 1);
   },
 
   startPlot: function(cursor, x, y, colour) {
     cursor.moveTo(x, y);
   },
   drawGraphMarkers: function(index,cursor,x,y,colour, datalabel, element) {
-    var circle = this.paper.circle(x, y, this.options['marker_size']);
-    circle.attr({ 'stroke-width': '1px', stroke: this.options['background_colour'], fill: colour });
+    var circle = this.paper.circle(x, y, this.options.marker_size);
+    circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
 
-    if(this.options["datalabels"]) {
+    if(this.options.datalabels) {
       var datalabelelem;
-      var old_marker_size = this.options["marker_size"];
+      var old_marker_size = this.options.marker_size;
 
       circle.node.onmouseover = function (e) {
         new_marker_size = parseInt(1.7*old_marker_size);
@@ -656,15 +656,15 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   },
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
 
-    if (this.options['markers'] == 'circle') {
+    if (this.options.markers == 'circle') {
       this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
     }
     if (index == 0) {
       return this.startPlot(cursor, x, y, colour);
     }
 
-    if (this.options['curve_amount']) {
-      cursor.cplineTo(x, y, this.options['curve_amount']);
+    if (this.options.curve_amount) {
+      cursor.cplineTo(x, y, this.options.curve_amount);
     } else {
       cursor.lineTo(x, y);
     }
@@ -678,25 +678,25 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
   },
 
   setChartSpecificOptions: function() {
-    if (typeof(this.options['curve_amount']) == 'undefined') {
-      this.options['curve_amount'] = 10;
+    if (typeof(this.options.curve_amount) == 'undefined') {
+      this.options.curve_amount = 10;
     }
   },
 
   calculateStep: function() {
-    return (this.graph_width - (this.options['plot_padding'] * 2)) / (this.data_size - 1);
+    return (this.graph_width - (this.options.plot_padding * 2)) / (this.data_size - 1);
   },
 
   startPlot: function(cursor, x, y, colour) {
     cursor.moveTo(x, y);
   },
   drawGraphMarkers: function(index, cursor, x, y, colour, datalabel, element) {
-    var circle = this.paper.circle(x, y, this.options['marker_size']);
-    circle.attr({ 'stroke-width': '1px', stroke: this.options['background_colour'], fill: colour });
+    var circle = this.paper.circle(x, y, this.options.marker_size);
+    circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
 
-    if(this.options["datalabels"]) {
+    if(this.options.datalabels) {
       var datalabelelem;
-      var old_marker_size = this.options["marker_size"];
+      var old_marker_size = this.options.marker_size;
 
       circle.node.onmouseover = function (e) {
         new_marker_size = parseInt(1.7*old_marker_size);
@@ -742,8 +742,8 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
   },
 
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
-    if(this.options['markers'] == 'circle') {
-      if(this.options['stacked_fill'] == true) {
+    if(this.options.markers == 'circle') {
+      if(this.options.stacked_fill == true) {
         if (index != 0 && index != coords.length-1) {
           this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
         }
@@ -755,10 +755,10 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
       return this.startPlot(cursor, x, y, colour);
     }
 
-    if (this.options['curve_amount'] && index > 1 && (index < coords.length-1)) {
-      cursor.cplineTo(x, y, this.options['curve_amount']);
-    } else if (this.options['curve_amount'] && !this.options["stacked_fill"] && (index = 1 || (index = coords.length-1))) {
-      cursor.cplineTo(x, y, this.options['curve_amount']);
+    if (this.options.curve_amount && index > 1 && (index < coords.length-1)) {
+      cursor.cplineTo(x, y, this.options.curve_amount);
+    } else if (this.options.curve_amount && !this.options.stacked_fill && (index = 1 || (index = coords.length-1))) {
+      cursor.cplineTo(x, y, this.options.curve_amount);
     } else {
       cursor.lineTo(x, y);
     }
@@ -775,7 +775,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
   setChartSpecificOptions: function() {
     this.bar_padding = 5;
     this.bar_width = this.calculateBarWidth();
-    this.options['plot_padding'] = (this.bar_width / 2);
+    this.options.plot_padding = (this.bar_width / 2);
     this.step = this.calculateStep();
     this.grid_start_offset = this.bar_padding - 1;
   },
@@ -785,24 +785,24 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
   },
 
   calculateStep: function() {
-    return (this.graph_width - (this.options['plot_padding'] * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
+    return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
   },
 
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
-    var start_y = this.options['height'] - this.y_padding_bottom;
+    var start_y = this.options.height - this.y_padding_bottom;
     x = x + this.bar_padding;
-    var firstcolor = this.options['bargraph_lastcolour'];
+    var firstcolor = this.options.bargraph_lastcolour;
     var colour2;
     if(firstcolor && coords[coords.length-1][1] == y){
       colour2 = firstcolor;
     } else {
       colour2 = colour;
     }
-    var cursor = this.paper.rect(x-(this.bar_width/2), start_y-(this.options['height']-y-this.y_padding_bottom), this.bar_width, (this.options['height']-this.y_padding_bottom)-y);
+    var cursor = this.paper.rect(x-(this.bar_width/2), start_y-(this.options.height-y-this.y_padding_bottom), this.bar_width, (this.options.height-this.y_padding_bottom)-y);
     cursor.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
 
-    if(this.options["datalabels"]) {
-      var hover_colour = this.options["hover_colour"];
+    if(this.options.datalabels) {
+      var hover_colour = this.options.hover_colour;
         cursor.node.onmouseover = function (e) {
           cursor.attr({fill: hover_colour,stroke:hover_colour});
           var posx = 0;
@@ -842,13 +842,13 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
       }
 
     x = x + this.step;
-    this.options["count"]++;
+    this.options.count++;
   },
 
   /* Change the standard options to correctly offset against the bars */
   drawHorizontalLabels: function() {
-    var x_start = this.bar_padding + this.options['plot_padding'];
-    this.drawMarkers(this.options['labels'], [1, 0], this.step, x_start, [0, (this.options['font_size'] + 7) * -1]);
+    var x_start = this.bar_padding + this.options.plot_padding;
+    this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1]);
   }
 });
 
@@ -856,14 +856,14 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
 Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   setChartSpecificOptions: function() {
     // Approximate the width required by the labels
-    this.x_padding_left = 12 + this.longestLabel() * (this.options['font_size'] / 2);
-    this.graph_width = this.options["width"] - this.x_padding_right - this.x_padding_left;
+    this.x_padding_left = 12 + this.longestLabel() * (this.options.font_size / 2);
+    this.graph_width = this.options.width - this.x_padding_right - this.x_padding_left;
     this.bar_padding = 5;
     this.bar_width = this.calculateBarHeight();
-    this.options['plot_padding'] = 0;
+    this.options.plot_padding = 0;
     this.step = this.calculateStep();
-    this.options["horizontalbar_grid"] = true;
-    this.options["horizontalbar_padding"] = true;
+    this.options.horizontalbar_grid = true;
+    this.options.horizontalbar_padding = true;
   },
 
   normalise: function(value) {
@@ -872,7 +872,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   },
 
   longestLabel: function() {
-    return $A(this.options['labels']).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
+    return $A(this.options.labels).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
   },
 
   /* Height */
@@ -881,12 +881,12 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   },
 
   calculateStep: function() {
-    return (this.graph_height - (this.options['plot_padding'] * 2)) / (this.data_size);
+    return (this.graph_height - (this.options.plot_padding * 2)) / (this.data_size);
   },
   drawLines: function(label, colour, data, datalabel, element) {
-    var x = this.x_padding_left + this.options['plot_padding'];
+    var x = this.x_padding_left + this.options.plot_padding;
     var y = this.y_padding_top+(this.bar_width/2)+(this.bar_padding/2);
-    var firstcolor = this.options['bargraph_lastcolour'];
+    var firstcolor = this.options.bargraph_lastcolour;
 
     $A(data).each(function(value, number) {
       var colour2;
@@ -899,7 +899,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
 //    var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
 //    cursor.lineTo(x + value - this.normalise(this.start_value), y).attr({ 'stroke-linecap':'round'});
-      var horizontal_rounded = this.options["horizontal_rounded"] ? this.bar_width/2 : 0;
+      var horizontal_rounded = this.options.horizontal_rounded ? this.bar_width/2 : 0;
       var cursor = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value), this.bar_width, horizontal_rounded);
       cursor.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
       if(horizontal_rounded){
@@ -912,8 +912,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       y = y + this.step;
 
 
-      if(this.options["datalabels"]) {
-      var hover_colour = this.options["hover_colour"];
+      if(this.options.datalabels) {
+      var hover_colour = this.options.hover_colour;
         cursor.node.onmouseover = function (e) {
           cursor.attr({fill: hover_colour,stroke:hover_colour});
           if(horizontal_rounded){cursor.secondnode.attr({fill: hover_colour,stroke:hover_colour});}
@@ -960,8 +960,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   drawFocusHint: function() {
     var length = 5,
         x = this.x_padding_left + (this.step * 2),
-        y = this.options['height'] - this.y_padding_bottom;
-    var cursor = this.paper.path({stroke: this.options['label_colour'], 'stroke-width': 2});
+        y = this.options.height - this.y_padding_bottom;
+    var cursor = this.paper.path({stroke: this.options.label_colour, 'stroke-width': 2});
 
     cursor.moveTo(x, y);
     cursor.lineTo(x - length, y + length);
@@ -971,19 +971,19 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
   drawVerticalLabels: function() {
     var y_start = (this.step / 2);
-    this.drawMarkers(this.options['labels'].reverse(), [0, -1], this.step, y_start, [-8, -(this.options['font_size'] / 5)], { "text-anchor": 'end' });
+    this.drawMarkers(this.options.labels.reverse(), [0, -1], this.step, y_start, [-8, -(this.options.font_size / 5)], { "text-anchor": 'end' });
   },
 
   drawHorizontalLabels: function() {
     var x_step = this.graph_width / this.y_label_count,
         x_labels = this.makeValueLabels(this.y_label_count);
 
-        if(this.options["vertical_label_unit"]) {
+        if(this.options.vertical_label_unit) {
           for(var i=0;i<x_labels.length;i++) {
-            x_labels[i] += this.options["vertical_label_unit"];
+            x_labels[i] += this.options.vertical_label_unit;
           }
         }
-    this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options['font_size'] + 7) * -1]);
+    this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options.font_size + 7) * -1]);
   }
 });
 
