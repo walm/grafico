@@ -106,12 +106,12 @@ Ico.SparkLine = Class.create(Ico.Base, {
         y = data[i] + ((size / 2).round());
 
     // Find the x position if it's not the last value
-    if (typeof(this.options.highlight['index']) != 'undefined') {
-      x = this.step * this.options.highlight['index'];
+    if (typeof(this.options.highlight.index) != 'undefined') {
+      x = this.step * this.options.highlight.index;
     }
 
     var circle = this.paper.circle(x, this.options.height - y, size);
-    circle.attr({ stroke: false, fill: this.options.highlight['colour']});
+    circle.attr({ stroke: false, fill: this.options.highlight.colour});
   }
 });
 
@@ -140,7 +140,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1]; }).flatten();
     this.range = this.calculateRange();
     this.data_size = this.longestDataSetLength();
-    var stacked = this.chartDefaults()["stacked"];
+    var stacked = this.chartDefaults().stacked;
     this.start_value = this.calculateStartValue(stacked);
 
     if (this.start_value == 0) {
@@ -148,10 +148,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     /* If one colour is specified, map it to a compatible set */
-    if (options && options['colour']) {
-      options['colours'] = {};
+    if (options && options.colour) {
+      options.colours = {};
       this.data_sets.keys().each(function(key) {
-        options['colours'][key] = options['colour'];
+        options.colours[key] = options.colour;
       });
     }
 
@@ -238,7 +238,32 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   calculateStep: function() {
     /* Define in child classes */
   },
+  getMousePos: function (e) {
+    var posx = 0;
+    var posy = 0;
+    if (!e) {var e = window.event;}
+    if (e.pageX || e.pageY)   {
+      posx = e.pageX;
+      posy = e.pageY;
+    }
+    else if (e.clientX || e.clientY)   {
+      posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+      posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    }
 
+    var mousepos = {x:posx,y:posy};
+    return mousepos;
+  },
+  buildDataLabel: function (id, text) {
+    var attr = {
+      'id':'datalabelelem-'+id,
+      'class':'datalabelelem',
+      'style':'display:block'
+    };
+    var datalabelelem = new Element('div', attr);
+    datalabelelem.update(text);
+    return datalabelelem;
+  },
   calculateStartValue: function(stacked) {
     var min = this.flat_data.min();
     if(stacked) {
@@ -343,7 +368,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
   drawLinesInit: function(thisgraph, data) {
     thisgraph.data_sets.each(function(data, index) {
-      thisgraph.drawLines(data[0], thisgraph.options['colours'][data[0]], thisgraph.normaliseData(data[1]), thisgraph.options['datalabels'][data[0]], thisgraph.element);
+      thisgraph.drawLines(data[0], thisgraph.options.colours[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element);
     }.bind(thisgraph));
   },
   drawWatermark: function() {
@@ -352,7 +377,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         thisgraph = this;
     watermarkimg.onload = function(){
       var right, bottom;
-      if(thisgraph.options["watermark_orientation"] == "middle") {
+      if(thisgraph.options.watermark_orientation == "middle") {
           right = (thisgraph.graph_width - watermarkimg.width)/2 + thisgraph.x_padding_left;
           bottom = (thisgraph.graph_height - watermarkimg.height)/2 + thisgraph.y_padding_top;
       } else {
@@ -364,7 +389,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
       thisgraph.drawLinesInit(thisgraph, data);
 
-      if(thisgraph.options["stacked_fill"]) {
+      if(thisgraph.options.stacked_fill) {
         image.toFront();
       }
     };
@@ -432,49 +457,28 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     if(this.options.datalabels) {
-      var datalabelelem;
       var colorattr = (this.options.stacked_fill) ? "fill" : "stroke";
       var hover_colour = this.options.hover_colour;
-      cursor.node.onmouseover = function (e) {
+      var datalabelelem = this.buildDataLabel(element.id, datalabel);
+
+      cursor.node.onmouseover = (function (e) {
         if(colorattr==="fill") { cursor.attr({fill: hover_colour,stroke:hover_colour});}
         else {                   cursor.attr({stroke: hover_colour});}
 
-        var posx = 0;
-        var posy = 0;
-        if (!e) {var e = window.event;}
-        if (e.pageX || e.pageY)   {
-          posx = e.pageX;
-          posy = e.pageY;
-        }
-        else if (e.clientX || e.clientY)   {
-          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-        }
-
-        datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
+        var mousepos = this.getMousePos(e);
         element.insert(datalabelelem);
+        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
 
-        cursor.node.onmousemove = function(e) {
-          var posx = 0;
-          var posy = 0;
-          if (!e) {var e = window.event;}
-          if (e.pageX || e.pageY)   {
-            posx = e.pageX;
-            posy = e.pageY;
-          }
-          else if (e.clientX || e.clientY)   {
-            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-          }
-          $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
-
-        };
-      };
+        cursor.node.onmousemove = (function(e) {
+          var mousepos = this.getMousePos(e);
+          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
+        }.bind(this));
+      }.bind(this));
       cursor.node.onmouseout = function () {
         if(colorattr==="fill") { cursor.attr({fill: colour,stroke:colour});}
         else {                   cursor.attr({stroke: colour});}
 
-        $('datalabelelem-'+element.id).remove();
+        $(datalabelelem).remove();
       };
 
     }
@@ -574,8 +578,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     for (var i = 0; i < this.value_labels.length; i++) {
       this.value_labels[i] += vertical_label_unit;
     }
-
-
     this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
 
@@ -583,7 +585,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
   }
 });
-
 
 Ico.LineGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function() {
@@ -603,56 +604,34 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   startPlot: function(cursor, x, y, colour) {
     cursor.moveTo(x, y);
   },
-  drawGraphMarkers: function(index,cursor,x,y,colour, datalabel, element) {
+
+  drawGraphMarkers: function(index, cursor, x, y, colour, datalabel, element) {
     var circle = this.paper.circle(x, y, this.options.marker_size);
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
 
     if(this.options.datalabels) {
-      var datalabelelem;
       var old_marker_size = this.options.marker_size;
+      var datalabelelem = this.buildDataLabel(element.id, datalabel);
 
-      circle.node.onmouseover = function (e) {
+      circle.node.onmouseover = (function (e) {
         new_marker_size = parseInt(1.7*old_marker_size);
         circle.attr({r:new_marker_size});
 
-        var posx = 0;
-        var posy = 0;
-        if (!e) {var e = window.event;}
-        if (e.pageX || e.pageY)   {
-          posx = e.pageX;
-          posy = e.pageY;
-        }
-        else if (e.clientX || e.clientY)   {
-          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-        }
-
-        datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
+        var mousepos = this.getMousePos(e);
         element.insert(datalabelelem);
+        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
 
-        cursor.node.onmousemove = function(e) {
-          var posx = 0;
-          var posy = 0;
-          if (!e) {var e = window.event;}
-          if (e.pageX || e.pageY)   {
-            posx = e.pageX;
-            posy = e.pageY;
-          }
-          else if (e.clientX || e.clientY)   {
-            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-          }
-          $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
-
-        };
-      };
+        cursor.node.onmousemove = (function(e) {
+          var mousepos = this.getMousePos(e);
+          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
+        }.bind(this));
+      }.bind(this));
 
       circle.node.onmouseout = function () {
         circle.attr({r:old_marker_size});
-        $('datalabelelem-'+element.id).remove();
+        $(datalabelelem).remove();
       };
     }
-
   },
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
 
@@ -671,7 +650,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   }
 });
 
-Ico.StackGraph = Class.create(Ico.BaseGraph, {
+Ico.StackGraph = Class.create(Ico.LineGraph, {
 
   chartDefaults: function() {
     return { plot_padding: 10, stacked_fill:true, stacked:true };
@@ -680,64 +659,6 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
   setChartSpecificOptions: function() {
     if (typeof(this.options.curve_amount) == 'undefined') {
       this.options.curve_amount = 10;
-    }
-  },
-
-  calculateStep: function() {
-    return (this.graph_width - (this.options.plot_padding * 2)) / (this.data_size - 1);
-  },
-
-  startPlot: function(cursor, x, y, colour) {
-    cursor.moveTo(x, y);
-  },
-  drawGraphMarkers: function(index, cursor, x, y, colour, datalabel, element) {
-    var circle = this.paper.circle(x, y, this.options.marker_size);
-    circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
-
-    if(this.options.datalabels) {
-      var datalabelelem;
-      var old_marker_size = this.options.marker_size;
-
-      circle.node.onmouseover = function (e) {
-        new_marker_size = parseInt(1.7*old_marker_size);
-        circle.attr({r:new_marker_size});
-
-        var posx = 0;
-        var posy = 0;
-        if (!e) {var e = window.event;}
-        if (e.pageX || e.pageY)   {
-          posx = e.pageX;
-          posy = e.pageY;
-        }
-        else if (e.clientX || e.clientY)   {
-          posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-          posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-        }
-
-        datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel+'</div>';
-        element.insert(datalabelelem);
-
-        cursor.node.onmousemove = function(e) {
-          var posx = 0;
-          var posy = 0;
-          if (!e) {var e = window.event;}
-          if (e.pageX || e.pageY)   {
-            posx = e.pageX;
-            posy = e.pageY;
-          }
-          else if (e.clientX || e.clientY)   {
-            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-          }
-          $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
-
-        };
-      };
-
-      circle.node.onmouseout = function () {
-        circle.attr({r:old_marker_size});
-        $('datalabelelem-'+element.id).remove();
-      };
     }
   },
 
@@ -764,7 +685,6 @@ Ico.StackGraph = Class.create(Ico.BaseGraph, {
     }
   }
 });
-
 
 /* This is based on the line graph, I can probably inherit from a shared class here */
 Ico.BarGraph = Class.create(Ico.BaseGraph, {
@@ -803,43 +723,25 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
 
     if(this.options.datalabels) {
       var hover_colour = this.options.hover_colour;
-        cursor.node.onmouseover = function (e) {
-          cursor.attr({fill: hover_colour,stroke:hover_colour});
-          var posx = 0;
-          var posy = 0;
-          if (!e) {var e = window.event;}
-          if (e.pageX || e.pageY)   {
-            posx = e.pageX;
-            posy = e.pageY;
-          }
-          else if (e.clientX || e.clientY)   {
-            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-          }
-          var datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel[index]+'</div>';
-          element.insert(datalabelelem);
+      var datalabelelem = this.buildDataLabel(element.id, datalabel[number]);
+      cursor.node.onmouseover = (function (e) {
+        cursor.attr({fill: hover_colour,stroke:hover_colour});
 
-          cursor.node.onmousemove = function(e) {
-            var posx = 0;
-            var posy = 0;
-            if (!e) {var e = window.event;}
-            if (e.pageX || e.pageY)   {
-              posx = e.pageX;
-              posy = e.pageY;
-            }
-            else if (e.clientX || e.clientY)   {
-              posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-              posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-            }
+        var mousepos = this.getMousePos(e);
+        element.insert(datalabelelem);
+        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
 
-            $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
-          };
-        };
-        cursor.node.onmouseout = function (e) {
-          cursor.attr({fill: colour2,stroke:colour2});
-          $('datalabelelem-'+element.id).remove();
-        };
-      }
+        cursor.node.onmousemove = (function(e) {
+          var mousepos = this.getMousePos(e);
+          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
+        }.bind(this));
+      }.bind(this));
+
+      cursor.node.onmouseout = function (e) {
+        cursor.attr({fill: colour2,stroke:colour2});
+        $(datalabelelem).remove();
+      };
+    }
 
     x = x + this.step;
     this.options.count++;
@@ -896,9 +798,6 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
         colour2 = colour;
       }
 
-
-//    var cursor = this.paper.path({stroke: colour2, 'stroke-width': this.bar_width + 'px'}).moveTo(x, y);
-//    cursor.lineTo(x + value - this.normalise(this.start_value), y).attr({ 'stroke-linecap':'round'});
       var horizontal_rounded = this.options.horizontal_rounded ? this.bar_width/2 : 0;
       var cursor = this.paper.rect(x, (y-this.bar_width/2), x + value - this.normalise(this.start_value), this.bar_width, horizontal_rounded);
       cursor.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
@@ -911,47 +810,31 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
       y = y + this.step;
 
-
       if(this.options.datalabels) {
-      var hover_colour = this.options.hover_colour;
-        cursor.node.onmouseover = function (e) {
+        var hover_colour = this.options.hover_colour;
+        var datalabelelem = this.buildDataLabel(element.id, datalabel[number]);
+
+        cursor.node.onmouseover = (function (e) {
           cursor.attr({fill: hover_colour,stroke:hover_colour});
           if(horizontal_rounded){cursor.secondnode.attr({fill: hover_colour,stroke:hover_colour});}
-          var posx = 0;
-          var posy = 0;
-          if (!e) {var e = window.event;}
-          if (e.pageX || e.pageY)   {
-            posx = e.pageX;
-            posy = e.pageY;
-          }
-          else if (e.clientX || e.clientY)   {
-            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-          }
-          var datalabelelem = '<div id="datalabelelem-'+element.id+'" style="left:'+posx+'px;top:'+posy+'px" class="datalabelelem">'+datalabel[number]+'</div>';
+
+          var mousepos = this.getMousePos(e);
           element.insert(datalabelelem);
+          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
 
-          cursor.node.onmousemove = function(e) {
-            var posx = 0;
-            var posy = 0;
-            if (!e) {var e = window.event;}
-            if (e.pageX || e.pageY)   {
-              posx = e.pageX;
-              posy = e.pageY;
-            }
-            else if (e.clientX || e.clientY)   {
-              posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-              posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-            }
+          cursor.node.onmousemove = (function(e) {
+            var mousepos = this.getMousePos(e);
+            $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
 
-            $('datalabelelem-'+element.id).setStyle({left:posx+'px',top:posy+'px'});
-          };
-        };
+          }.bind(this));
+
+        }.bind(this));
+
         cursor.node.onmouseout = function (e) {
           cursor.attr({fill: colour2,stroke:colour2});
           if(horizontal_rounded){cursor.secondnode.attr({fill: colour2,stroke:colour2});}
-          $('datalabelelem-'+element.id).remove();
-        };
+          $(datalabelelem).remove();
+        }
       }
     }.bind(this));
   },
