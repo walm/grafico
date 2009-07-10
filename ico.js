@@ -811,6 +811,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       y = y + this.step;
 
       if(this.options.datalabels) {
+
         var hover_colour = this.options.hover_colour;
         var datalabelelem = this.buildDataLabel(element.id, datalabel[number]);
 
@@ -830,11 +831,11 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
         }.bind(this));
 
-        cursor.node.onmouseout = function (e) {
+        cursor.node.onmouseout = function () {
           cursor.attr({fill: colour2,stroke:colour2});
           if(horizontal_rounded){cursor.secondnode.attr({fill: colour2,stroke:colour2});}
-          $(datalabelelem).remove();
-        }
+          //$(datalabelelem).remove();
+        };
       }
     }.bind(this));
   },
