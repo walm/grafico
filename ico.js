@@ -834,7 +834,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
         cursor.node.onmouseout = function () {
           cursor.attr({fill: colour2,stroke:colour2});
           if(horizontal_rounded){cursor.secondnode.attr({fill: colour2,stroke:colour2});}
-          //$(datalabelelem).remove();
+          $(datalabelelem).remove();
         };
       }
     }.bind(this));
