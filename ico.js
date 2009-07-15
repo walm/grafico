@@ -230,11 +230,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawPlot: function(index, cursor, x, y, colour, datalabel, element) {
     /* Define in child class */
   },
-
-  drawHorizontalLabels: function() {
-    /* Define in child class */
-  },
-
   calculateStep: function() {
     /* Define in child classes */
   },
@@ -542,9 +537,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
     return labels;
   },
-
-  /* Axis label markers */
   drawMarkers: function(labels, direction, step, start_offset, font_offsets, extra_font_options) {
+  /* Axis label markers */
     function x_offset(value) {
       return value * direction[0];
     }
@@ -580,7 +574,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
     this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
-
   drawHorizontalLabels: function() {
     this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
   }
@@ -718,27 +711,27 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     } else {
       colour2 = colour;
     }
-    var cursor = this.paper.rect(x-(this.bar_width/2), start_y-(this.options.height-y-this.y_padding_bottom), this.bar_width, (this.options.height-this.y_padding_bottom)-y);
-    cursor.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y-(this.options.height-y-this.y_padding_bottom), this.bar_width, (this.options.height-this.y_padding_bottom)-y);
+    bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
 
     if(this.options.datalabels) {
       var hover_colour = this.options.hover_colour;
       var datalabelelem = this.buildDataLabel(element.id, datalabel[number]);
-      cursor.node.onmouseover = (function (e) {
-        cursor.attr({fill: hover_colour,stroke:hover_colour});
+      bargraph.node.onmouseover = (function (e) {
+        bargraph.attr({fill: hover_colour,stroke:hover_colour});
 
         var mousepos = this.getMousePos(e);
         element.insert(datalabelelem);
         $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
 
-        cursor.node.onmousemove = (function(e) {
+        bargraph.node.onmousemove = (function(e) {
           var mousepos = this.getMousePos(e);
           $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
         }.bind(this));
       }.bind(this));
 
-      cursor.node.onmouseout = function (e) {
-        cursor.attr({fill: colour2,stroke:colour2});
+      bargraph.node.onmouseout = function (e) {
+        bargraph.attr({fill: colour2,stroke:colour2});
         $(datalabelelem).remove();
       };
     }
@@ -746,9 +739,8 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     x = x + this.step;
     this.options.count++;
   },
-
-  /* Change the standard options to correctly offset against the bars */
   drawHorizontalLabels: function() {
+  /* Change the standard options to correctly offset against the bars */
     var x_start = this.bar_padding + this.options.plot_padding;
     this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1]);
   }
