@@ -236,7 +236,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   getMousePos: function (e) {
     var posx = 0;
     var posy = 0;
-    if (!e) {var e = window.event;}
+    if (!e) {e = window.event;}
     if (e.pageX || e.pageY)   {
       posx = e.pageX;
       posy = e.pageY;
