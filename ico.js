@@ -127,7 +127,7 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
 
     data.each(function(value,index) {
       var colour2;
-      if(firstcolor && value == data.last()){
+      if(firstcolor && index == data.length-1 ){
         colour2 = firstcolor;
       } else {
         colour2 = colour;
