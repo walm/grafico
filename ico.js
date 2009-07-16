@@ -119,12 +119,20 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
   calculateStep: function() {
     return this.options.width / this.data.length;
   },
-
   drawLines: function(label, colour, data) {
-    var width = this.step > 2 ? this.step - 1 : this.step;
-    var x = width;
-    var line = this.paper.path({ stroke: colour, 'stroke-width': width });
-    data.each(function(value) {
+    var firstcolor = this.options.bargraph_lastcolour;
+    var width = this.step > 2 ? this.step - 1 : this.step,
+        x = width;
+
+
+    data.each(function(value,index) {
+      var colour2;
+      if(firstcolor && value == data.last()){
+        colour2 = firstcolor;
+      } else {
+        colour2 = colour;
+      }
+      var line = this.paper.path({ stroke: colour2, 'stroke-width': width });
       line.moveTo(x, this.options.height - value);
       line.lineTo(x, this.options.height);
       x = x + this.step;
@@ -704,10 +712,10 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
     var start_y = this.options.height - this.y_padding_bottom;
     x = x + this.bar_padding;
-    var firstcolor = this.options.bargraph_lastcolour;
+    var lastcolor = this.options.bargraph_lastcolour;
     var colour2;
-    if(firstcolor && coords[coords.length-1][1] == y){
-      colour2 = firstcolor;
+    if(lastcolor && coords[coords.length-1][1] == y){
+      colour2 = lastcolor;
     } else {
       colour2 = colour;
     }
