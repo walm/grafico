@@ -51,7 +51,20 @@ p.example { color: #555; }
     <div id="linegraph3" class="linegraph"></div>
 
     <img id="watermark" src="logo.png" alt="" style="display:none;">
+      <script type="text/javascript">
+        var admingraphBJH3V = new Ico.LineGraph(
+          $('linegraph'),
+          { a: [23, 43, 2804, 4451, 5336, 5899, 6190, 6440, 6821, 7195, 7494, 7706, 7941, 8175, 8442, 9016, 9337, 9799, 10341, 10974, 11394, 11664, 11923, 12178, 12478, 12763, 13071, 14166, 14542, 15093, 15435, 15785, 16110, 16414, 16945, 17270, 17554, 17603, 18639, 18989, 19313, 19671, 20021, 20371, 20703, 21071, 21493, 21913, 22353, 22823, 23283, 23835, 24375, 24842, 25355, 25804, 26225, 26722, 27216, 27696, 28373, 28810, 29458, 29946, 30520, 31030, 31473, 31993, 32497, 32985, 33462, 33919, 34531, 35439, 36396, 37562, 38519, 39377, 40505, 41607, 43060, 44545, 46012, 47241, 48479, 49728, 50871, 52188, 53853, 55195, 56211, 58281, 59818, 61388, 62861, 64293, 65730, 67180, 68687, 70250, 70593, 70595, 70596] },
+          $H({ labels: ["Apr07", "", "", "", "", "", "", "", "", "", "", "", "", "Jul07", "", "", "", "", "", "", "", "", "", "", "", "", "Oct07", "", "", "", "", "", "", "", "", "", "", "", "", "Jan08", "", "", "", "", "", "", "", "", "", "", "", "", "Apr08", "", "", "", "", "", "", "", "", "", "", "", "", "Jul08", "", "", "", "", "", "", "", "", "", "", "", "", "Oct08", "", "", "", "", "", "", "", "", "", "", "", "", "Jan09", "", "", "", "", "", "", "", "", "", "", ""], datalabels: { a: "Total Users" }, colours: { a: "#4b80b6" }}).merge($H({})).toObject()
+        );
 
+              var softwarereachF1Xyz = new Ico.LineGraph(
+        $('linegraph2'),
+        { a: [0.00395026929368862, 0.00162224995090559, 0.00339493263712935, 0.000621747565377481, 0.00197369860085495, 0.0133457493402388, 0.000125920060679732, 0.000119187825733738, 0.00323178340720925, 0.00804298327147477, 0.00158294128976994] },
+        $H({ labels: [" 2 Jun", "", "", "", "", "", "", "", "", "", "12 Jun"], datalabels: { a: "WhatSize" }, colours: { a: "#4b80b6" }}).merge($H({meanline: false, curve_amount: 10, grid: true})).toObject()
+      );
+
+      </script>
     <script type="text/javascript">
 var data = [[11.1, 10.1, 13.1, 10.7, 12.0, 12.9, 8.6, 11.7, 8.5], [11.6, 11.4, 15.7, 11.5, 12.0, 12.9, 8.6, 11.9, 10.3], [11.6, 12.0, 15.7, 11.7, 12.4, 13.0, 8.7, 12.3, 10.5], [11.8, 12.6, 15.7, 11.7, 12.5, 13.0, 8.7, 12.3, 10.5], [11.9, 12.7, 15.7, 11.8, 12.6, 13.0, 8.7, 12.3, 10.5]];
 
@@ -83,37 +96,6 @@ var stackgraph =
       },
       datalabels: {one:'Development', two:'Office', three:'Utilities', four:'Design', five:'Internet'}
 });
-
-var linegraph =
-  new Ico.LineGraph($('linegraph'),
-    {
-      one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
-      two: [10, 9, 3, 30, 1, 10, 5, 33, 33],
-      three: ["", "", "", 1, 30, 11, 33, 12, 22]
-    },
-    {
-      markers: 'circle',
-      curve_amount: 20,
-      colours: { one: '#4b80b6', two: '#79af7b', three: '#e2ba74'},
-      labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
-      meanline: false,
-      grid: true,
-      start_at_zero: false,
-      datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'}
-    });
-var linegraph2 =
-  new Ico.LineGraph($('linegraph2'),
-    {
-      firefox: [30, 35, 31, 30, 35, 28, 30, 35, 32]
-    },
-    {
-      curve_amount: 10,
-      colours: { firefox: '#a267a7'},
-      labels: ['6th April', '', '', '', '20th April', '', '','6th May'],
-      meanline: false,
-      grid: true,
-      datalabels: {firefox:'Firefox'}
-    });
 var linegraph3 =
   new Ico.LineGraph($('linegraph3'),
     {

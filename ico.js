@@ -19,7 +19,13 @@ Ico.Base = Class.create({
         range = max - min,
         step = 0;
 
-    if (range < 2) {
+    if (range < 0.01) {
+      step = 0.001;
+    } else if (range < 0.05) {
+      step = 0.005;
+    } else if (range < 0.5) {
+      step = 0.05;
+    } else if (range < 2) {
       step = 0.1;
     } else if (range < 3) {
       step = 0.2;
@@ -34,7 +40,7 @@ Ico.Base = Class.create({
     } else if (range < 100) {
       step = 10;
     } else {
-      step = Math.pow(20, (Math.log(range) / Math.LN10).round() - 1);
+      step = Math.pow(10, (Math.log(range) / Math.LN10).round() - 1);
     }
 
     return step;
