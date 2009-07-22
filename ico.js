@@ -19,20 +19,22 @@ Ico.Base = Class.create({
         range = max - min,
         step = 0;
 
-    if (range < 0.01) {
-      step = 0.001;
-    } else if (range < 0.05) {
+    if (range < 0.02) {
       step = 0.005;
+    } else if (range < 0.05) {
+      step = 0.01;
     } else if (range < 0.5) {
-      step = 0.05;
-    } else if (range < 2) {
       step = 0.1;
-    } else if (range < 3) {
+    } else if (range < 1) {
       step = 0.2;
-    } else if (range < 5) {
+    } else if (range < 2) {
+      step = 0.4;
+    } else if (range < 3) {
       step = 0.5;
-    } else if (range < 11) {
+    } else if (range < 5) {
       step = 1;
+    } else if (range < 11) {
+      step = 2;
     } else if (range < 21) {
       step = 2;
     } else if (range < 50) {
@@ -329,7 +331,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   calculateRange: function() {
     this.max = this.flat_data.max();
     this.min = this.flat_data.min();
-    return this.max - this.min;
+    return (this.max - this.min)*1.2; //this is here to fix display for small values
   },
 
   normaliseData: function(data) {
