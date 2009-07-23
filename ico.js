@@ -23,6 +23,8 @@ Ico.Base = Class.create({
       step = 0.005;
     } else if (range < 0.05) {
       step = 0.01;
+    } else if (range < 0.1) {
+      step = 0.05;
     } else if (range < 0.5) {
       step = 0.1;
     } else if (range < 1) {
