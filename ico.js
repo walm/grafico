@@ -432,7 +432,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
           }
 
       for (i = 0; i < x_labels; i++) {
-        console.log(x+","+x_labels+","+this.options.labels[i]);
         if(this.options.hide_empty_label_grid == true) {
           if (this.options.labels[i] != "") {
             path.moveTo(x, this.y_padding_top);
