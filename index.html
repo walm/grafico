@@ -55,7 +55,7 @@ p.example { color: #555; }
               var softwarereach = new Ico.LineGraph(
         $('linegraph2'),
         { a: [0.00395026929368862, 0.00162224995090559, 0.00339493263712935, 0.000621747565377481, 0.00197369860085495, 0.0133457493402388, 0.000125920060679732, 0.000119187825733738, 0.00323178340720925, 0.00804298327147477, 0.00158294128976994] },
-        $H({ labels: [" 2 Jun", "", "", "", "", "", "", "", "", "", "12 Jun"], datalabels: { a: "WhatSize" }, colours: { a: "#4b80b6" }}).merge($H({meanline: false, curve_amount: 10, grid: true})).toObject()
+        $H({ labels: [" 2 Jun", "", "", "", "", "", "", "", "", "", "12 Jun"], datalabels: { a: "WhatSize" }, colours: { a: "#4b80b6" }}).merge($H({      hide_empty_label_grid:true,curve_amount: 10, grid: true})).toObject()
       );
 
       </script>
@@ -105,6 +105,7 @@ var linegraph =
       labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
       meanline: false,
       grid: true,
+
       start_at_zero: false,
       datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'}
     });
@@ -117,8 +118,9 @@ var linegraph3 =
     {
       curve_amount: 10,
       colours: { firefox: '#a267a7', chrome: '#4b80b6'},
-      labels: ['6th April', '', '', '', '20th April', '', '','6th May'],
+      labels: ['6th April', '', '', '', '20th April', '', '','','6th May'],
       meanline: false,
+      hide_empty_label_grid:true,
       grid: true,
       datalabels: {firefox:'Firefox', chrome:'Google Chrome'}
     });

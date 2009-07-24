@@ -197,7 +197,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       hover_colour:           "#333333",                             // hover color if there are datalabels
       watermark:              false,
       watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
-      horizontal_rounded:     false                                  // show rounded endings on horizontal bar charts if true,
+      horizontal_rounded:     false,                                 // show rounded endings on horizontal bar charts if true
+      hide_empty_label_grid:  false                                  // hide gridlines for labels with no value
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -431,11 +432,17 @@ Ico.BaseGraph = Class.create(Ico.Base, {
           }
 
       for (i = 0; i < x_labels; i++) {
-        path.moveTo(x, this.y_padding_top);
-        path.lineTo(x, this.y_padding_top + this.graph_height);
-
+        console.log(x+","+x_labels+","+this.options.labels[i]);
+        if(this.options.hide_empty_label_grid == true) {
+          if (this.options.labels[i] != "") {
+            path.moveTo(x, this.y_padding_top);
+            path.lineTo(x, this.y_padding_top + this.graph_height);
+          }
+        } else {
+          path.moveTo(x, this.y_padding_top);
+          path.lineTo(x, this.y_padding_top + this.graph_height);
+        }
         x = x + x_step;
-
       }
 
       x = x - this.options.plot_padding - 1;
