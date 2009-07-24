@@ -446,7 +446,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         x = x + x_step;
       }
 
-      x = x - this.options.plot_padding - 1;
+      x = this.graph_width+this.x_padding_left-1;
       path.moveTo(x, this.y_padding_top);
       path.lineTo(x, this.y_padding_top + this.graph_height);
     }
