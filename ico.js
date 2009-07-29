@@ -161,7 +161,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     /* Padding around the graph area to make room for labels */
     this.x_padding_left = 10+ this.paddingLeftOffset();
-//    this.x_padding_left += (this.options.vertical_label_unit && !this.options.horizontalbar_padding) ? 10 : 0;
     this.x_padding_right = 20;
     this.x_padding = this.x_padding_left + this.x_padding_right;
     this.y_padding_top = this.options.y_padding_top;
