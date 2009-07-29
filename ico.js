@@ -16,8 +16,8 @@ var Ico = {
 /* Supporting methods to make dealing with arrays easier */
 /* Note that some of this work to reduce framework dependencies */
 Array.prototype.sum = function() {
-for (var i = 0, sum = 0; i < this.length; sum += this[i++]);
-return sum;
+  for (var i = 0, sum = 0; i < this.length; sum += this[i++]);
+  return sum;
 }
 
 if (typeof Array.prototype.max == 'undefined') {
@@ -68,7 +68,9 @@ Ico.Normaliser = Class.create({
   calculateStart: function(offset) {
     offset = offset || 1;
     var start_value = this.round(this.options.start_value != null && this.min >= 0 ? this.options.start_value : this.min, offset);
-    if (start_value < 0 && start_value > this.min) {
+    if (start_value > this.min) {
+      start_value = this.min;
+    } else if (start_value < 0 && start_value > this.min) {
       return this.calculateStart(offset + 1);
     }
     return start_value;
@@ -89,6 +91,9 @@ Ico.Normaliser = Class.create({
   process: function() {
     this.range = this.max - this.start_value;
     this.step = this.labelStep();
+//    console.log(this.step, this.range);
+//    this.step += (this.step/this.range)*2;
+// @TODO fix for small graphs
   },
 
   labelStep: function() {
@@ -441,12 +446,14 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawGrid: function() {
     var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
 
-    if (this.options.show_vertical_labels && !this.options.horizontalbar_grid) {
+    if (this.options.show_vertical_labels) {
       var y = this.graph_height + this.y_padding_top;
       for (i = 0; i < this.y_label_count; i++) {
         y = y - (this.graph_height / this.y_label_count);
-        path.moveTo(this.x_padding_left, y);
-        path.lineTo(this.x_padding_left + this.graph_width, y);
+        if((this.options.horizontalbar_grid && i == this.y_label_count-1)|| !this.options.horizontalbar_grid) {
+          path.moveTo(this.x_padding_left, y);
+          path.lineTo(this.x_padding_left + this.graph_width, y);
+        }
       }
     }
 
@@ -459,9 +466,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
           path.moveTo(x, this.y_padding_top);
           path.lineTo(x, this.y_padding_top + this.graph_height);
         }
-        x = x + this.step;
+        x = this.options.horizontalbar_grid ? x+(this.graph_width / this.y_label_count) : x + this.step;
       }
 
+      //last line
       x = this.graph_width+this.x_padding_left-1;
       path.moveTo(x, this.y_padding_top);
       path.lineTo(x, this.y_padding_top + this.graph_height);
@@ -687,10 +695,6 @@ Ico.StackGraph = Class.create(Ico.LineGraph, {
 
   chartDefaults: function() {
     return { plot_padding: 10, stacked_fill:true, stacked:true };
-  },
-  normaliserOptions: function() {
-    //return { start_value: 0 };
-    // @TODO make normalizer fixor range
   },
   setChartSpecificOptions: function() {
     if (typeof(this.options.curve_amount) == 'undefined') {
