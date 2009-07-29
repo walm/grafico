@@ -389,6 +389,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var coords = this.calculateCoords(data);
     if(this.options.stacked_fill) {
       y_offset = (this.graph_height + this.y_padding_top);
+      //@TODO get the 0 value here, to support negative values in stacked charts as well
     }
 
     if(this.options.start_at_zero == false) {
@@ -487,10 +488,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var step = this.label_step,
         label = this.start_value,
         labels = [];
-
-
     for (var i = 0; i < steps; i++) {
-      label = this.roundValue((label + step), 2);
+      label = this.roundValue((label + step), 3);
       labels.push(label);
     }
     return labels;
