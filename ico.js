@@ -92,10 +92,7 @@ Ico.Normaliser = Class.create({
   process: function() {
     this.range = this.max - this.start_value;
     this.step = this.labelStep();
-    if(!this.options.horizontalbargraph) {
-      this.step = (this.options.graph_height/(this.range/this.step) < 30) ? this.step*4 : this.step
-    }
-
+    this.step = (this.options.graph_height/(this.range/this.step) < 30) ? this.step*4 : this.step
   },
 
   labelStep: function() {
@@ -716,9 +713,6 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     this.options.horizontalbar_grid = true;
     this.options.horizontalbar_padding = true;
     this.graph_width = this.options.width - this.x_padding_right - this.x_padding_left;
-  },
-  normaliserOptions: function() {
-    return {start_value: 0, horizontalbargraph:true};
   },
   normalise: function(value) {
     var offset = this.x_padding_left;
