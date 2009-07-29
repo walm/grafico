@@ -382,10 +382,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
   drawLines: function(label, colour, data, datalabel, element) {
     var coords = this.calculateCoords(data);
-    if(this.options.stacked_fill) {
-      y_offset = (this.graph_height + this.y_padding_top);
-      //@TODO get the 0 value here, to support negative values in stacked charts as well
-    }
+    y_offset = (this.graph_height + this.y_padding_top);
 
     if(this.options.start_at_zero == false) {
       var odd_horizontal_offset=0;
