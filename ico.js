@@ -52,7 +52,8 @@ Array.prototype.standard_deviation = function() {
 Ico.Normaliser = Class.create({
   initialize: function(data, options) {
     this.options = {
-      start_value: null
+      start_value: null,
+      graph_height: 0
     };
     Object.extend(this.options, options || { });
 
@@ -91,9 +92,10 @@ Ico.Normaliser = Class.create({
   process: function() {
     this.range = this.max - this.start_value;
     this.step = this.labelStep();
-//    console.log(this.step, this.range);
-//    this.step += (this.step/this.range)*2;
-// @TODO fix for small graphs
+    if(!this.options.horizontalbargraph) {
+      this.step = (this.options.graph_height/(this.range/this.step) < 30) ? this.step*4 : this.step
+    }
+
   },
 
   labelStep: function() {
@@ -243,7 +245,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       stacked_fill:           false,                                 // if true, show stacked lines instead of area's
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
       start_at_zero:          true,                                  // allow line graphs to start at a non-zero horizontal step
-      bargraph_lastcolour:   false,                                 // different colour for first value in horizontal graph
+      bargraph_lastcolour:    false,                                 // different colour for first value in horizontal graph
       hover_colour:           "#333333",                             // hover color if there are datalabels
       watermark:              false,
       watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
@@ -293,7 +295,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   normaliserOptions: function() {
-    return {};
+    return {graph_height:parseInt(this.element.getStyle('height'))};
   },
 
   chartDefaults: function() {
@@ -808,7 +810,9 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     this.options.horizontalbar_padding = true;
     this.graph_width = this.options.width - this.x_padding_right - this.x_padding_left;
   },
-
+  normaliserOptions: function() {
+    return {start_value: 0, horizontalbargraph:true};
+  },
   normalise: function(value) {
     var offset = this.x_padding_left;
     return ((value / this.range) * (this.graph_width - offset));
