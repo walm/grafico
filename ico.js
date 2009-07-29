@@ -514,8 +514,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     Object.extend(font_options, extra_font_options || {});
 
     labels.each(function(label) {
-      cursor.moveTo(x, y);
-      cursor.lineTo(x + y_offset(5), y + x_offset(5));
+      if((this.options.hide_empty_label_grid == true && label != "") || this.options.hide_empty_label_grid == false) {
+        cursor.moveTo(x, y);
+        cursor.lineTo(x + y_offset(5), y + x_offset(5));
+      }
       this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toFront();
       x = x + x_offset(step);
       y = y + y_offset(step);
