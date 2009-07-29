@@ -294,11 +294,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   draw: function() {
     if (this.options.grid) {
       this.drawGrid();
-        if(this.options.watermark) {
-          this.drawWatermark();
-        }
     }
-
+    if(this.options.watermark) {
+      this.drawWatermark();
+    }
     if (this.options.meanline) {
       this.drawMeanLine(this.normaliseData(this.flat_data));
     }
