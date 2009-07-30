@@ -59,6 +59,7 @@ Ico.Normaliser = Class.create({
 
     this.min = data.min();
     this.max = data.max();
+    this.middle = (this.min+this.max)/2;
     this.standard_deviation = data.standard_deviation();
     this.range = 0;
     this.step = 1;
@@ -92,7 +93,13 @@ Ico.Normaliser = Class.create({
   process: function() {
     this.range = this.max - this.start_value;
     this.step = this.labelStep();
-    this.step = (this.options.graph_height/(this.range/this.step) < 30) ? this.step*4 : this.step
+
+    var delta = (this.step*4*4)/this.range - (this.range+this.start_value),
+        graphdist = this.options.graph_height/(this.range/this.step);
+
+    this.step *= (delta < 1 && graphdist < 30) ? 4 : 1;
+
+
   },
 
   labelStep: function() {
@@ -160,7 +167,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     Object.extend(this.options, options || { });
 
     /* Padding around the graph area to make room for labels */
-    this.x_padding_left = 10+ this.paddingLeftOffset();
+    this.x_padding_left = 10 + this.paddingLeftOffset();
+    this.x_padding_left += this.options.vertical_label_unit ? 6 : 0;
     this.x_padding_right = 20;
     this.x_padding = this.x_padding_left + this.x_padding_right;
     this.y_padding_top = this.options.y_padding_top;
