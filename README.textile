@@ -2,22 +2,18 @@ h2. Introduction
 
 This is a fork of http://github.com/alexyoung/ico/tree. It adds hover effects and information and stacked area charts to the library, amongst a host of other things.
 
-This version still supports all of the original graphs and api options.
+This version still supports all of the original graphs and api options, check the original readme for more information
 
 h3. new options
-
-* added a stack graph, can be filled or can be lines
-* added google analytics-style extra information interactivity to all items
-* added an option to allow linegraphs to start at a non-zero horizontal steps
-* Added various api options to edit the new functionality, such as hover color, allowing the last item of a bar chart to be a different colour
-* fixed bug with vertical line drawing in horizontal bar graph
-* halved the amount of steps when above 100 for more spacious looking graphs
-* added the option to add a watermark over your graph, via a link or an img element
-* added the option to show a unit in the vertical labels (or horizontal labels in the horizontal bar chart)
-* added the option to have rounded endings for the horizontal barchart
-* updated regular bar chart to rest of the functionality, hover and last item colours
-* fixed a positioning bug with vertical labels
-* changed the firstcolour option to lastcolour, and reversed the horizontal bar chart rendering to make it consistent
+* Stacked area charts and stacked line charts
+* Interactivity through hoverable items to display additional information, and give them a different colour on hover
+* Allow the last item of (horizontal) bar charts and spark bars to be a different colour
+* Ability to add watermarks via a link to an image or an image element
+* Watermark can be placed in the middle of the graph or the lower right corner
+* Add units (such as %) to the vertical axis values (or horizontal in the case of a horizontal bar chart)
+* Horizontal bar charts can now have a rounded ending
+* Linegraphs have an API option that allows them to start at a non-zero horizontal position
+* API option to hide grid lines if there is no label associated with that value
 
 Made at Wakoopa (wakoopa.com)
 
