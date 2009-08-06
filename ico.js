@@ -120,7 +120,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.element = element;
 
     this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
-    this.flat_data = this.data_sets.collect(function(data_set) { return data_set[1] }).flatten();
+    if(this.chartDefaults().stacked === true) { this.stackData(this.data_sets); }
+    this.flat_data = this.data_sets.collect(function(data_set) {return data_set[1]}).flatten();
 
     this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
     this.label_step = this.normaliser.step;
@@ -319,14 +320,15 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     if(!this.options.watermark) {
-        this.drawLinesInit(this, this.data);
+        this.drawLinesInit(this);
     }
 
     if (this.start_value != 0) {
       this.drawFocusHint();
     }
   },
-  drawLinesInit: function(thisgraph, data) {
+  drawLinesInit: function(thisgraph) {
+
     thisgraph.data_sets.each(function(data, index) {
       thisgraph.drawLines(data[0], thisgraph.options.colours[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element);
     }.bind(thisgraph));
@@ -611,7 +613,21 @@ Ico.StackGraph = Class.create(Ico.LineGraph, {
       this.options.curve_amount = 10;
     }
   },
+  stackData: function(stacked_data) {
+    this.stacked_data = stacked_data.collect(
+      function(data_set) {
+        return data_set[1]
+      });
 
+    this.stacked_data.reverse();
+    for (var i=1;i<this.stacked_data.length;i++) {
+      for(var j=0;j<this.stacked_data[0].length; j++) {
+        this.stacked_data[i][j] += this.stacked_data[i-1][j] + 2;
+      };
+    };
+    this.stacked_data.reverse();
+    return this.stacked_data;
+  },
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
     if(this.options.markers == 'circle') {
       if(this.options.stacked_fill == true) {
