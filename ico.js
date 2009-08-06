@@ -649,6 +649,9 @@ Ico.StackGraph = Class.create(Ico.AreaGraph, {
   chartDefaults: function() {
     return { plot_padding: 10, stacked_fill:true, stacked:true };
   },
+  normaliserOptions: function() {
+    return { start_value: 0 };
+  },
   stackData: function(stacked_data) {
     this.stacked_data = stacked_data.collect(
       function(data_set) {
@@ -658,7 +661,7 @@ Ico.StackGraph = Class.create(Ico.AreaGraph, {
     this.stacked_data.reverse();
     for (var i=1;i<this.stacked_data.length;i++) {
       for(var j=0;j<this.stacked_data[0].length; j++) {
-        this.stacked_data[i][j] += this.stacked_data[i-1][j] + 2;
+        this.stacked_data[i][j] += this.stacked_data[i-1][j];
       };
     };
     this.stacked_data.reverse();
