@@ -696,7 +696,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     x = x + this.bar_padding;
     var lastcolor = this.options.bargraph_lastcolour;
     var colour2;
-    if(lastcolor && coords[coords.length-1][1] == y){
+    if(lastcolor && index == coords.length-1){
       colour2 = lastcolor;
     } else {
       colour2 = colour;
@@ -706,7 +706,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
 
     if(this.options.datalabels) {
       var hover_colour = this.options.hover_colour;
-      var datalabelelem = this.buildDataLabel(element.id, datalabel[number]);
+      var datalabelelem = this.buildDataLabel(element.id, datalabel[index]);
       bargraph.node.onmouseover = (function (e) {
         bargraph.attr({fill: hover_colour,stroke:hover_colour});
 
@@ -771,9 +771,9 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     var y = this.y_padding_top+(this.bar_width/2)+(this.bar_padding/2);
     var lastcolor = this.options.bargraph_lastcolour;
 
-    $A(data).each(function(value, number) {
+    $A(data).each(function(value, index) {
       var colour2;
-      if(lastcolor && value == $A(data).last()){
+      if(lastcolor && index == $A(data).length-1){
         colour2 = lastcolor;
       } else {
         colour2 = colour;
@@ -794,7 +794,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
       if(this.options.datalabels) {
 
         var hover_colour = this.options.hover_colour;
-        var datalabelelem = this.buildDataLabel(element.id, datalabel[number]);
+        var datalabelelem = this.buildDataLabel(element.id, datalabel[index]);
 
         cursor.node.onmouseover = (function (e) {
           cursor.attr({fill: hover_colour,stroke:hover_colour});
