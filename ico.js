@@ -404,8 +404,13 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       }
     }
     var cursor;
-    if(this.options.stacked_fill) {
-      cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0'});
+    if(this.options.stacked_fill||this.options.area) {
+      if(this.options.area) {
+        var rel_opacity = this.data_sets.collect(function(data_set){return data_set.length}).length;
+        cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0', 'fill-opacity':1.5/rel_opacity});
+      } else {
+        cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0'});
+      }
       coords.unshift([coords[0][0],y_offset]);
       coords.push([coords[coords.length-1][0],y_offset]);
     } else {
@@ -413,7 +418,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     if(this.options.datalabels) {
-      var colorattr = (this.options.stacked_fill) ? "fill" : "stroke";
+      var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke";
       var hover_colour = this.options.hover_colour;
       var datalabelelem = this.buildDataLabel(element.id, datalabel);
 
@@ -603,15 +608,45 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   }
 });
 
-Ico.StackGraph = Class.create(Ico.LineGraph, {
+Ico.AreaGraph = Class.create(Ico.LineGraph, {
 
   chartDefaults: function() {
-    return { plot_padding: 10, stacked_fill:true, stacked:true };
+    return { plot_padding: 10, area:true };
   },
   setChartSpecificOptions: function() {
     if (typeof(this.options.curve_amount) == 'undefined') {
       this.options.curve_amount = 10;
     }
+  },
+  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
+    var filltype = this.options.area||this.options.stacked_fill;
+
+    if(this.options.markers == 'circle') {
+      if(filltype == true) {
+        if (index != 0 && index != coords.length-1) {
+          this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+        }
+      } else {
+         this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+      }
+    }
+    if (index == 0) {
+      return this.startPlot(cursor, x, y, colour);
+    }
+
+    if (this.options.curve_amount && index > 1 && (index < coords.length-1)) {
+      cursor.cplineTo(x, y, this.options.curve_amount);
+    } else if (this.options.curve_amount && !filltype && (index = 1 || (index = coords.length-1))) {
+      cursor.cplineTo(x, y, this.options.curve_amount);
+    } else {
+      cursor.lineTo(x, y);
+    }
+  }
+});
+
+Ico.StackGraph = Class.create(Ico.AreaGraph, {
+  chartDefaults: function() {
+    return { plot_padding: 10, stacked_fill:true, stacked:true };
   },
   stackData: function(stacked_data) {
     this.stacked_data = stacked_data.collect(
@@ -627,32 +662,8 @@ Ico.StackGraph = Class.create(Ico.LineGraph, {
     };
     this.stacked_data.reverse();
     return this.stacked_data;
-  },
-  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
-    if(this.options.markers == 'circle') {
-      if(this.options.stacked_fill == true) {
-        if (index != 0 && index != coords.length-1) {
-          this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
-        }
-      } else {
-         this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
-      }
-    }
-    if (index == 0) {
-      return this.startPlot(cursor, x, y, colour);
-    }
-
-    if (this.options.curve_amount && index > 1 && (index < coords.length-1)) {
-      cursor.cplineTo(x, y, this.options.curve_amount);
-    } else if (this.options.curve_amount && !this.options.stacked_fill && (index = 1 || (index = coords.length-1))) {
-      cursor.cplineTo(x, y, this.options.curve_amount);
-    } else {
-      cursor.lineTo(x, y);
-    }
   }
 });
-
-
 Ico.BarGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function() {
     return { plot_padding: 0 };

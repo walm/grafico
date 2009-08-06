@@ -5,6 +5,7 @@ This is a fork of http://github.com/alexyoung/ico/tree. It adds hover effects an
 This version still supports all of the original graphs and api options, check the original readme for more information
 
 h3. new options
+* Area charts
 * Stacked area charts and stacked line charts
 * Interactivity through hoverable items to display additional information, and give them a different colour on hover
 * Allow the last item of (horizontal) bar charts and spark bars to be a different colour
