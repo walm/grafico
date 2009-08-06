@@ -8,6 +8,7 @@ var Ico = {
 
   BaseGraph: {},
   LineGraph: {},
+  AreaGraph: {},
   StackGraph: {},
   BarGraph: {},
   HorizontalBarGraph: {}
