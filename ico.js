@@ -605,13 +605,13 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     if(this.options.odd_horizontal_offset>1) {
           index += this.options.odd_horizontal_offset;
       }
-    var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]}),
+    var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]})[graphindex].toFixed(3);
         vertical_label_unit = this.options.vertical_label_unit||"";
 
     if(this.options.datalabels) {
-      datalabel = datalabel+" <span>"+currentvalue[graphindex]+" "+vertical_label_unit+"</span>";
+      datalabel = datalabel+" <span>"+currentvalue+" "+vertical_label_unit+"</span>";
     } else {
-      datalabel = "<span>"+currentvalue[graphindex]+" "+vertical_label_unit+"</span>";
+      datalabel = "<span>"+currentvalue+" "+vertical_label_unit+"</span>";
     }
     var datalabelelem = this.buildDataLabel(element.id, datalabel);
 
