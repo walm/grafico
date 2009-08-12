@@ -592,10 +592,44 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       };
     }
   },
+  drawGraphValueMarkers: function(index, cursor, x, y, colour, datalabel, element) {
+
+    var circle = this.paper.circle(x, y, this.options.marker_size);
+    circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour,opacity:0 });
+    var block = this.paper.rect(x-(this.step/2), this.y_padding_top, this.step, this.graph_height);
+    block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0.0});
+    block.secondnode = circle;
+
+    if(this.options.datalabels) {
+      var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]});
+
+      datalabel = datalabel+" <span>"+currentvalue+" "+this.options.vertical_label_unit+"</span>";
+      var datalabelelem = this.buildDataLabel(element.id, datalabel);
+
+      block.node.onmouseover = (function (e) {
+        var mousepos = this.getMousePos(e);
+        block.secondnode.attr({opacity:1});
+        element.insert(datalabelelem);
+        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
+
+        block.node.onmousemove = (function(e) {
+          var mousepos = this.getMousePos(e);
+          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
+        }.bind(this));
+      }.bind(this));
+
+      block.node.onmouseout = function () {
+        block.secondnode.attr({opacity:0});
+        $(datalabelelem).remove();
+      };
+    }
+  },
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
 
     if (this.options.markers == 'circle') {
       this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+    } else if (this.options.markers == 'value') {
+      this.drawGraphValueMarkers(index,cursor,x,y,colour, datalabel, element);
     }
     if (index == 0) {
       return this.startPlot(cursor, x, y, colour);
