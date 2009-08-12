@@ -580,7 +580,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         element.insert(datalabelelem);
         $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
 
-        cursor.node.onmousemove = (function(e) {
+        circle.node.onmousemove = (function(e) {
           var mousepos = this.getMousePos(e);
           $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
         }.bind(this));
