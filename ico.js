@@ -396,12 +396,13 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     y_offset = (this.graph_height + this.y_padding_top);
 
     if(this.options.start_at_zero == false) {
-      var odd_horizontal_offset=0;
+      odd_horizontal_offset=0;
       $A(coords).each(function(coord, index) {
         if(coord[1] == y_offset) {odd_horizontal_offset++;}
       });
-      if(odd_horizontal_offset>1) {
-        coords.splice(0,odd_horizontal_offset);
+      this.options.odd_horizontal_offset = odd_horizontal_offset;
+      if(this.options.odd_horizontal_offset>1) {
+        coords.splice(0,this.options.odd_horizontal_offset);
       }
     }
     var cursor;
@@ -602,8 +603,12 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     block.secondnode = circle;
 
     if(this.options.datalabels) {
+      if(this.options.odd_horizontal_offset>1) {
+          index += this.options.odd_horizontal_offset;
+      }
       var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]}),
           vertical_label_unit = this.options.vertical_label_unit||"";
+
       datalabel = datalabel+" <span>"+currentvalue[graphindex]+" "+vertical_label_unit+"</span>";
       var datalabelelem = this.buildDataLabel(element.id, datalabel);
 
