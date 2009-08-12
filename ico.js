@@ -159,7 +159,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
       start_at_zero:          true,                                  // allow line graphs to start at a non-zero horizontal step
       bargraph_lastcolour:    false,                                 // different colour for first value in horizontal graph
-      hover_colour:           "#333333",                             // hover color if there are datalabels
+      hover_colour:           '',                             // hover color if there are datalabels
       watermark:              false,
       watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
       horizontal_rounded:     false,                                 // show rounded endings on horizontal bar charts if true
@@ -331,7 +331,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawLinesInit: function(thisgraph) {
 
     thisgraph.data_sets.each(function(data, index) {
-      thisgraph.drawLines(data[0], thisgraph.options.colours[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element);
+      thisgraph.drawLines(data[0], thisgraph.options.colours[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element,index);
     }.bind(thisgraph));
   },
   drawWatermark: function() {
@@ -391,7 +391,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
   },
 
-  drawLines: function(label, colour, data, datalabel, element) {
+  drawLines: function(label, colour, data, datalabel, element,graphindex) {
     var coords = this.calculateCoords(data);
     y_offset = (this.graph_height + this.y_padding_top);
 
@@ -420,7 +420,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     if(this.options.datalabels) {
       var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke";
-      var hover_colour = this.options.hover_colour;
+      var hover_colour = this.options.hover_colour|| colour;
       var datalabelelem = this.buildDataLabel(element.id, datalabel);
 
       cursor.node.onmouseover = (function (e) {
@@ -447,7 +447,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     $A(coords).each(function(coord, index) {
       var x = coord[0],
           y = coord[1];
-          this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element);
+          this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element,graphindex);
     }.bind(this));
   },
 
@@ -564,7 +564,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     cursor.moveTo(x, y);
   },
 
-  drawGraphMarkers: function(index, cursor, x, y, colour, datalabel, element) {
+  drawGraphMarkers: function(index, x, y, colour, datalabel, element) {
     var circle = this.paper.circle(x, y, this.options.marker_size);
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
 
@@ -592,18 +592,19 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       };
     }
   },
-  drawGraphValueMarkers: function(index, cursor, x, y, colour, datalabel, element) {
+  drawGraphValueMarkers: function(index, x, y, colour, datalabel, element, graphindex) {
 
-    var circle = this.paper.circle(x, y, this.options.marker_size);
+    var circle = this.paper.circle(x, y, this.options.marker_size),
+        block = this.paper.rect(x-(this.step/2), y-(this.graph_height/6), this.step, this.graph_height/3);
+
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour,opacity:0 });
-    var block = this.paper.rect(x-(this.step/2), this.y_padding_top, this.step, this.graph_height);
-    block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0.0});
+    block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0.5});
     block.secondnode = circle;
 
     if(this.options.datalabels) {
-      var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]});
-
-      datalabel = datalabel+" <span>"+currentvalue+" "+this.options.vertical_label_unit+"</span>";
+      var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]}),
+          vertical_label_unit = this.options.vertical_label_unit||"";
+      datalabel = datalabel+" <span>"+currentvalue[graphindex]+" "+vertical_label_unit+"</span>";
       var datalabelelem = this.buildDataLabel(element.id, datalabel);
 
       block.node.onmouseover = (function (e) {
@@ -624,12 +625,12 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       };
     }
   },
-  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
+  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
 
     if (this.options.markers == 'circle') {
-      this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+      this.drawGraphMarkers(index, x, y, colour, datalabel, element);
     } else if (this.options.markers == 'value') {
-      this.drawGraphValueMarkers(index,cursor,x,y,colour, datalabel, element);
+      this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
     }
     if (index == 0) {
       return this.startPlot(cursor, x, y, colour);
@@ -739,7 +740,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
 
     if(this.options.datalabels) {
-      var hover_colour = this.options.hover_colour;
+      var hover_colour = this.options.hover_colour || colour;
       var datalabelelem = this.buildDataLabel(element.id, datalabel[index]);
       bargraph.node.onmouseover = (function (e) {
         bargraph.attr({fill: hover_colour,stroke:hover_colour});
@@ -827,7 +828,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
       if(this.options.datalabels) {
 
-        var hover_colour = this.options.hover_colour;
+        var hover_colour = this.options.hover_colour || colour;
         var datalabelelem = this.buildDataLabel(element.id, datalabel[index]);
 
         cursor.node.onmouseover = (function (e) {
