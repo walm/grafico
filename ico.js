@@ -608,8 +608,12 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     if(this.options.odd_horizontal_offset>1) {
           index += this.options.odd_horizontal_offset;
       }
-    var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]})[graphindex].toFixed(3);
+    var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]})[graphindex];
         vertical_label_unit = this.options.vertical_label_unit||"";
+        currentvalue = currentvalue.toString().split('.');
+        if(currentvalue[1]) {
+          currentvalue[1] = currentvalue[1].truncate(3, '');
+        }
 
     if(this.options.datalabels) {
       datalabel = datalabel+" <span>"+currentvalue+" "+vertical_label_unit+"</span>";
