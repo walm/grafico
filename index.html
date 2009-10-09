@@ -45,14 +45,16 @@ p.example { color: #555; }
   </head>
   <body>
   <p>sparklines lol! <span id="sparkline" class="sparkline"></span> </p>
-    <h2>Categories stacked area chart</h2>
+    <h2>area chart</h2>
     <div id="stackgraph" class="stackgraph"></div>
-    <h2>Todays software line chart</h2>
+    <h2>stacked area chart</h2>
+    <div id="stackgraph2" class="stackgraph"></div>
+    <h2>line chart</h2>
     <div id="linegraph" class="linegraph"></div>
     <h2>Horizontal bar graph</h2>
     <div id="bargraph_5" class="linegraph"></div>
 
-    <h2>Reach graph test</h2>
+    <h2>small line charts test</h2>
     <div id="linegraph2" class="linegraph"></div>
     <div id="linegraph3" class="linegraph"></div>
     <div id="linegraph4" class="linegraph" ></div>
@@ -91,6 +93,34 @@ var data = [[11.1, 10.1, 13.1, 10.7, 12.0, 12.9, 8.6, 11.7, 8.5], [11.6, 11.4, 1
 
 var stackgraph =
   new Ico.AreaGraph($('stackgraph'),
+    {
+    one: data[4],
+    two: data[3],
+    three: data[2],
+    four: data[1],
+    five: data[0]
+    },
+    {
+      labels: ['Sat 08 Dec', 'Sun 09 Dec', 'Mon 10 Dec', 'Tue 11 Dec', 'Wed 12 Dec', 'Thu 13 Dec', 'Fri 14 Dec', 'Sat 15 Dec', 'Sun 16 Dec'],
+      meanline: false,
+      grid: true,
+      plot_padding: 0,
+      show_vertical_labels: true,
+      vertical_label_unit: "hr",
+      curve_amount: 20,
+      background_colour: "#eeeeee",
+      draw_axis: false,
+      colours: {
+        one: '#a267a7',
+        two: '#dc504f',
+        three: '#e2ba74',
+        four: '#79af7b',
+        five: '#4b80b6'
+      },
+      datalabels: {one:'Development', two:'Office', three:'Utilities', four:'Design', five:'Internet'}
+});
+var stackgraph2 =
+  new Ico.StackGraph($('stackgraph2'),
     {
     one: data[4],
     two: data[3],
