@@ -53,58 +53,57 @@ Array.prototype.standard_deviation = function() {
 Ico.Normaliser = Class.create({
   initialize: function(data, options) {
     this.options = {
-      start_value: null,
-      graph_height: 0
+      start_value: null
     };
     Object.extend(this.options, options || { });
 
     this.min = data.min();
     this.max = data.max();
-    this.middle = (this.min+this.max)/2;
     this.standard_deviation = data.standard_deviation();
     this.range = 0;
-    this.step = 1;
+    this.step = this.labelStep(this.max - this.min);
     this.start_value = this.calculateStart();
     this.process();
   },
 
-  calculateStart: function(offset) {
-    offset = offset || 1;
-    var start_value = this.round(this.options.start_value != null && this.min >= 0 ? this.options.start_value : this.min, offset);
-    if (start_value > this.min) {
-      start_value = this.min;
-    } else if (start_value < 0 && start_value > this.min) {
-      return this.calculateStart(offset + 1);
+  calculateStart: function() {
+    var min = this.options.start_value != null && this.min >= 0 ? this.options.start_value : this.min;
+    start_value = this.round(min, 1);
+
+    /* This is a boundary condition */
+    if (this.min > 0 && start_value > this.min) {
+      return 0;
     }
+
     return start_value;
   },
 
   /* Given a value, this method rounds it to the nearest good value for an origin */
   round: function(value, offset) {
     offset = offset || 1;
-    if (this.standard_deviation > 0.1) {
-      var multiplier = Math.pow(10, length - offset);
-      value *= multiplier;
-      value = Math.round(value) / multiplier;
-    }
+    roundedValue = value;
 
-    return value;
+    if (this.standard_deviation > 0.1) {
+      var multiplier = Math.pow(10, -offset);
+      roundedValue = Math.round(value * multiplier) / multiplier;
+
+      if (roundedValue > this.min) {
+        return this.round(value - this.step);
+      }
+    }
+    return roundedValue;
   },
 
   process: function() {
     this.range = this.max - this.start_value;
-    this.step = this.labelStep();
-
-    var delta = (this.step*4*4)/this.range - (this.range+this.start_value),
-        graphdist = this.options.graph_height/(this.range/this.step);
-
-    this.step *= (delta < 1 && graphdist < 30) ? 4 : 1;
-
-
+    this.step = this.labelStep(this.range);
+    if (this.range/this.step > 15) {
+      this.step *= 3;
+    }
   },
 
-  labelStep: function() {
-    return Math.pow(10, (Math.log(this.range) / Math.LN10).round() - 1)
+  labelStep: function(value) {
+    return Math.pow(10, (Math.log(value) / Math.LN10).round() - 1)
   }
 });
 
@@ -276,7 +275,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   paddingLeftOffset: function() {
-    if(this.options.show_vertical_label) {
+    if(this.options.show_vertical_labels) {
       /* Find the longest label and multiply it by the font size */
       var data = this.flat_data;
 
@@ -286,8 +285,9 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       var longest_label_length = $A(data).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
       longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
       return longest_label_length * this.options.font_size;
+    } else {
+      return 0;
     }
-    return 0;
   },
 
   paddingBottomOffset: function() {
