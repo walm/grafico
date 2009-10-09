@@ -276,15 +276,18 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   paddingLeftOffset: function() {
-    /* Find the longest label and multiply it by the font size */
-    var data = this.flat_data;
+    if(this.options.show_vertical_label) {
+      /* Find the longest label and multiply it by the font size */
+      var data = this.flat_data;
 
-    // Round values
-    data = this.roundValues(data, 2);
+      // Round values
+      data = this.roundValues(data, 2);
 
-    var longest_label_length = $A(data).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
-    longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
-    return longest_label_length * this.options.font_size;
+      var longest_label_length = $A(data).sort(function(a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
+      longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
+      return longest_label_length * this.options.font_size;
+    }
+    return 0;
   },
 
   paddingBottomOffset: function() {
