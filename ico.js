@@ -148,7 +148,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       vertical_label_unit:    false,
       colours:                this.makeRandomColours(),             // Line colours
       background_colour:      element.getStyle('backgroundColor'),
-      label_colour:           '#666',                               // Label text colour
+      label_colour:           '#000',                               // Label text colour
+      grid_colour:            '#ccc',                               // Grid line colour
       markers:                false,                                // false, circle
       marker_size:            5,
       meanline:               false,
@@ -362,15 +363,15 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     watermarkimg.src = watermark.src || watermark;
   },
   drawGrid: function() {
-    var path = this.paper.path({ stroke: '#CCC', 'stroke-width': '1px' });
+    var path = this.paper.path({ stroke: this.options.grid_colour});
 
     if (this.options.show_vertical_labels) {
       var y = this.graph_height + this.y_padding_top;
       for (i = 0; i < this.y_label_count; i++) {
         y = y - (this.graph_height / this.y_label_count);
         if((this.options.horizontalbar_grid && i == this.y_label_count-1)|| !this.options.horizontalbar_grid) {
-          path.moveTo(this.x_padding_left, y);
-          path.lineTo(this.x_padding_left + this.graph_width, y);
+          path.moveTo(this.x_padding_left, parseInt(y)+0.5);
+          path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y)+0.5);
         }
       }
     }
@@ -381,16 +382,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
       for (i = 0; i < x_labels; i++) {
         if((this.options.hide_empty_label_grid == true && this.options.labels[i] != "") || this.options.hide_empty_label_grid == false) {
-          path.moveTo(x, this.y_padding_top);
-          path.lineTo(x, this.y_padding_top + this.graph_height);
+          path.moveTo(parseInt(x), this.y_padding_top);
+          path.lineTo(parseInt(x), this.y_padding_top + this.graph_height);
         }
         x = this.options.horizontalbar_grid ? x+(this.graph_width / this.y_label_count) : x + this.step;
       }
-
-      //last line
-      x = this.graph_width+this.x_padding_left-1;
-      path.moveTo(x, this.y_padding_top);
-      path.lineTo(x, this.y_padding_top + this.graph_height);
     }
   },
 
@@ -489,10 +485,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawAxis: function() {
     var cursor = this.paper.path({stroke: this.options.label_colour});
 
-    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom);
-    cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom);
+    cursor.moveTo(this.x_padding_left,                    this.options.height - this.y_padding_bottom + 0.5);
+    cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom + 0.5);
 
-    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom);
+    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom+1);
     cursor.lineTo(this.x_padding_left - 1, this.y_padding_top);
   },
 
@@ -520,15 +516,15 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var x = this.x_padding_left - 1 + x_offset(start_offset),
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset);
 
-    var cursor = this.paper.path({stroke: this.options.label_colour});
+    var cursor = this.paper.path({stroke: this.options.grid_colour});
 
-    font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: "#000"};
+    font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: this.options.label_colour};
     Object.extend(font_options, extra_font_options || {});
 
     labels.each(function(label) {
-      if((this.options.hide_empty_label_grid == true && label != "") || this.options.hide_empty_label_grid == false) {
-        cursor.moveTo(x, y);
-        cursor.lineTo(x + y_offset(5), y + x_offset(5));
+      if(this.options.draw_axis && ((this.options.hide_empty_label_grid == true && label != "") || this.options.hide_empty_label_grid == false)) {
+        cursor.moveTo(parseInt(x), parseInt(y)+0.5);
+        cursor.lineTo(parseInt(x) + y_offset(5), parseInt(y)+0.5 + x_offset(5));
       }
       this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toFront();
       x = x + x_offset(step);
