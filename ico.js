@@ -746,7 +746,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     } else {
       colour2 = colour;
     }
-    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y-(this.options.height-y-this.y_padding_bottom), this.bar_width, parseInt((this.options.height-this.y_padding_bottom)-y));
+    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y-(this.options.height-y-this.y_padding_bottom), this.bar_width, (this.options.height-this.y_padding_bottom)-y);
     bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
 
     if(this.options.datalabels) {
