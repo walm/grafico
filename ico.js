@@ -526,7 +526,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         cursor.moveTo(parseInt(x), parseInt(y)+0.5);
         cursor.lineTo(parseInt(x) + y_offset(5), parseInt(y)+0.5 + x_offset(5));
       }
-      this.paper.text(x + font_offsets[0], y - font_offsets[1], label).attr(font_options).toFront();
+      this.paper.text(x + font_offsets[0], y - 2 - font_offsets[1], label).attr(font_options).toFront();
       x = x + x_offset(step);
       y = y + y_offset(step);
     }.bind(this));
