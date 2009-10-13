@@ -485,11 +485,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawAxis: function() {
     var cursor = this.paper.path({stroke: this.options.label_colour});
 
-    cursor.moveTo(this.x_padding_left,                    this.options.height - this.y_padding_bottom + 0.5);
-    cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom + 0.5);
+    cursor.moveTo(this.x_padding_left,                    this.options.height - parseInt(this.y_padding_bottom) + 0.5);
+    cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - parseInt(this.y_padding_bottom) + 0.5);
 
-    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom+1);
-    cursor.lineTo(this.x_padding_left - 1, this.y_padding_top);
+    cursor.moveTo(parseInt(this.x_padding_left), this.options.height - this.y_padding_bottom+1);
+    cursor.lineTo(parseInt(this.x_padding_left), this.y_padding_top);
   },
 
   makeValueLabels: function(steps) {
