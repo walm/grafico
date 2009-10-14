@@ -475,7 +475,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   drawMeanLine: function(data) {
-    var cursor = this.paper.path(this.options.meanline);
+    var cursor = this.paper.path().attr({stroke: this.options.meanline});
     var offset = $A(data).inject(0, function(value, sum) { return sum + value; }) / data.length;
 
     cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset);
