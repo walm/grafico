@@ -485,11 +485,13 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawAxis: function() {
     var cursor = this.paper.path().attr({stroke: this.options.label_colour});
 
-    cursor.moveTo(this.x_padding_left,                    this.options.height - parseInt(this.y_padding_bottom) + 0.5);
-    cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - parseInt(this.y_padding_bottom) + 0.5);
+    //horizontal
+    cursor.moveTo(parseInt(this.x_padding_left)-0.5,                    this.options.height - parseInt(this.y_padding_bottom) + 0.5);
+    cursor.lineTo(parseInt(this.graph_width + this.x_padding_left)-0.5, this.options.height - parseInt(this.y_padding_bottom) + 0.5);
 
-    cursor.moveTo(parseInt(this.x_padding_left), this.options.height - this.y_padding_bottom+1);
-    cursor.lineTo(parseInt(this.x_padding_left), this.y_padding_top);
+    //vertical
+    cursor.moveTo(parseInt(this.x_padding_left)-0.5, parseInt(this.options.height - this.y_padding_bottom)+0.5);
+    cursor.lineTo(parseInt(this.x_padding_left)-0.5, parseInt(this.y_padding_top));
   },
 
   makeValueLabels: function(steps) {
@@ -513,10 +515,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     /* Start at the origin */
-    var x = this.x_padding_left - 1 + x_offset(start_offset),
+    var x = parseInt(this.x_padding_left) - 0.5 + x_offset(start_offset),
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset);
 
-    var cursor = this.paper.path().attr({stroke: this.options.grid_colour});
+    var cursor = this.paper.path().attr({stroke: this.options.label_colour});
 
     font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: this.options.label_colour};
     Object.extend(font_options, extra_font_options || {});
