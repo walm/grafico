@@ -363,7 +363,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     watermarkimg.src = watermark.src || watermark;
   },
   drawGrid: function() {
-    var path = this.paper.path({ stroke: this.options.grid_colour});
+    var path = this.paper.path().attr({ stroke: this.options.grid_colour});
 
     if (this.options.show_vertical_labels) {
       var y = this.graph_height + this.y_padding_top;
@@ -408,14 +408,14 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if(this.options.stacked_fill||this.options.area) {
       if(this.options.area) {
         var rel_opacity = this.data_sets.collect(function(data_set){return data_set.length}).length;
-        cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0', 'fill-opacity':1.5/rel_opacity});
+        cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0', 'fill-opacity':1.5/rel_opacity});
       } else {
-        cursor = this.paper.path({stroke: colour, fill: colour, 'stroke-width': '0'});
+        cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0'});
       }
       coords.unshift([coords[0][0],y_offset]);
       coords.push([coords[coords.length-1][0],y_offset]);
     } else {
-      cursor = this.paper.path({stroke: colour, 'stroke-width': '5px'});
+      cursor = this.paper.path().attr({stroke: colour, 'stroke-width': '5px'});
     }
 
     if(this.options.datalabels) {
@@ -466,7 +466,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var length = 5,
         x = this.x_padding_left + (length / 2) - 1,
         y = this.options.height - this.y_padding_bottom;
-    var cursor = this.paper.path({stroke: this.options.label_colour, 'stroke-width': 2});
+    var cursor = this.paper.path().attr({stroke: this.options.label_colour, 'stroke-width': 2});
 
     cursor.moveTo(x, y);
     cursor.lineTo(x - length, y - length);
@@ -483,7 +483,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   drawAxis: function() {
-    var cursor = this.paper.path({stroke: this.options.label_colour});
+    var cursor = this.paper.path().attr({stroke: this.options.label_colour});
 
     cursor.moveTo(this.x_padding_left,                    this.options.height - parseInt(this.y_padding_bottom) + 0.5);
     cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - parseInt(this.y_padding_bottom) + 0.5);
@@ -516,7 +516,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var x = this.x_padding_left - 1 + x_offset(start_offset),
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset);
 
-    var cursor = this.paper.path({stroke: this.options.grid_colour});
+    var cursor = this.paper.path().attr({stroke: this.options.grid_colour});
 
     font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: this.options.label_colour};
     Object.extend(font_options, extra_font_options || {});
@@ -871,7 +871,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     var length = 5,
         x = this.x_padding_left + (this.step * 2),
         y = this.options.height - this.y_padding_bottom;
-    var cursor = this.paper.path({stroke: this.options.label_colour, 'stroke-width': 2});
+    var cursor = this.paper.path().attr({stroke: this.options.label_colour, 'stroke-width': 2});
 
     cursor.moveTo(x, y);
     cursor.lineTo(x - length, y + length);
@@ -940,7 +940,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
   },
 
   drawLines: function(label, colour, data) {
-    var line = this.paper.path({ stroke: colour }).moveTo(0, this.options.height - data.first());
+    var line = this.paper.path().attr({ stroke: colour }).moveTo(0, this.options.height - data.first());
     var x = 0;
     data.slice(1).each(function(value) {
       x = x + this.step;
@@ -980,7 +980,7 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
       } else {
         colour2 = colour;
       }
-      var line = this.paper.path({ stroke: colour2, 'stroke-width': width });
+      var line = this.paper.path().attr({ stroke: colour2, 'stroke-width': width });
       line.moveTo(x, this.options.height - value);
       line.lineTo(x, this.options.height);
       x = x + this.step;
