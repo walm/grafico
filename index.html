@@ -86,7 +86,7 @@ var linegraph3 =
      var linegraph4 = new Ico.LineGraph(
         $('linegraph4'),
         { a: [23.4034, 24.01285, 24.43865, 23.9407, 23.7391, 23.85575, 24.13295, 23.738, 23.3405, 23.7046, 23.49665, 23.7359, 23.455, 23.1422, 24.108] },
-        $H({ labels: ["1 Oct", "", "", "", "", "19 Sep", "", "", "", "", "28 Sep", "", "", "", "8 Sep"], datalabels: { a: "Firefox" }, colours: { a: "#a267a7" }}).merge($H({markers: "value", meanline: false, hide_empty_label_grid: true, font_size: 11,  grid: true, curve_amount: 5, plot_padding: 0, vertical_label_unit: "%"})).toObject()
+        $H({ labels: ["1 Oct", "", "", "", "", "19 Sep", "", "", "", "", "28 Sep", "", "", "", "8 Sep"], datalabels: { a: "Firefox" }, colours: { a: "#a267a7" }}).merge($H({markers: "value", meanline: false, hide_empty_label_grid: true, font_size: 11,  grid: true, curve_amount: 5, plot_padding: 0, vertical_label_unit: "%", draw_axis:false})).toObject()
       );
       </script>
     <script type="text/javascript">
@@ -173,7 +173,7 @@ var bargraph_5 =
    {
    labels: ["Safari", "Gmail", "Twitter", "QuickTime Player", "Google Reader", "Bean", "...and more"],
    colour: '#4b80b6',
-   grid: false,
+   grid: true,
    background_colour: "#ffffff",
    vertical_label_unit: "%",
    horizontal_rounded: true,

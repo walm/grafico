@@ -367,12 +367,12 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     if (this.options.show_vertical_labels) {
       var y = this.graph_height + this.y_padding_top;
-      for (i = 0; i < this.y_label_count; i++) {
-        y = y - (this.graph_height / this.y_label_count);
-        if((this.options.horizontalbar_grid && i == this.y_label_count-1)|| !this.options.horizontalbar_grid) {
+      for (i = 0; i < this.y_label_count+1; i++) {
+        if((this.options.horizontalbar_grid && i == this.y_label_count)|| !this.options.horizontalbar_grid) {
           path.moveTo(this.x_padding_left, parseInt(y)+0.5);
           path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y)+0.5);
         }
+        y = y - (this.graph_height / this.y_label_count);
       }
     }
 
@@ -386,6 +386,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
           path.lineTo(parseInt(x), this.y_padding_top + this.graph_height);
         }
         x = this.options.horizontalbar_grid ? x+(this.graph_width / this.y_label_count) : x + this.step;
+      }
+      if(this.bar_padding) {
+          path.moveTo(this.x_padding_left + this.graph_width-0.5, this.y_padding_top);
+          path.lineTo(this.x_padding_left + this.graph_width-0.5, this.y_padding_top + this.graph_height);
       }
     }
   },
