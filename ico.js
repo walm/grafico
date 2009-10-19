@@ -771,25 +771,44 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     var bargraph = this.paper.rect(x-(this.bar_width/2), start_y-(this.options.height-y-this.y_padding_bottom), this.bar_width, (this.options.height-this.y_padding_bottom)-y);
     bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
 
+
     if(this.options.datalabels) {
       var hover_colour = this.options.hover_colour || colour;
-      var datalabelelem = this.buildDataLabel(element.id, datalabel[index]);
-      bargraph.node.onmouseover = (function (e) {
+      var datalabel = datalabel[index];
+
+      var hoverset = this.paper.set(),
+          text = this.paper.text(bargraph.attrs.x+(this.bar_width/2), bargraph.attrs.y-(this.options.font_size*1.5), datalabel),
+          hoverbar = this.paper.rect(x-(this.bar_width/2), this.y_padding_top, this.bar_width, this.options.height);
+
+      hoverbar.attr({fill: colour2, 'stroke-width': 0, stroke : colour2,opacity:0});
+      text.attr({'font-size': this.options.font_size, fill:this.options.background_colour,opacity: 1})
+
+      var textbox = text.getBBox(),
+          textpadding = 4,
+          roundrect= this.paper.rect(
+            text.attrs.x-(textbox.width/2)-textpadding,
+            text.attrs.y-(textbox.height/2)-textpadding,
+            textbox.width+(textpadding*2),
+            textbox.height+(textpadding*2),
+            textpadding*1.5);
+      roundrect.attr({fill: this.options.label_colour,opacity: 1});
+
+      text.toFront();
+      hoverset.push(roundrect,text).attr({opacity:0}).toFront();
+      hoverbar.toFront();
+
+      if(roundrect.attrs.y < 0) {
+        hoverset.translate(0,1+(roundrect.attrs.y*-1));
+      }
+
+      hoverbar.node.onmouseover = (function (e) {
         bargraph.attr({fill: hover_colour,stroke:hover_colour});
-
-        var mousepos = this.getMousePos(e);
-        element.insert(datalabelelem);
-        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
-
-        bargraph.node.onmousemove = (function(e) {
-          var mousepos = this.getMousePos(e);
-          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
-        }.bind(this));
+        hoverset.attr({opacity:1});
       }.bind(this));
 
-      bargraph.node.onmouseout = function (e) {
+      hoverbar.node.onmouseout = function (e) {
         bargraph.attr({fill: colour2,stroke:colour2});
-        $(datalabelelem).remove();
+        hoverset.attr({opacity:0});
       };
     }
 
