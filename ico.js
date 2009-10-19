@@ -603,47 +603,55 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     }
   },
   drawGraphValueMarkers: function(index, x, y, colour, datalabel, element, graphindex) {
-
-    var circle = this.paper.circle(x, y, this.options.marker_size),
-        block = this.paper.rect(x-(this.step/2), y-(this.graph_height/6), this.step, this.graph_height/3);
-
-    circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour,opacity:0 });
-    block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0});
-    block.secondnode = circle;
-
     if(this.options.odd_horizontal_offset>1) {
           index += this.options.odd_horizontal_offset;
       }
+    index -= (this.options.stacked) ? 1 : 0;
     var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]})[graphindex];
         vertical_label_unit = this.options.vertical_label_unit||"";
-        currentvalue = currentvalue.toString().split('.');
-        if(currentvalue[1]) {
-          currentvalue[1] = currentvalue[1].truncate(3, '');
+        if(currentvalue) {
+          currentvalue = currentvalue.toString().split('.');
+          if(currentvalue[1]) {
+            currentvalue[1] = currentvalue[1].truncate(3, '');
+          }
         }
 
-    if(this.options.datalabels) {
-      datalabel = datalabel+" <span>"+currentvalue+" "+vertical_label_unit+"</span>";
-    } else {
-      datalabel = "<span>"+currentvalue+" "+vertical_label_unit+"</span>";
-    }
-    var datalabelelem = this.buildDataLabel(element.id, datalabel);
+    if((this.options.stacked && index != -1 && typeof(currentvalue) != "undefined") || !this.options.stacked) {
+      var rectx = x-(this.step/2),
+          recty = (this.options.stacked) ? y-(this.graph_height/18): y-(this.graph_height/6),
+          rectw = this.step,
+          recth = (this.options.stacked) ? this.graph_height/9     : this.graph_height/3,
+          circle = this.paper.circle(x, y, this.options.marker_size),
+          block = this.paper.rect(rectx, recty, rectw, recth);
 
-    block.node.onmouseover = (function (e) {
-      var mousepos = this.getMousePos(e);
-      block.secondnode.attr({opacity:1});
-      element.insert(datalabelelem);
-      $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
+      circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour,opacity:0});
+      block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0});
+      block.secondnode = circle;
 
-      block.node.onmousemove = (function(e) {
+      if(this.options.datalabels) {
+        datalabel = datalabel+" <span>"+currentvalue+" "+vertical_label_unit+"</span>";
+      } else {
+        datalabel = "<span>"+currentvalue+" "+vertical_label_unit+"</span>";
+      }
+      var datalabelelem = this.buildDataLabel(element.id, datalabel);
+
+      block.node.onmouseover = (function (e) {
         var mousepos = this.getMousePos(e);
-        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
-      }.bind(this));
-    }.bind(this));
+        block.secondnode.attr({opacity:1});
+        element.insert(datalabelelem);
+        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
 
-    block.node.onmouseout = function () {
-      block.secondnode.attr({opacity:0});
-      $(datalabelelem).remove();
-    };
+        block.node.onmousemove = (function(e) {
+          var mousepos = this.getMousePos(e);
+          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
+        }.bind(this));
+      }.bind(this));
+
+      block.node.onmouseout = function () {
+        block.secondnode.attr({opacity:0});
+        $(datalabelelem).remove();
+      };
+    }
   },
   drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
 
@@ -674,7 +682,7 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
       this.options.curve_amount = 10;
     }
   },
-  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element) {
+  drawPlot: function(index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
     var filltype = this.options.area||this.options.stacked_fill;
 
     if(this.options.markers == 'circle') {
@@ -685,7 +693,10 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
       } else {
          this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
       }
+    } else if (this.options.markers == 'value') {
+      this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
     }
+
     if (index == 0) {
       return this.startPlot(cursor, x, y, colour);
     }
@@ -705,7 +716,6 @@ Ico.StackGraph = Class.create(Ico.AreaGraph, {
     return { plot_padding: 10, stacked_fill:true, stacked:true };
   },
   normaliserOptions: function() {
-    return { start_value: 0 };
   },
   stackData: function(stacked_data) {
     this.stacked_data = stacked_data.collect(
