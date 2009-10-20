@@ -237,8 +237,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       posy = e.pageY;
     }
     else if (e.clientX || e.clientY)   {
-      posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-      posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+      posx = e.clientX + document.body.scrollLeft - document.documentElement.scrollLeft;
+      posy = e.clientY + document.body.scrollTop - document.documentElement.scrollTop;
     }
 
     var mousepos = {x:posx,y:posy};
@@ -436,29 +436,61 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if(this.options.datalabels) {
       var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke";
       var hover_colour = this.options.hover_colour|| colour;
-      var datalabelelem = this.buildDataLabel(element.id, datalabel);
+
+      var hoverSet = this.paper.set(),
+          textpadding = 4,
+          text = this.paper.text(cursor.attrs.x, cursor.attrs.y-(this.options.font_size*1.5)-textpadding, datalabel);
+          text.attr({'font-size': this.options.font_size, fill:this.options.background_colour,opacity: 1})
+      var textbox = text.getBBox(),
+          roundRect= this.paper.rect(
+            text.attrs.x-(textbox.width/2)-textpadding,
+            text.attrs.y-(textbox.height/2)-textpadding,
+            textbox.width+(textpadding*2),
+            textbox.height+(textpadding*2),
+            textpadding*1.5);
+      roundRect.attr({fill: this.options.label_colour,opacity: 1});
+
+      text.toFront();
+      hoverSet.push(roundRect,text).attr({opacity:0}).toFront();
+      this.checkHoverPos(roundRect,hoverSet);
+      this.globalHoverSet.push(hoverSet);
 
       cursor.node.onmouseover = (function (e) {
+
         if(colorattr==="fill") { cursor.attr({fill: hover_colour,stroke:hover_colour});}
         else {                   cursor.attr({stroke: hover_colour});}
 
         var mousepos = this.getMousePos(e);
-        element.insert(datalabelelem);
-        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
+        hoverSet[0].attr({
+          x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
+          y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
+          opacity:1});
+        hoverSet[1].attr({
+          x:mousepos.x-element.offsetLeft,
+          y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
+          opacity:1});
 
         cursor.node.onmousemove = (function(e) {
           var mousepos = this.getMousePos(e);
-          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
+          hoverSet[0].attr({
+            x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
+            y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
+            opacity:1});
+          hoverSet[1].attr({
+            x:mousepos.x-element.offsetLeft,
+            y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
+            opacity:1});
+          this.checkHoverPos(roundRect,hoverSet);
         }.bind(this));
       }.bind(this));
+
       cursor.node.onmouseout = function () {
         if(colorattr==="fill") { cursor.attr({fill: colour,stroke:colour});}
         else {                   cursor.attr({stroke: colour});}
-
-        $(datalabelelem).remove();
+        hoverSet.attr({opacity:0});
       };
-
     }
+
     $A(coords).each(function(coord, index) {
       var x = coord[0],
           y = coord[1];
@@ -569,8 +601,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if(roundRect.attrs.x < 0) {
       hoverSet.translate(1+(roundRect.attrs.x*-1),0);
     }
-    rect = roundRect.getBBox();
 
+    rect = roundRect.getBBox();
     /*right*/
     if((roundRect.attrs.x +rect.width) > this.options.width) {
       var diff = (roundRect.attrs.x +rect.width) - this.options.width;

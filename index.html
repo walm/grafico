@@ -19,12 +19,6 @@ p.example { color: #555; }
 .stackgraph {width: 610px; height: 240px; background-color: #eee; margin-bottom: 20px;overflow:hidden; }
 .linegraph{width: 610px; height: 200px; background-color: #fff; margin-bottom: 20px; }
 #bargraph_5{height:200px;}
-
-.datalabelelem {position:absolute;width:120px;height:30px;line-height:30px;text-align:center;font-size:16px;-moz-border-radius:5px;opacity:0.9;border:2px solid #333;background:#fff;margin-left:-135px;margin-top:-45px;z-index:99;}
-
-#datalabelelem-linegraph{background: #000;color:#fff}
-#datalabelelem-bargraph_5{height:auto;line-height:1.5em;font-size:10px;font-style:italic;}
-
 #linegraph2,
 #linegraph3,
 #linegraph4 {
@@ -35,24 +29,19 @@ p.example { color: #555; }
     float:left;
     margin-right:20px;
 }
-#datalabelelem-linegraph2,
-#datalabelelem-linegraph3,
-#datalabelelem-linegraph4 {margin-left:-125px;margin-top:-40px;font-size:10px;width:auto;height:auto;padding-left:5px;padding-right:5px;font-weight:bold;}
-#datalabelelem-linegraph2 span,
-#datalabelelem-linegraph3 span,
-#datalabelelem-linegraph4 span {font-weight:normal;}
+
 
     </style>
   </head>
   <body>
-  <p>sparklines lol! <span id="sparkline" class="sparkline"></span> </p>
+  <p>sparklines <span id="sparkline" class="sparkline"></span> </p>
     <h2>area chart</h2>
     <div id="stackgraph" class="stackgraph"></div>
     <h2>stacked area chart</h2>
     <div id="stackgraph2" class="stackgraph"></div>
     <h2>line chart</h2>
     <div id="linegraph" class="linegraph"></div>
-    <h2>Horizontal bar graph</h2>
+    <h2>bar chart</h2>
     <div id="bargraph_5" class="linegraph"></div>
 
     <h2>small line charts test</h2>
