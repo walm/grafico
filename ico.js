@@ -692,7 +692,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         var datalabel = datalabel+": "+currentvalue;
         datalabel += (this.options.vertical_label_unit)? " "+this.options.vertical_label_unit:"";
       } else {
-        var datalabel = currentvalue;
+        var datalabel = currentvalue.toString();
         datalabel += (this.options.vertical_label_unit)? " "+this.options.vertical_label_unit:"";
       }
       var hoverSet = this.paper.set(),
@@ -846,7 +846,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
 
     if(this.options.datalabels) {
       var hover_colour = this.options.hover_colour || colour;
-      var datalabel = datalabel[index];
+      var datalabel = datalabel[index].toString();
 
       var hoverSet = this.paper.set(),
           text = this.paper.text(bargraph.attrs.x+(this.bar_width/2), bargraph.attrs.y-(this.options.font_size*1.5), datalabel),
