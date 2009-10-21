@@ -25,18 +25,18 @@ Array.prototype.sum = function() {
 if (typeof Array.prototype.max == 'undefined') {
   Array.prototype.max = function() {
     return Math.max.apply({}, this)
-  }
+  };
 }
 
 if (typeof Array.prototype.min == 'undefined') {
   Array.prototype.min = function() {
     return Math.min.apply({}, this)
-  }
+  };
 }
 
 Array.prototype.mean = function() {
   return this.sum() / this.length;
-}
+};
 
 Array.prototype.variance = function() {
   var mean = this.mean(),
@@ -45,11 +45,11 @@ Array.prototype.variance = function() {
     variance += Math.pow(this[i] - mean, 2);
   }
   return variance / (this.length - 1);
-}
+};
 
 Array.prototype.standard_deviation = function() {
   return Math.sqrt(this.variance());
-}
+};
 
 Ico.Normaliser = Class.create({
   initialize: function(data, options) {
@@ -113,15 +113,36 @@ Ico.Base = Class.create({
     return $A(data).collect(function(value) {
       return this.normalise(value);
     }.bind(this))
+  },
+  deepCopy: function(obj) {
+    if (Object.prototype.toString.call(obj) === '[object Array]') {
+        var out = [], i = 0, len = obj.length;
+        for ( ; i < len; i++ ) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    if (typeof obj === 'object') {
+        var out = {}, i;
+        for ( i in obj ) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    return obj;
   }
 });
+
+
 
 Ico.BaseGraph = Class.create(Ico.Base, {
   initialize: function(element, data, options) {
     this.element = element;
-
     this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
-    if(this.chartDefaults().stacked === true) { this.stackData(this.data_sets); }
+    if(this.chartDefaults().stacked === true) {
+      this.real_data = this.deepCopy(this.data_sets);
+      this.stackData(this.data_sets);
+    }
     this.flat_data = this.data_sets.collect(function(data_set) {return data_set[1]}).flatten();
 
     this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
@@ -668,7 +689,8 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
           index += this.options.odd_horizontal_offset;
       }
     index -= (this.options.stacked) ? 1 : 0;
-    var currentvalue = this.data_sets.collect(function(data_set) {return data_set[1][index]})[graphindex];
+    var currentset = (this.options.stacked) ? this.real_data : this.data_sets;
+    var currentvalue = currentset.collect(function(data_set) {return data_set[1][index]})[graphindex];
         vertical_label_unit = this.options.vertical_label_unit||"";
         if(currentvalue) {
           currentvalue = currentvalue.toString().split('.');
@@ -676,6 +698,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
             currentvalue[1] = currentvalue[1].truncate(3, '');
           }
         }
+
 
     if((this.options.stacked && index != -1 && typeof(currentvalue) != "undefined") || !this.options.stacked) {
       var rectx = x-(this.step/2),
@@ -711,7 +734,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 
       text.toFront();
       hoverSet.push(roundRect,text,block).attr({opacity:0}).toFront();
-      this.checkHoverPos(roundRect,hoverSet);
+      this.checkHoverPos(circle,roundRect,hoverSet);
       this.globalHoverSet.push(hoverSet);
 
       block.node.onmouseover = function (e) {
