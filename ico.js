@@ -613,26 +613,29 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawHorizontalLabels: function() {
     this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
   },
-  checkHoverPos: function(roundRect, hoverSet) {
+  checkHoverPos: function(roundRect, hoverSet, nib) {
+
+    var rect = roundRect.getBBox();
     /*top*/
     if(roundRect.attrs.y < 0) {
       hoverSet.translate(0,1+(roundRect.attrs.y*-1));
-    }
-    /*left*/
-    if(roundRect.attrs.x < 0) {
-      hoverSet.translate(1+(roundRect.attrs.x*-1),0);
-    }
-
-    rect = roundRect.getBBox();
-    /*right*/
-    if((roundRect.attrs.x +rect.width) > this.options.width) {
-      var diff = (roundRect.attrs.x +rect.width) - this.options.width;
-      hoverSet.translate((diff*-1)-1,0);
     }
     /*bottom*/
     if((roundRect.attrs.y +rect.height) > this.options.height) {
       var diff = (roundRect.attrs.y +rect.height) - this.options.height;
       hoverSet.translate(0,(diff*-1)-1);
+    }
+    /*left*/
+    if(roundRect.attrs.x < 0) {
+      var diff = roundRect.attrs.x;
+      hoverSet.translate(1+(diff*-1),0);
+      if(nib) {nib.translate(((diff)-1),0);}
+    }
+    /*right*/
+    if((roundRect.attrs.x +rect.width) > this.options.width) {
+      var diff = (roundRect.attrs.x +rect.width) - this.options.width;
+      hoverSet.translate((diff*-1)-1,0);
+      if(nib) {nib.translate((diff)+1,0);}
     }
   },
 });
@@ -699,7 +702,6 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
           }
         }
 
-
     if((this.options.stacked && index != -1 && typeof(currentvalue) != "undefined") || !this.options.stacked) {
       var rectx = x-(this.step/2),
           recty = (this.options.stacked) ? y-(this.graph_height/18): y-(this.graph_height/6),
@@ -733,8 +735,8 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       roundRect.attr({fill: this.options.label_colour,opacity: 1});
 
       text.toFront();
-      hoverSet.push(roundRect,text,block).attr({opacity:0}).toFront();
-      this.checkHoverPos(circle,roundRect,hoverSet);
+      hoverSet.push(circle,roundRect,text,block).attr({opacity:0}).toFront();
+      this.checkHoverPos(roundRect,hoverSet);
       this.globalHoverSet.push(hoverSet);
 
       block.node.onmouseover = function (e) {
@@ -888,10 +890,17 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
             textpadding*1.5);
       roundRect.attr({fill: this.options.label_colour,opacity: 1});
 
+      var nib = this.paper.path();
+      nib.attr({fill: this.options.label_colour,opacity: 1});
+      nib.moveTo(hoverbar.attrs.x+(this.bar_width/2)-textpadding,text.attrs.y+(textbox.height/2)+textpadding);
+      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2),text.attrs.y+(textbox.height/2)+(textpadding*2));
+      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2)+textpadding,text.attrs.y+(textbox.height/2)+textpadding);
+      nib.andClose();
+
       text.toFront();
-      hoverSet.push(roundRect,text).attr({opacity:0}).toFront();
+      hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
       hoverbar.toFront();
-      this.checkHoverPos(roundRect,hoverSet);
+      this.checkHoverPos(roundRect,hoverSet,nib);
       this.globalHoverSet.push(hoverSet);
       if(roundRect.attrs.y < 0) {
         hoverSet.translate(0,1+(roundRect.attrs.y*-1));
