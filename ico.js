@@ -473,7 +473,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
       text.toFront();
       hoverSet.push(roundRect,text).attr({opacity:0}).toFront();
-      this.checkHoverPos(roundRect,hoverSet);
+      this.checkHoverPos({rect:roundRect,set:hoverSet});
       this.globalHoverSet.push(hoverSet);
 
       cursor.node.onmouseover = (function (e) {
@@ -613,29 +613,40 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawHorizontalLabels: function() {
     this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
   },
-  checkHoverPos: function(roundRect, hoverSet, nib) {
+  checkHoverPos: function(elements) {
+    if(elements.rect) {
+      var rect = elements.rect;
+      var rectsize = rect.getBBox();
+    }
+    if(elements.set) {    var set = elements.set;}
+    if(elements.marker) { var marker = elements.marker;}
+    if(elements.nib) {    var nib = elements.nib;}
 
-    var rect = roundRect.getBBox();
     /*top*/
-    if(roundRect.attrs.y < 0) {
-      hoverSet.translate(0,1+(roundRect.attrs.y*-1));
+    if(rect.attrs.y < 0) {
+      var diff = rect.attrs.y;
+      set.translate(0,1+(diff*-1));
+      if(marker) {marker.translate(0,diff-1);}
     }
     /*bottom*/
-    if((roundRect.attrs.y +rect.height) > this.options.height) {
-      var diff = (roundRect.attrs.y +rect.height) - this.options.height;
-      hoverSet.translate(0,(diff*-1)-1);
+    if((rect.attrs.y +rectsize.height) > this.options.height) {
+      var diff = (rect.attrs.y +rectsize.height) - this.options.height;
+      set.translate(0,(diff*-1)-1);
+      if(marker) {marker.translate(0,diff+1);}
     }
     /*left*/
-    if(roundRect.attrs.x < 0) {
-      var diff = roundRect.attrs.x;
-      hoverSet.translate(1+(diff*-1),0);
-      if(nib) {nib.translate(((diff)-1),0);}
+    if(rect.attrs.x < 0) {
+      var diff = rect.attrs.x;
+      set.translate((diff*-1)+1,0);
+      if(nib) {nib.translate(diff-1,0);}
+      if(marker) {marker.translate(diff-1,0);}
     }
     /*right*/
-    if((roundRect.attrs.x +rect.width) > this.options.width) {
-      var diff = (roundRect.attrs.x +rect.width) - this.options.width;
-      hoverSet.translate((diff*-1)-1,0);
-      if(nib) {nib.translate((diff)+1,0);}
+    if((rect.attrs.x +rectsize.width) > this.options.width) {
+      var diff = (rect.attrs.x +rectsize.width) - this.options.width;
+      set.translate((diff*-1)-1,0);
+      if(nib) {nib.translate(diff+1,0);}
+      if(marker) {marker.translate(diff+1,0);}
     }
   },
 });
@@ -711,7 +722,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
           block = this.paper.rect(rectx, recty, rectw, recth);
 
       circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour,opacity:0});
-      block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0}).toFront();
+      block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0.1}).toFront();
 
       if(this.options.datalabels) {
         var datalabel = datalabel+": "+currentvalue;
@@ -736,7 +747,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 
       text.toFront();
       hoverSet.push(circle,roundRect,text,block).attr({opacity:0}).toFront();
-      this.checkHoverPos(roundRect,hoverSet);
+      this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle});
       this.globalHoverSet.push(hoverSet);
 
       block.node.onmouseover = function (e) {
@@ -900,7 +911,8 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
       text.toFront();
       hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
       hoverbar.toFront();
-      this.checkHoverPos(roundRect,hoverSet,nib);
+      console.log(hoverSet);
+      this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
       this.globalHoverSet.push(hoverSet);
       if(roundRect.attrs.y < 0) {
         hoverSet.translate(0,1+(roundRect.attrs.y*-1));
