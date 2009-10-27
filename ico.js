@@ -265,17 +265,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var mousepos = {x:posx,y:posy};
     return mousepos;
   },
-  buildDataLabel: function (id, text) {
-    var attr = {
-      'id':'datalabelelem-'+id,
-      'class':'datalabelelem',
-      'style':'display:block'
-    };
-    var datalabelelem = new Element('div', attr);
-    datalabelelem.update(text);
-    return datalabelelem;
-  },
-
   makeRandomColours: function(number) {
     var colours = {};
     this.data_sets.each(function(data) {
@@ -989,33 +978,6 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
       y = y + this.step;
 
-      if(this.options.datalabels) {
-
-        var hover_colour = this.options.hover_colour || colour;
-        var datalabelelem = this.buildDataLabel(element.id, datalabel[index]);
-
-        cursor.node.onmouseover = (function (e) {
-          cursor.attr({fill: hover_colour,stroke:hover_colour});
-          if (horizontal_rounded) {cursor.secondnode.attr({fill: hover_colour,stroke:hover_colour});}
-
-          var mousepos = this.getMousePos(e);
-          element.insert(datalabelelem);
-          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
-
-          cursor.node.onmousemove = (function(e) {
-            var mousepos = this.getMousePos(e);
-            $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
-
-          }.bind(this));
-
-        }.bind(this));
-
-        cursor.node.onmouseout = function () {
-          cursor.attr({fill: colour2,stroke:colour2});
-          if (horizontal_rounded) {cursor.secondnode.attr({fill: colour2,stroke:colour2});}
-          $(datalabelelem).remove();
-        };
-      }
     }.bind(this));
   },
 
