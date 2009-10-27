@@ -913,7 +913,6 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
       text.toFront();
       hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
       hoverbar.toFront();
-      console.log(hoverSet);
       this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
       this.globalHoverSet.push(hoverSet);
       if(roundRect.attrs.y < 0) {
