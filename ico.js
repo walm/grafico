@@ -733,21 +733,17 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       nib.andClose();
 
       text.toFront();
-      hoverSet.push(circle,roundRect,nib,text,block).attr({opacity:0}).toFront();
+      hoverSet.push(circle,roundRect,nib,text).attr({opacity:0}).toFront();
       this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle,nib:nib});
       this.globalHoverSet.push(hoverSet);
       this.globalBlockSet.push(block);
 
       block.node.onmouseover = function (e) {
         hoverSet.animate({opacity:1},200);
-        circle.animate({opacity:1},200);
-        block.animate({opacity:0},200);
       };
 
       block.node.onmouseout = function (e) {
         hoverSet.animate({opacity:0},200);
-        circle.animate({opacity:0},200);
-        block.attr({opacity:1});
       };
     }
   },
