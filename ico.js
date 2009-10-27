@@ -229,10 +229,12 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
     /* global hoverSet */
     this.globalHoverSet = this.paper.set();
+    this.globalBlockSet = this.paper.set();
 
     this.setChartSpecificOptions();
     this.draw();
     this.globalHoverSet.toFront();
+    this.globalBlockSet.toFront();
   },
 
   normaliserOptions: function() {
@@ -691,7 +693,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
           }
         }
 
-    if((this.options.stacked && index != -1 && typeof(currentvalue) != "undefined") || !this.options.stacked) {
+    if(!this.options.stacked || (this.options.stacked && index != -1 && typeof(currentvalue) != "undefined")) {
       var rectx = x-(this.step/2),
           recty = (this.options.stacked) ? y-(this.graph_height/18): y-(this.graph_height/6),
           rectw = this.step,
@@ -700,7 +702,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
           block = this.paper.rect(rectx, recty, rectw, recth);
 
       circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour,opacity:0});
-      block.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0.1}).toFront();
+      block.attr({fill:colour, 'stroke-width': 0, stroke : colour,opacity:0}).toFront();
 
       if(this.options.datalabels) {
         var datalabel = datalabel+": "+currentvalue;
@@ -734,6 +736,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       hoverSet.push(circle,roundRect,nib,text,block).attr({opacity:0}).toFront();
       this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle,nib:nib});
       this.globalHoverSet.push(hoverSet);
+      this.globalBlockSet.push(block);
 
       block.node.onmouseover = function (e) {
         hoverSet.animate({opacity:1},200);
@@ -744,7 +747,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       block.node.onmouseout = function (e) {
         hoverSet.animate({opacity:0},200);
         circle.animate({opacity:0},200);
-        block.attr({opacity:0});
+        block.attr({opacity:1});
       };
     }
   },
