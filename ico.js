@@ -622,31 +622,33 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if(elements.marker) { var marker = elements.marker;}
     if(elements.nib) {    var nib = elements.nib;}
 
-    /*top*/
-    if(rect.attrs.y < 0) {
-      var diff = rect.attrs.y;
-      set.translate(0,1+(diff*-1));
-      if(marker) {marker.translate(0,diff-1);}
-    }
-    /*bottom*/
-    if((rect.attrs.y +rectsize.height) > this.options.height) {
-      var diff = (rect.attrs.y +rectsize.height) - this.options.height;
-      set.translate(0,(diff*-1)-1);
-      if(marker) {marker.translate(0,diff+1);}
-    }
-    /*left*/
-    if(rect.attrs.x < 0) {
-      var diff = rect.attrs.x;
-      set.translate((diff*-1)+1,0);
-      if(nib) {nib.translate(diff-1,0);}
-      if(marker) {marker.translate(diff-1,0);}
-    }
-    /*right*/
-    if((rect.attrs.x +rectsize.width) > this.options.width) {
-      var diff = (rect.attrs.x +rectsize.width) - this.options.width;
-      set.translate((diff*-1)-1,0);
-      if(nib) {nib.translate(diff+1,0);}
-      if(marker) {marker.translate(diff+1,0);}
+    if(rect && set) {
+      /*top*/
+      if(rect.attrs.y < 0) {
+        var diff = rect.attrs.y;
+        set.translate(0,1+(diff*-1));
+        if(marker) {marker.translate(0,diff-1);}
+      }
+      /*bottom*/
+      if((rect.attrs.y +rectsize.height) > this.options.height) {
+        var diff = (rect.attrs.y +rectsize.height) - this.options.height;
+        set.translate(0,(diff*-1)-1);
+        if(marker) {marker.translate(0,diff+1);}
+      }
+      /*left*/
+      if(rect.attrs.x < 0) {
+        var diff = rect.attrs.x;
+        set.translate((diff*-1)+1,0);
+        if(nib) {nib.translate(diff-1,0);}
+        if(marker) {marker.translate(diff-1,0);}
+      }
+      /*right*/
+      if((rect.attrs.x +rectsize.width) > this.options.width) {
+        var diff = (rect.attrs.x +rectsize.width) - this.options.width;
+        set.translate((diff*-1)-1,0);
+        if(nib) {nib.translate(diff+1,0);}
+        if(marker) {marker.translate(diff+1,0);}
+      }
     }
   },
 });
