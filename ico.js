@@ -736,9 +736,9 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 
       var nib = this.paper.path();
       nib.attr({fill: this.options.label_colour,opacity: 1});
-      nib.moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding+1);
-      nib.lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(2*textpadding+1));
-      nib.lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding+1);
+      nib.moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
+      nib.lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(2*textpadding+0.5));
+      nib.lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
       nib.andClose();
 
       text.toFront();
@@ -899,9 +899,9 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
 
       var nib = this.paper.path();
       nib.attr({fill: this.options.label_colour,opacity: 1});
-      nib.moveTo(hoverbar.attrs.x+(this.bar_width/2)-textpadding,text.attrs.y+(textbox.height/2)+textpadding);
-      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2),text.attrs.y+(textbox.height/2)+(textpadding*2));
-      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2)+textpadding,text.attrs.y+(textbox.height/2)+textpadding);
+      nib.moveTo(hoverbar.attrs.x+(this.bar_width/2)-textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
+      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2),text.attrs.y+(textbox.height/2)+(textpadding*2)+0.5);
+      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2)+textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
       nib.andClose();
 
       text.toFront();
