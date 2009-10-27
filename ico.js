@@ -676,29 +676,16 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     var circle = this.paper.circle(x, y, this.options.marker_size);
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
 
-    if(this.options.datalabels) {
-      var old_marker_size = this.options.marker_size;
-      var datalabelelem = this.buildDataLabel(element.id, datalabel);
+    var old_marker_size = this.options.marker_size;
 
-      circle.node.onmouseover = (function (e) {
-        new_marker_size = parseInt(1.7*old_marker_size);
-        circle.attr({r:new_marker_size});
+    circle.node.onmouseover = (function (e) {
+      new_marker_size = parseInt(1.7*old_marker_size);
+      circle.animate({r:new_marker_size},200);
+    }.bind(this));
 
-        var mousepos = this.getMousePos(e);
-        element.insert(datalabelelem);
-        $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px',display:'block'});
-
-        circle.node.onmousemove = (function(e) {
-          var mousepos = this.getMousePos(e);
-          $(datalabelelem).setStyle({left:mousepos.x+'px',top:mousepos.y+'px'});
-        }.bind(this));
-      }.bind(this));
-
-      circle.node.onmouseout = function () {
-        circle.attr({r:old_marker_size});
-        $(datalabelelem).remove();
-      };
-    }
+    circle.node.onmouseout = function () {
+      circle.animate({r:old_marker_size},200);
+    };
   },
   drawGraphValueMarkers: function(index, x, y, colour, datalabel, element, graphindex) {
     if(this.options.odd_horizontal_offset>1) {
@@ -734,11 +721,11 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         datalabel += (this.options.vertical_label_unit)? " "+this.options.vertical_label_unit:"";
       }
       var hoverSet = this.paper.set(),
-          text = this.paper.text(circle.attrs.cx, circle.attrs.cy-(this.options.font_size*1.5)-4, datalabel);
+          textpadding = 4,
+          text = this.paper.text(circle.attrs.cx, circle.attrs.cy-(this.options.font_size*1.5)-2*textpadding, datalabel);
           text.attr({'font-size': this.options.font_size, fill:this.options.background_colour,opacity: 1})
 
       var textbox = text.getBBox(),
-          textpadding = 4,
           roundRect= this.paper.rect(
             text.attrs.x-(textbox.width/2)-textpadding,
             text.attrs.y-(textbox.height/2)-textpadding,
@@ -747,20 +734,27 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
             textpadding*1.5);
       roundRect.attr({fill: this.options.label_colour,opacity: 1});
 
+      var nib = this.paper.path();
+      nib.attr({fill: this.options.label_colour,opacity: 1});
+      nib.moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding+1);
+      nib.lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(2*textpadding+1));
+      nib.lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding+1);
+      nib.andClose();
+
       text.toFront();
-      hoverSet.push(circle,roundRect,text,block).attr({opacity:0}).toFront();
-      this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle});
+      hoverSet.push(circle,roundRect,nib,text,block).attr({opacity:0}).toFront();
+      this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle,nib:nib});
       this.globalHoverSet.push(hoverSet);
 
       block.node.onmouseover = function (e) {
-        hoverSet.attr({opacity:1});
-        circle.attr({opacity:1});
-        block.attr({opacity:0});
+        hoverSet.animate({opacity:1},200);
+        circle.animate({opacity:1},200);
+        block.animate({opacity:0},200);
       };
 
       block.node.onmouseout = function (e) {
-        hoverSet.attr({opacity:0});
-        circle.attr({opacity:0});
+        hoverSet.animate({opacity:0},200);
+        circle.animate({opacity:0},200);
         block.attr({opacity:0});
       };
     }
@@ -920,13 +914,13 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
       }
 
       hoverbar.node.onmouseover = (function (e) {
-        bargraph.attr({fill: hover_colour,stroke:hover_colour});
-        hoverSet.attr({opacity:1});
+        bargraph.animate({fill: hover_colour,stroke:hover_colour}, 200);
+        hoverSet.animate({opacity:1}, 200);
       }.bind(this));
 
       hoverbar.node.onmouseout = function (e) {
-        bargraph.attr({fill: colour2,stroke:colour2});
-        hoverSet.attr({opacity:0});
+        bargraph.animate({fill: colour2,stroke:colour2}, 200);
+        hoverSet.animate({opacity:0}, 200);
       };
     }
 
