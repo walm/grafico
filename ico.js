@@ -614,13 +614,19 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if(elements.set) {    var set = elements.set;}
     if(elements.marker) { var marker = elements.marker;}
     if(elements.nib) {    var nib = elements.nib;}
+    if(elements.textpadding) { var textpadding = elements.textpadding;}
 
     if(rect && set) {
       /*top*/
       if(rect.attrs.y < 0) {
-        var diff = rect.attrs.y;
-        set.translate(0,1+(diff*-1));
-        if(marker) {marker.translate(0,diff-1);}
+        if(nib && marker) {
+          set.translate(0,set.getBBox().height+(textpadding*2));
+          marker.translate(0,-set.getBBox().height-(textpadding*2));
+          nib.translate(0,-rectsize.height-textpadding-1).scale(1,-1);
+        } else {
+          var diff = rect.attrs.y;
+          set.translate(0,1+(diff*-1));
+        }
       }
       /*bottom*/
       if((rect.attrs.y +rectsize.height) > this.options.height) {
@@ -736,7 +742,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 
       text.toFront();
       hoverSet.push(circle,roundRect,nib,text).attr({opacity:0}).toFront();
-      this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle,nib:nib});
+      this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle,nib:nib,textpadding:textpadding});
       this.globalHoverSet.push(hoverSet);
       this.globalBlockSet.push(block);
 
