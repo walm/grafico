@@ -399,12 +399,14 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       var x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset,
           x_labels = this.options.labels.length;
 
-      for (i = 0; i < x_labels; i++) {
-        if((this.options.hide_empty_label_grid == true && this.options.labels[i] != "") || this.options.hide_empty_label_grid == false) {
-          path.moveTo(parseInt(x), this.y_padding_top);
-          path.lineTo(parseInt(x), this.y_padding_top + this.graph_height);
+      if(!this.bar_padding) {
+        for (i = 0; i < x_labels; i++) {
+          if((this.options.hide_empty_label_grid == true && this.options.labels[i] != "") || this.options.hide_empty_label_grid == false) {
+            path.moveTo(parseInt(x), this.y_padding_top);
+            path.lineTo(parseInt(x), this.y_padding_top + this.graph_height);
+          }
+          x = this.options.horizontalbar_grid ? x+(this.graph_width / this.y_label_count) : x + this.step;
         }
-        x = this.options.horizontalbar_grid ? x+(this.graph_width / this.y_label_count) : x + this.step;
       }
       if(this.bar_padding) {
           //left side
