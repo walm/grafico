@@ -1030,7 +1030,8 @@ Ico.SparkLine = Class.create(Ico.Base, {
       height:                 parseInt(element.getStyle('height')),
       highlight:              false,
       background_colour:      element.getStyle('backgroundColor'),
-      colour:                 '#036'
+      colour:                 '#036',
+      stroke_width:           1
     };
     Object.extend(this.options, options || { });
 
@@ -1064,7 +1065,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
   },
 
   drawLines: function(label, colour, data) {
-    var line = this.paper.path().attr({ stroke: colour }).moveTo(0, this.options.height - data.first());
+    var line = this.paper.path().attr({ stroke: colour, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first());
     var x = 0;
     data.slice(1).each(function(value) {
       x = x + this.step;
