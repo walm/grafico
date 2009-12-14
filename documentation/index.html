@@ -46,6 +46,13 @@
   <pre><code>   var foo = new Ico.GraphType($(element), data, options);</code></pre>
   <p>$(element) is a prototype id selector, data is an object or array (depending on the graph) and options is optional and an object.</p>
   <p>The base graph options are applicable to all graphs except for the sparklines and sparkbars.</p>
+
+  <h3>Dependencies</h3>
+  <ul>
+    <li><a href="http://raphaeljs.com">Raphaël</a> 1.0+</li>
+    <li><a href="http://prototypejs.com">Prototype.js</a> 1.6+</li>
+  </ul>
+
   <h3>Base graph options:</h3>
 
   <dl>
@@ -230,8 +237,7 @@
           your_workload:  "Your workload",
           his_workload:   "His workload"
         }
-      }
-      );
+      });
 </code></pre>
   <script>
     var linegraph = new Ico.LineGraph($('linegraph3'),

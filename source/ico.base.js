@@ -147,7 +147,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
       hover_colour:           '',                                    // hover color if there are datalabels
       watermark:              false,
-      watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
+      watermark_orientation:  false,                                 // determine position of watermark. currently available is bottomright and middle
       hide_empty_label_grid:  false,                                 // hide gridlines for labels with no value
       left_padding:           false                                  // set a standard leftpadding regardless of label width
     };
