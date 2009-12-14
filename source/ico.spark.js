@@ -4,7 +4,8 @@ Ico.SparkLine = Class.create(Ico.Base, {
     this.data = data;
 
     this.options = {
-      highlight:              false
+      highlight:              false,
+      stroke_width:           1
     };
     Object.extend(this.options, options || { });
 
