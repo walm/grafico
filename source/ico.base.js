@@ -128,28 +128,26 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       width:                  parseInt(element.getStyle('width'), 10),
       height:                 parseInt(element.getStyle('height'), 10),
       labels:                 $A($R(1, this.data_size)),            // Label data
+      grid:                   true,
       plot_padding:           10,                                   // Padding for the graph line/bar plots
       font_size:              10,                                   // Label font size
       show_horizontal_labels: true,
       show_vertical_labels:   true,
-      vertical_label_unit:    false,
+      vertical_label_unit:    '',
       colours:                this.makeRandomColours(),             // Line colours
-      background_colour:      element.getStyle('backgroundColor'),
+      background_colour:      element.getStyle('backgroundColor') || "#fff",
       label_colour:           '#000',                               // Label text colour
       grid_colour:            '#ccc',                               // Grid line colour
-      markers:                false,                                // false, circle
+      hover_text_colour:      '#fff',                               // hover colour
+      markers:                false,                                // false, circle, value
       marker_size:            5,
       meanline:               false,
-      y_padding_top:          20,
+      padding_top:            20,
       draw_axis:              true,
-      stacked_fill:           false,                                 // if true, show stacked lines instead of area's
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
-      start_at_zero:          true,                                  // allow line graphs to start at a non-zero horizontal step
-      bargraph_lastcolour:    false,                                 // different colour for first value in horizontal graph
       hover_colour:           '',                                    // hover color if there are datalabels
       watermark:              false,
       watermark_orientation:  false,                                 // determine position of watermark. default is bottomright. currenty available is bottomright and middle
-      horizontal_rounded:     false,                                 // show rounded endings on horizontal bar charts if true
       hide_empty_label_grid:  false,                                 // hide gridlines for labels with no value
       left_padding:           false                                  // set a standard leftpadding regardless of label width
     };
@@ -162,7 +160,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.x_padding_left = this.options.left_padding ? this.options.left_padding : this.x_padding_left;
     this.x_padding_right = 20;
     this.x_padding = this.x_padding_left + this.x_padding_right;
-    this.y_padding_top = this.options.y_padding_top;
+    this.y_padding_top = this.options.padding_top;
     this.y_padding_bottom = 20 + this.paddingBottomOffset();
     this.y_padding = this.y_padding_top + this.y_padding_bottom;
 
@@ -432,7 +430,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
             textbox.width+(textpadding*2),
             textbox.height+(textpadding*2),
             textpadding*1.5);
-      roundRect.attr({fill: this.options.label_colour,opacity: 1});
+      roundRect.attr({fill: this.options.label_colour,opacity: 1, stroke : 0, "stroke-color":this.options.label_colour});
 
       text.toFront();
       hoverSet.push(roundRect,text).attr({opacity:0}).toFront();
@@ -440,8 +438,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       this.globalHoverSet.push(hoverSet);
 
       cursor.node.onmouseover = function (e) {
-        if (colorattr==="fill") { cursor.attr({fill: hover_colour,stroke:hover_colour});}
-        else {                   cursor.attr({stroke: hover_colour});}
+        if (colorattr==="fill") { cursor.animate({fill : hover_colour,stroke : hover_colour}, 200);}
+        else {                    cursor.animate({stroke : hover_colour}, 200);}
 
         var mousepos = this.getMousePos(e);
         hoverSet[0].attr({
@@ -468,8 +466,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       }.bind(this);
 
       cursor.node.onmouseout = function () {
-        if (colorattr==="fill") { cursor.attr({fill: colour,stroke:colour});}
-        else {                   cursor.attr({stroke: colour});}
+        if (colorattr==="fill") { cursor.animate({fill : colour,stroke : colour}, 200);}
+        else {                    cursor.animate({stroke : colour}, 200);}
         hoverSet.attr({opacity:0});
       };
     }
@@ -505,7 +503,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   drawMeanLine: function (data) {
-    var cursor = this.paper.path().attr({stroke: this.options.meanline}),
+    var cursor = this.paper.path().attr(this.options.meanline),
         offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length;
 
     cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset);

@@ -1,177 +1,264 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Additional ICO charts</title>
+    <meta charset="utf8">
+    <title>Ico graphing library documentation</title>
+
+    <link href="http://github.com/Kilian/sencss/raw/master/sen.css" rel="stylesheet" type="text/css">
+    <style>
+    body {padding:2em;}
+
+    h2 {display:block;background:#ccc;padding:0.5em}
+    h3 {display:block;float:left;background:#eee;padding:0.5em}
+    h3+*{clear:left;}
+
+    pre {background:#eee;float:left;widtH:700px;}
+    pre + * {clear:left;}
+    </style>
+
     <script src="../dependencies/prototype.js" type="text/javascript" charset="utf-8"></script>
     <script src="../dependencies/raphael.js" type="text/javascript" charset="utf-8"></script>
-
-    <script src="../packaged/ico.min.js" type="text/javascript" charset="utf-8"></script>
-
-    <style type="text/css" media="screen">
-html, body, div, ul, ol, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, fieldset, input { margin: 0; padding: 0; }
-h1, h2, h3, h4, h5, h6, pre, code, address, caption, cite, code, em, strong, th { font-size: 1em; font-weight: normal; font-style: normal; }
-fieldset, img { border: none; }
-body { font-family: "Lucida Grande", Helvetica, sans-serif; font-size: 12px; background-color: #fff; padding: 0; margin: 10px 5%; color: #000 }
-h1, h2 { font-size: 2em; margin: 0.5em 0; }
-
-p { margin: 1em 0; }
-p.example { color: #555; }
-
-.stackgraph {width: 610px; height: 240px; background-color: #eee; margin-bottom: 20px;overflow:hidden; }
-.linegraph{width: 610px; height: 200px; background-color: #fff; margin-bottom: 20px; }
-#bargraph_5{height:200px;}
-#linegraph2,
-#linegraph3,
-#linegraph4 {
-    width:288px;
-    height:152px;
-    background:#fff;
-    border:1px solid #ddd;
-    float:left;
-    margin-right:20px;
-}
-    </style>
+    <script src="../source/ico.base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/ico.line.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/ico.bar.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/ico.spark.js" type="text/javascript" charset="utf-8"></script>
   </head>
+
   <body>
-  <p>sparklines <span id="sparkline" class="sparkline"></span> </p>
-    <h2>area chart</h2>
-    <div id="stackgraph" class="stackgraph"></div>
-    <h2>stacked area chart</h2>
-    <div id="stackgraph2" class="stackgraph"></div>
-    <h2>line chart</h2>
-    <div id="linegraph" class="linegraph"></div>
-    <h2>bar chart</h2>
-    <div id="bargraph_5" class="linegraph"></div>
+  <h1>Ico graphing library Documentation</h1>
+  <p>Ico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.com">Prototype.js</a>. It is originally developed by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>, but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a>.</p>
 
-    <h2>small line charts test</h2>
-    <div id="linegraph2" class="linegraph"></div>
-    <div id="linegraph3" class="linegraph"></div>
-    <div id="linegraph4" class="linegraph" ></div>
+  <p>Ico's basic principles are to provide <strong>good, clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte.</p>
 
-    <img id="watermark" src="logo.png" alt="" style="display:none;">
-      <script type="text/javascript">
-              var softwarereach = new Ico.LineGraph(
-        $('linegraph2'),
-        { a: [0.54395, 0.25835, 0.54215, 0.5439, 0.3954, 0.38395, 0.52805, 0.554, 0.3837, 0.37705, 0.51725, 0.56345, 0.2741, 0.56265, 0.57685] },
-        $H({ labels: ["1 Jul", "", "", "", "", "19 Jul", "", "", "", "", "28 Jul", "", "", "", "8 Jul"], datalabels: { a: "Mozilla Thunderbird" }, colours: { a: "#4b80b6" }}).merge($H({curve_amount: 5, plot_padding: 0, start_at_zero: false, vertical_label_unit: "%", font_size: 11, markers:'value', meanline: false, hide_empty_label_grid: true, grid: true})).toObject()
-       );
-var linegraph3 =
-  new Ico.LineGraph($('linegraph3'),
-    {
-      firefox: [30, 35, 31, 30, 35, 28, 30, 35, 32],
-      chrome:  [15, 10,  9, 13, 16, 12, 10,  5, 10]
-    },
-    {
-      curve_amount: 10,
-      colours: { firefox: '#a267a7', chrome: '#4b80b6'},
-      labels: ['6th April', '', '', '', '20th April', '', '','','6th May'],
-      meanline: false,
-      markers:'value',
-      hide_empty_label_grid:true,
-      grid: true,
-      datalabels: {firefox:'Firefox', chrome:'Google Chrome'}
-    });
-     var linegraph4 = new Ico.LineGraph(
-        $('linegraph4'),
-        { a: [23.4034, 24.01285, 24.43865, 23.9407, 23.7391, 23.85575, 24.13295, 23.738, 23.3405, 23.7046, 23.49665, 23.7359, 23.455, 23.1422, 24.108] },
-        $H({ labels: ["1 Oct", "", "", "", "", "19 Sep", "", "", "", "", "28 Sep", "", "", "", "8 Sep"], datalabels: { a: "Firefox" }, colours: { a: "#a267a7" }}).merge($H({markers: "value", meanline: false, hide_empty_label_grid: true, font_size: 11,  grid: true, curve_amount: 5, plot_padding: 0, vertical_label_unit: "%", draw_axis:false})).toObject()
-      );
-      </script>
-    <script type="text/javascript">
-var data = [[11.1, 10.1, 13.1, 10.7, 12.0, 12.9, 8.6, 11.7, 8.5], [11.6, 11.4, 15.7, 11.5, 12.0, 12.9, 8.6, 11.9, 10.3], [11.6, 12.0, 15.7, 11.7, 12.4, 13.0, 8.7, 12.3, 10.5], [11.8, 12.6, 15.7, 11.7, 5.5, 2.0, 8.7, 12.3, 10.5], [11.9, 12.7, 15.7, 11.8, 12.6, 13.0, 8.7, 12.3, 10.5]];
+  <h2>The available graphs in Ico:</h2>
+  <ul>
+    <li>Line graphs</li>
+    <li>Area graphs</li>
+    <li>Stacked area graphs</li>
+    <li>Bar graphs</li>
+    <li>Horizontal bar graphs</li>
+    <li>Sparklines</li>
+    <li>Sparkbars</li>
+  </ul>
 
-var stackgraph =
-  new Ico.AreaGraph($('stackgraph'),
-    {
-    one: data[4],
-    two: data[3],
-    three: data[2],
-    four: data[1],
-    five: data[0]
-    },
-    {
-      labels: ['Sat 08 Dec', 'Sun 09 Dec', 'Mon 10 Dec', 'Tue 11 Dec', 'Wed 12 Dec', 'Thu 13 Dec', 'Fri 14 Dec', 'Sat 15 Dec', 'Sun 16 Dec'],
-      meanline: false,
-      grid: true,
-      plot_padding: 0,
-      show_vertical_labels: true,
-      vertical_label_unit: "hr",
-      curve_amount: 20,
-      background_colour: "#eeeeee",
-      draw_axis: false,
-      colours: {
-        one: '#a267a7',
-        two: '#dc504f',
-        three: '#e2ba74',
-        four: '#79af7b',
-        five: '#4b80b6'
-      },
-      datalabels: {one:'Development', two:'Office', three:'Utilities', four:'Design', five:'Internet'}
-});
-var stackgraph2 =
-  new Ico.StackGraph($('stackgraph2'),
-    {
-    one: data[4],
-    two: data[3],
-    three: data[2],
-    four: data[1],
-    five: data[0]
-    },
-    {
-      labels: ['Sat 08 Dec', 'Sun 09 Dec', 'Mon 10 Dec', 'Tue 11 Dec', 'Wed 12 Dec', 'Thu 13 Dec', 'Fri 14 Dec', 'Sat 15 Dec', 'Sun 16 Dec'],
-      meanline: false,
-      grid: true,
-      plot_padding: 0,
-      show_vertical_labels: true,
-      vertical_label_unit: "hr",
-      curve_amount: 20,
-      markers:"value",
-      background_colour: "#eeeeee",
-      draw_axis: false,
-      colours: {
-        one: '#a267a7',
-        two: '#dc504f',
-        three: '#e2ba74',
-        four: '#79af7b',
-        five: '#4b80b6'
-      },
-      datalabels: {one:'Development', two:'Office', three:'Utilities', four:'Design', five:'Internet'}
-});
+  <h2>Basics</h2>
+  <p>Ico graphs are initiated via this function call:</p>
+  <pre><code>   var foo = new Ico.GraphType($(element), data, options);</code></pre>
+  <p>$(element) is a prototype id selector, data is an object or array (depending on the graph) and options is optional and an object.</p>
+  <p>The base graph options are applicable to all graphs except for the sparklines and sparkbars.</p>
+  <h3>Base graph options:</h3>
 
-var linegraph =
-  new Ico.LineGraph($('linegraph'),
-    {
-      one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
-      two: [10, 9, 3, 30, 1, 10, 5, 33, 33],
-      three: ["", "", "", 1, 30, 11, 33, 12, 22]
-    },
-    {
-      markers: 'value',
-      curve_amount: 20,
-      colours: { one: '#4b80b6', two: '#79af7b', three: '#e2ba74'},
-      labels: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
-      meanline: false,
-      grid: true,
+  <dl>
+    <dt>width</dt>
+    <dd>
+        Specify the width of the element (number)<br>
+        <em>Default value: width of $(element)</em>
+    </dd>
+    <dt>height</dt>
+    <dd>
+        Specify the height of the element (number)<br>
+        <em>Default value: height of $(element)</em>
+    </dd>
+    <dt>labels</dt>
+    <dd>
+        The labels being displayed on the horizontal axis (array of strings)<br>
+        <em>Default value: numerical</em>
+    </dd>
+    <dt>grid</dt>
+    <dd>
+        draw a grid or not (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
+    <dt>plot_padding</dt>
+    <dd>
+        Padding at the start and end of the graph (number)<br>
+        <em>Default value: 10</em>
+    </dd>
+    <dt>font_size</dt>
+    <dd>
+        The font-size for the axis and hovers (number)<br>
+        <em>Default value: 10</em>
+    </dd>
+    <dt>show_vertical_labels</dt>
+    <dd>
+        Show the vertical axis and gridlines (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
+    <dt>show_horizontal_labels</dt>
+    <dd>
+        Show the horizontal axis and gridline (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
+    <dt>vertical_label_unit</dt>
+    <dd>
+        append a unit to the vertical axis and text in the hover (string)<br>
+        <em>Default value: empty</em>
+    </dd>
+    <dt>colours</dt>
+    <dd>
+        Select the colours for the lines or bars (object)<br>
+        <em>Default value: random colours</em>
+    </dd>
+    <dt>background_colour</dt>
+    <dd>
+        The background colour of the graph (string, example: "#fff")<br>
+        <em>Default value: backgroundcolor of $(element), else #fff</em>
+    </dd>
+    <dt>label_colour</dt>
+    <dd>
+        The colour of the axis, axis values and hovers (string, example: "#fff")<br>
+        <em>Default value: "#000" </em>
+    </dd>
+    <dt>grid_colour</dt>
+    <dd>
+        The colour of the gridlines (string, example: "#fff") <br>
+        <em>Default value: "#ccc"</em>
+    </dd>
+    <dt>hover_text_colour</dt>
+    <dd>
+        the colour of the text in the hovers (string, example: "#fff")<br>
+        <em>Default value: "#fff"</em>
+    </dd>
+    <dt>meanline</dt>
+    <dd>
+        Display a line on the average of all datapoints (object or boolean, example: { 'stroke-width': '2px', stroke: '#000' })<br>
+        object example:
+        <em>Default value: false</em>
+    </dd>
+    <dt>padding_top</dt>
+    <dd>
+        The amount of padding above the graph (number)<br>
+        <em>Default value: 20</em>
+    </dd>
+    <dt>draw_axis</dt>
+    <dd>
+        show or hide the axis lines (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
+    <dt>datalabels</dt>
+    <dd>
+        for line graphs: Add a hover with the text, and append the text to the marker hover, per line (object, example: {workload:'My workload'})<br>
+        for bar graphs: append a text per bar.  (object, example: {workload: ["1","2","5"]})<br>
+        <em>Default value: empty</em>
+    </dd>
+    <dt>hover_colour</dt>
+    <dd>
+        colour a bar or line should fade to on hover (string, example: "#fff")<br>
+        <em>Default value: empty</em>
+    </dd>
+    <dt>watermark</dt>
+    <dd>
+        Add in an image to be used as watermark. (link to image or image element)<br>
+        <em>Default value: false</em>
+    </dd>
+    <dt>watermark_orientation</dt>
+    <dd>
+        where the watermark should be placed. default is the bottom right, can be placed in the center with "middle" (string)<br>
+        <em>Default value: bottom right</em>
+    </dd>
+    <dt>left_padding</dt>
+    <dd>
+        Set a standard left spacing regardless of vertical axis label width (number)<br>
+        <em>Default value: false</em>
+    </dd>
+  </dl>
+  <h2>Line graphs</h2>
+  <p><strong>A linegraph with the default rendering (no options):</strong></p>
 
-      start_at_zero: false,
-      datalabels: {one:'Firefox', two:'G-edit', three:'Pidgin'}
-    });
-var bargraph_5 =
-  new Ico.BarGraph($('bargraph_5'),
-  [31, 12, 12, 10, 6, 4, 26],
-   {
-   labels: ["Safari", "Gmail", "Twitter", "QuickTime Player", "Google Reader", "Bean", "...and more"],
-   colour: '#4b80b6',
-   grid: true,
-   draw_axis:false,
-   background_colour: "#ffffff",
-   vertical_label_unit: "%",
-   horizontal_rounded: true,
-   bargraph_lastcolour: "#666666",
-   datalabels: {one: ["Used for 13 hours, 19 minutes and 5 seconds", "Used for 5 hours, 18 minutes and 24 seconds", "Used for 5 hours, 2 minutes and 19 seconds", "Used for 4 hours, 8 minutes and 15 seconds", "Used for 2 hours, 40 minutes and 48 seconds", "Used for 1 hour, 41 minutes and 18 seconds", "Used for 11 hours, 21 minutes and 25 seconds"]}
-   });
-var sparkline = new Ico.SparkLine($('sparkline'), [21, 41, 32, 1, 10, 23, 32, 10, 23], { width: 90, height: 15, colour: "#a267a7",bargraph_lastcolour:"#0000ff",  });
-    </script>
+  <div id="linegraph" style="height:170px;display:block;float:left;width:500px""></div>
+  <pre style="display:block;float:left;width:700px"><code>   var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
+  <script>
+    var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
+  </script>
+
+  <p style="clear:both"><strong>A linegraph with custom options:</strong></p>
+
+  <div id="linegraph2" style="height:170px;display:block;float:left;width:500px"></div>
+  <pre style="display:block;float:left;width:700px"><code>   var linegraph2 = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
+    {
+      grid :                  true,
+      plot_padding :          0,
+      font_size :             11,
+      vertical_label_unit :   "hr",
+      colours :               {workload: '#4b80b6'},
+      background_colour :     "#fff",
+      label_colour :          "#444",
+      grid_colour :           "#ccf",
+      markers :               "value",
+      meanline :              { 'stroke-width': '2px', stroke: '#000' },
+      draw_axis :             false,
+      labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
+      hide_empty_label_grid : true,
+      datalabels :            {workload:'My workload'},
+    });</code></pre>
+  <script>
+    var linegraph2 = new Ico.LineGraph($('linegraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
+    {
+      grid :                  true,
+      plot_padding :          0,
+      font_size :             11,
+      vertical_label_unit :   "hr",
+      colours :               {workload: '#4b80b6'},
+      background_colour :     "#fff",
+      label_colour :          "#444",
+      grid_colour :           "#ccf",
+      markers :               "value",
+      meanline :              { 'stroke-width': '2px', stroke: '#000' },
+      draw_axis :             false,
+      labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
+      hide_empty_label_grid : true,
+      datalabels :            {workload:'My workload'},
+    }
+    );
+  </script>
+<p style="clear:both">.</p>
+
+  <h3>Line graph options:</h3>
+  <dl>
+    <dt>markers</dt>
+    <dd>
+        Line graph: display markers on the datapoint. (string)<br>
+        Possible options:
+        <ul>
+          <li>"circle" - displays a circle</li>
+          <li>"value" - displays a hover with the value</li>
+        </ul>
+        <em>Default value: false</em>
+    </dd>
+    <dt>marker_size</dt>
+    <dd>
+        The size of the marker (number)<br>
+        <em>Default value: 5</em>
+    </dd>
+    <dt>hide_empty_label_grid</dt>
+    <dd>
+        hide the vertical gridlines for all empty label on the horizontal axis. (boolean)<br>
+        <em>Default value: false</em>
+    </dd>
+    <dt>start_at_zero</dt>
+    <dd>
+        if false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
+  </dl>
+
+  <h2>Area graphs</h2>
+    <h3>Area graph options</h3>
+
+  <h2>Stacked area graphs</h2>
+    <h3>Stacked area graph options</h3>
+
+  <h2>Bar graphs</h2>
+    <h3>Bar graph options</h3>
+
+  <h2>Horizontal bar graphs</h2>
+    <h3>Horizontal bar options</h3>
+
+  <h2>Sparkline</h2>
+    <h3>Sparkline options</h3>
+
+  <h2>Sparkbar</h2>
+    <h3>Sparkbar options</h3>
   </body>
 </html>
 

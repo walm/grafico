@@ -1,6 +1,6 @@
 Ico.BarGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function () {
-    return { plot_padding: 0 };
+    return { plot_padding : 0, bargraph_lastcolour : false};
   },
   normaliserOptions: function () {
     return { start_value: 0 };
@@ -46,7 +46,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
       datalabel = datalabel[index].toString();
       text = this.paper.text(bargraph.attrs.x+(this.bar_width/2), bargraph.attrs.y-(this.options.font_size*1.5), datalabel),
       hoverbar.attr({fill: colour2, 'stroke-width': 0, stroke : colour2,opacity:0});
-      text.attr({'font-size': this.options.font_size, fill:this.options.background_colour,opacity: 1});
+      text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
 
       var textbox = text.getBBox(),
           textpadding = 4,
@@ -96,6 +96,9 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
 });
 
 Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
+  chartDefaults: function () {
+    return { plot_padding : 0, horizontal_rounded : false};
+  },
   setChartSpecificOptions: function () {
     // Approximate the width required by the labels
     this.x_padding_left = 20 + this.longestLabel() * (this.options.font_size / 2);
