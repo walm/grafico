@@ -421,7 +421,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       var hoverSet = this.paper.set(),
           textpadding = 4,
           text = this.paper.text(cursor.attrs.x, cursor.attrs.y-(this.options.font_size*1.5)-textpadding, datalabel);
-      text.attr({'font-size': this.options.font_size, fill:this.options.background_colour,opacity: 1});
+      text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
 
       var textbox = text.getBBox(),
           roundRect= this.paper.rect(

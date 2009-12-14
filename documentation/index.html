@@ -163,7 +163,7 @@
     </dd>
   </dl>
   <h2>Line graphs</h2>
-  <p><strong>A linegraph with the default rendering (no options):</strong></p>
+  <p><strong>Line graph with the default rendering (no options):</strong></p>
 
   <div id="linegraph" style="height:170px;display:block;float:left;width:500px""></div>
   <pre style="display:block;float:left;width:700px"><code>   var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
@@ -171,7 +171,7 @@
     var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
   </script>
 
-  <p style="clear:both"><strong>A linegraph with custom options:</strong></p>
+  <p style="clear:both"><strong>Line graph with custom options:</strong></p>
 
   <div id="linegraph2" style="height:170px;display:block;float:left;width:500px"></div>
   <pre style="display:block;float:left;width:700px"><code>   var linegraph2 = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
@@ -211,8 +211,47 @@
     }
     );
   </script>
-<p style="clear:both">.</p>
+<p style="clear:both"><strong>Line graph with multiple lines:</strong></p>
 
+
+  <div id="linegraph3" style="height:170px;display:block;float:left;width:500px""></div>
+  <pre style="display:block;float:left;width:700px"><code>    var linegraph = new Ico.LineGraph($('linegraph3'),
+      {
+      workload:       [8, 10, 6, 12,7, 6, 9],
+      your_workload:  [6, 8,  4, 8, 12,6, 2],
+      his_workload:   [2, 9,  12,7, 8, 9, 8]
+      },
+      {
+        markers: "circle",
+        hover_colour: "#000",
+        hover_text_colour: "#fff",
+        datalabels: {
+          workload:       "My workload",
+          your_workload:  "Your workload",
+          his_workload:   "His workload"
+        }
+      }
+      );
+</code></pre>
+  <script>
+    var linegraph = new Ico.LineGraph($('linegraph3'),
+      {
+      workload:       [8, 10, 6, 12,7, 6, 9],
+      your_workload:  [6, 8,  4, 8, 12,6, 2],
+      his_workload:   [2, 9,  12,7, 8, 9, 8]
+      },
+      {
+        markers: "circle",
+        hover_colour: "#000",
+        hover_text_colour: "#fff",
+        datalabels: {
+          workload:       "My workload",
+          your_workload:  "Your workload",
+          his_workload:   "His workload"
+        }
+      });
+  </script>
+<p style="clear:both">.</p>
   <h3>Line graph options:</h3>
   <dl>
     <dt>markers</dt>
