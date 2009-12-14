@@ -15,69 +15,33 @@ var Ico = {
   HorizontalBarGraph: {}
 };
 
-/* Supporting methods to make dealing with arrays easier */
-/* Note that some of this work to reduce framework dependencies */
-Array.prototype.sum = function () {
-  for (var i = 0, sum = 0; i < this.length; sum += this[i++]) {}
-  return sum;
-};
-
-if (typeof Array.prototype.max === 'undefined') {
-  Array.prototype.max = function () {
-    return Math.max.apply({}, this);
-  };
-}
-
-if (typeof Array.prototype.min === 'undefined') {
-  Array.prototype.min = function () {
-    return Math.min.apply({}, this);
-  };
-}
-
-Array.prototype.mean = function () {
-  return this.sum() / this.length;
-};
-
-Array.prototype.variance = function () {
-  var mean = this.mean(),
-      variance = 0;
-  for (var i = 0; i < this.length; i++) {
-    variance += Math.pow(this[i] - mean, 2);
+Ico.Base = Class.create({
+  normaliseData: function (data) {
+    return $A(data).collect(function (value) {
+      return this.normalise(value);
+    }.bind(this));
+  },
+  deepCopy: function (obj) {
+    var out, i, len;
+    if (Object.prototype.toString.call(obj) === '[object Array]') {
+        out = [];
+        i = 0;
+        len = obj.length;
+        for (i; i < len; i++) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    if (typeof obj === 'object') {
+        out = {};
+        for (i in obj) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    return obj;
   }
-  return variance / (this.length - 1);
-};
-
-Array.prototype.standard_deviation = function () {
-  return Math.sqrt(this.variance());
-};
-
-/* Raphael path methods. Supporting methods to make dealing with arrays easier */
-/* Note that some of this work to reduce framework dependencies */
-Raphael.el.isAbsolute = true;
-Raphael.el.absolutely = function () {
-    this.isAbsolute = 1;
-    return this;
-};
-Raphael.el.relatively = function () {
-    this.isAbsolute = 0;
-    return this;
-};
-Raphael.el.moveTo = function (x, y) {
-    this._last = {x: x, y: y};
-    return this.attr({path: this.attrs.path + ["m", "M"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
-};
-Raphael.el.lineTo = function (x, y) {
-    this._last = {x: x, y: y};
-    return this.attr({path: this.attrs.path + ["l", "L"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
-};
-Raphael.el.cplineTo = function (x, y, w) {
-    this.attr({path: this.attrs.path + ["C", this._last.x + w, this._last.y, x - w, y, x, y]});
-    this._last = {x: x, y: y};
-    return this;
-};
-Raphael.el.andClose = function () {
-    return this.attr({path: this.attrs.path + "z"});
-};
+});
 
 Ico.Normaliser = Class.create({
   initialize: function (data, options) {
@@ -112,7 +76,6 @@ Ico.Normaliser = Class.create({
         multiplier;
         offset = offset || 1;
 
-
     if (this.standard_deviation > 0.1) {
       multiplier = Math.pow(10, -offset);
       roundedValue = Math.round(value * multiplier) / multiplier;
@@ -136,36 +99,6 @@ Ico.Normaliser = Class.create({
     return Math.pow(10, (Math.log(value) / Math.LN10).round() - 1);
   }
 });
-
-Ico.Base = Class.create({
-  normaliseData: function (data) {
-    return $A(data).collect(function (value) {
-      return this.normalise(value);
-    }.bind(this));
-  },
-  deepCopy: function (obj) {
-    var out, i, len;
-    if (Object.prototype.toString.call(obj) === '[object Array]') {
-        out = [];
-        i = 0;
-        len = obj.length;
-        for (; i < len; i++) {
-            out[i] = arguments.callee(obj[i]);
-        }
-        return out;
-    }
-    if (typeof obj === 'object') {
-        out = {};
-        for (i in obj) {
-            out[i] = arguments.callee(obj[i]);
-        }
-        return out;
-    }
-    return obj;
-  }
-});
-
-
 
 Ico.BaseGraph = Class.create(Ico.Base, {
   initialize: function (element, data, options) {
@@ -276,7 +209,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     /* Define in child class */
   },
 
-  drawPlot: function (index, cursor, x, y, colour, datalabel, element) {
+  drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
     /* Define in child class */
   },
   calculateStep: function () {
@@ -437,7 +370,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
             path.moveTo(parseInt(x, 10), this.y_padding_top);
             path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
           }
-          x = this.options.horizontalbar_grid ? x+(this.graph_width / this.y_label_count) : x + this.step;
+          x = x + this.step;
         }
       }
       if (this.bar_padding) {
@@ -687,4 +620,67 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
   }
 });
+
+/* Supporting methods to make dealing with arrays easier */
+/* Note that some of this work to reduce framework dependencies */
+Array.prototype.sum = function () {
+  for (var i = 0, sum = 0; i < this.length; sum += this[i++]) {}
+  return sum;
+};
+
+if (typeof Array.prototype.max === 'undefined') {
+  Array.prototype.max = function () {
+    return Math.max.apply({}, this);
+  };
+}
+
+if (typeof Array.prototype.min === 'undefined') {
+  Array.prototype.min = function () {
+    return Math.min.apply({}, this);
+  };
+}
+
+Array.prototype.mean = function () {
+  return this.sum() / this.length;
+};
+
+Array.prototype.variance = function () {
+  var mean = this.mean(),
+      variance = 0;
+  for (var i = 0; i < this.length; i++) {
+    variance += Math.pow(this[i] - mean, 2);
+  }
+  return variance / (this.length - 1);
+};
+
+Array.prototype.standard_deviation = function () {
+  return Math.sqrt(this.variance());
+};
+
+/* Raphael path methods. Supporting methods to make dealing with arrays easier */
+Raphael.el.isAbsolute = true;
+Raphael.el.absolutely = function () {
+    this.isAbsolute = 1;
+    return this;
+};
+Raphael.el.relatively = function () {
+    this.isAbsolute = 0;
+    return this;
+};
+Raphael.el.moveTo = function (x, y) {
+    this._last = {x: x, y: y};
+    return this.attr({path: this.attrs.path + ["m", "M"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
+};
+Raphael.el.lineTo = function (x, y) {
+    this._last = {x: x, y: y};
+    return this.attr({path: this.attrs.path + ["l", "L"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
+};
+Raphael.el.cplineTo = function (x, y, w) {
+    this.attr({path: this.attrs.path + ["C", this._last.x + w, this._last.y, x - w, y, x, y]});
+    this._last = {x: x, y: y};
+    return this;
+};
+Raphael.el.andClose = function () {
+    return this.attr({path: this.attrs.path + "z"});
+};
 
