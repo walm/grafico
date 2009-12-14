@@ -135,7 +135,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       show_vertical_labels:   true,
       vertical_label_unit:    '',
       colours:                this.makeRandomColours(),             // Line colours
-      background_colour:      element.getStyle('backgroundColor') || "#fff",
+      background_colour:      element.getStyle('backgroundColor'),
       label_colour:           '#000',                               // Label text colour
       grid_colour:            '#ccc',                               // Grid line colour
       hover_text_colour:      '#fff',                               // hover colour
@@ -153,7 +153,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
-
     /* Padding around the graph area to make room for labels */
     this.x_padding_left = 10 + this.paddingLeftOffset();
     this.x_padding_left += this.options.vertical_label_unit ? 6 : 0;
