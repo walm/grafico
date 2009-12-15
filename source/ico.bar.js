@@ -1,6 +1,6 @@
 Ico.BarGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function () {
-    return { plot_padding : 0, bargraph_lastcolour : false};
+    return { bar : true, plot_padding : 0, bargraph_lastcolour : false, bargraph_negativecolour : false};
   },
   normaliserOptions: function () {
     return { start_value: 0 };
@@ -22,23 +22,34 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
   },
 
   drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element) {
-    var start_y = this.options.height - this.y_padding_bottom,
+    var start_y = this.options.height - this.y_padding_bottom - ((this.zero_value) * (this.graph_height / this.y_label_count)),
         lastcolor = this.options.bargraph_lastcolour,
+        negativecolor = this.options.bargraph_negativecolour,
         colour2;
     x = x + this.bar_padding;
+    y = this.options.height - this.y_padding_bottom - y - ((this.zero_value) * (this.graph_height / this.y_label_count));
 
     if (lastcolor && index === coords.length-1){
       colour2 = lastcolor;
     } else {
-      colour2 = colour;
+      colour2 = y < 0 ? negativecolor : colour;
     }
 
-    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y-(this.options.height-y-this.y_padding_bottom), this.bar_width, (this.options.height-this.y_padding_bottom)-y);
-    bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+    var bargraph =
+      this.paper.rect(x-(this.bar_width/2),
+                      start_y,
+                      this.bar_width,
+                      y);
 
+    bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+    if( y < 0) {
+      bargraph.attr({height:-bargraph.attrs.height});
+    } else {
+      bargraph.translate(0,-y);
+    }
 
     if (this.options.datalabels) {
-      var hover_colour = this.options.hover_colour || colour,
+      var hover_colour = this.options.hover_colour || colour2,
           hoverSet = this.paper.set(),
           text,
           hoverbar = this.paper.rect(x-(this.bar_width/2), this.y_padding_top, this.bar_width, this.options.height);

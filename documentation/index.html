@@ -6,13 +6,22 @@
 
     <link href="http://github.com/Kilian/sencss/raw/master/sen.css" rel="stylesheet" type="text/css">
     <style>
-    body {padding:2em;}
-
+    #wrap {
+      width:700px;
+      padding:2em 2em 2em 172px;
+      margin:0 auto;
+    }
+    #menu {
+      width:150px;
+      position:fixed;
+      top:2em;
+      margin-left:-172px;
+    }
     h2 {display:block;background:#ccc;padding:0.5em}
-    h3 {display:block;float:left;background:#eee;padding:0.5em}
+    h3 {display:block;background:#eee;padding:0.5em}
     h3+*{clear:left;}
 
-    pre {background:#eee;float:left;widtH:700px;}
+    pre {background:#eee;widtH:700px;}
     pre + * {clear:left;}
     </style>
 
@@ -24,24 +33,29 @@
     <script src="../source/ico.spark.js" type="text/javascript" charset="utf-8"></script>
   </head>
 
-  <body>
+<body>
+  <div id="wrap">
   <h1>Ico graphing library Documentation</h1>
   <p>Ico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.com">Prototype.js</a>. It is originally developed by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>, but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a>.</p>
 
   <p>Ico's basic principles are to provide <strong>good, clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte.</p>
 
-  <h2>The available graphs in Ico:</h2>
-  <ul>
-    <li>Line graphs</li>
-    <li>Area graphs</li>
-    <li>Stacked area graphs</li>
-    <li>Bar graphs</li>
-    <li>Horizontal bar graphs</li>
-    <li>Sparklines</li>
-    <li>Sparkbars</li>
-  </ul>
+    <div id="menu">
+      <h2>Menu</h2>
+      <ul>
+        <li><a href="#wrap">Top</a></li>
+        <li><a href="#basics">Basics</a></li>
+        <li><a href="#line">Line graphs</a></li>
+        <li><a href="#area">Area graphs</a></li>
+        <li><a href="#stack">Stacked area graphs</a></li>
+        <li><a href="#bar">Bar graphs</a></li>
+        <li><a href="#horizontalbar">Horizontal bar graphs</a></li>
+        <li><a href="#sparkline">Sparklines</a></li>
+        <li><a href="#sparkbar">Sparkbars</a></li>
+      </ul>
+    </div>
 
-  <h2>Basics</h2>
+  <h2 id="basics">Basics</h2>
   <p>Ico graphs are initiated via this function call:</p>
   <pre><code>   var foo = new Ico.GraphType($(element), data, options);</code></pre>
   <p>$(element) is a prototype id selector, data is an object or array (depending on the graph) and options is optional and an object.</p>
@@ -169,19 +183,22 @@
         <em>Default value: false</em>
     </dd>
   </dl>
-  <h2>Line graphs</h2>
+
+
+  <h2 id="line">Line graphs</h2>
+  <p>Line graphs accept ranges of negative and positive numbers.</p>
   <p><strong>Line graph with the default rendering (no options):</strong></p>
 
-  <div id="linegraph" style="height:170px;display:block;float:left;width:500px""></div>
-  <pre style="display:block;float:left;width:700px"><code>   var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
+  <div id="linegraph" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>   var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
   <script>
     var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
   </script>
 
   <p style="clear:both"><strong>Line graph with custom options:</strong></p>
 
-  <div id="linegraph2" style="height:170px;display:block;float:left;width:500px"></div>
-  <pre style="display:block;float:left;width:700px"><code>   var linegraph2 = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
+  <div id="linegraph2" style="height:170px;display:block;width:500px"></div>
+  <pre style="display:block;width:700px"><code>   var linegraph2 = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
     {
       grid :                  true,
       plot_padding :          0,
@@ -218,11 +235,10 @@
     }
     );
   </script>
+
 <p style="clear:both"><strong>Line graph with multiple lines:</strong></p>
-
-
-  <div id="linegraph3" style="height:170px;display:block;float:left;width:500px""></div>
-  <pre style="display:block;float:left;width:700px"><code>    var linegraph = new Ico.LineGraph($('linegraph3'),
+  <div id="linegraph3" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var linegraph3 = new Ico.LineGraph($('linegraph3'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -240,7 +256,7 @@
       });
 </code></pre>
   <script>
-    var linegraph = new Ico.LineGraph($('linegraph3'),
+    var linegraph3 = new Ico.LineGraph($('linegraph3'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -255,6 +271,26 @@
           your_workload:  "Your workload",
           his_workload:   "His workload"
         }
+      });
+  </script>
+
+<p style="clear:both"><strong>Line graph with multiple lines and negative values:</strong></p>
+
+
+  <div id="linegraph4" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var linegraph4 = new Ico.LineGraph($('linegraph4'),
+      {
+      a : [8, -10, 6, 12,7, -6, -9],
+      b : [6, 8,  -4, 8, -12,6, 2],
+      c : [2, 9,  12,7, 8, -9, 8]
+      });
+</code></pre>
+  <script>
+    var linegraph4 = new Ico.LineGraph($('linegraph4'),
+      {
+      a : [8, -10, 6, 12,7, -6, -9],
+      b : [6, 8,  -4, 8, -12,6, 2],
+      c : [2, 9,  12,7, 8, -9, 8]
       });
   </script>
 <p style="clear:both">.</p>
@@ -282,28 +318,353 @@
     </dd>
     <dt>start_at_zero</dt>
     <dd>
-        if false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
         <em>Default value: true</em>
     </dd>
   </dl>
 
-  <h2>Area graphs</h2>
+  <h2 id="area">Area graphs</h2>
+    <p>Area graphs only support positive ranges.</p>
+    <p><strong>Area graph with the default rendering (no options):</strong></p>
+
+    <div id="areagraph" style="height:170px;display:block;width:500px""></div>
+    <pre style="display:block;width:700px"><code>   var areagraph = new Ico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
+    <script>
+      var areagraph = new Ico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
+    </script>
+
+      <p style="clear:both"><strong>Area graph with custom options:</strong></p>
+
+  <div id="areagraph2" style="height:170px;display:block;width:500px"></div>
+  <pre style="display:block;width:700px"><code>    var areagraph2 = new Ico.AreaGraph($('areagraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
+    {
+      grid :                  true,
+      area_opacity :          0.5,
+      plot_padding :          0,
+      font_size :             11,
+      vertical_label_unit :   "hr",
+      colours :               {workload: '#4b80b6'},
+      background_colour :     "#fff",
+      label_colour :          "#444",
+      grid_colour :           "#ccf",
+      markers :               "value",
+      meanline :              { 'stroke-width': '2px', stroke: '#000' },
+      draw_axis :             false,
+      labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
+      datalabels :            {workload:'My workload'},
+    });
+  </code></pre>
+  <script>
+    var areagraph2 = new Ico.AreaGraph($('areagraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
+    {
+      grid :                  true,
+      area_opacity :          0.5,
+      plot_padding :          0,
+      font_size :             11,
+      vertical_label_unit :   "hr",
+      colours :               {workload: '#4b80b6'},
+      background_colour :     "#fff",
+      label_colour :          "#444",
+      grid_colour :           "#ccf",
+      markers :               "value",
+      meanline :              { 'stroke-width': '2px', stroke: '#000' },
+      draw_axis :             false,
+      labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
+      datalabels :            {workload:'My workload'},
+    });
+  </script>
+
+<p style="clear:both"><strong>Area graph with multiple areas:</strong></p>
+  <div id="areagraph3" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var areagraph3 = new Ico.AreaGraph($('areagraph3'),
+      {
+      workload:       [8, 10, 6, 12,7, 6, 9],
+      your_workload:  [6, 8,  4, 8, 12,6, 2],
+      his_workload:   [2, 9,  12,7, 8, 9, 8]
+      });
+</code></pre>
+  <script>
+    var areagraph3 = new Ico.AreaGraph($('areagraph3'),
+      {
+      workload:       [8, 10, 6, 12,7, 6, 9],
+      your_workload:  [6, 8,  4, 8, 12,6, 2],
+      his_workload:   [2, 9,  12,7, 8, 9, 8]
+      });
+  </script>
+<p style="clear:both"><strong>Area graph with multiple areas and custom options:</strong></p>
+  <div id="areagraph4" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var areagraph4 = new Ico.AreaGraph($('areagraph4'),
+      {
+      workload:       [8, 10, 6, 12,7, 6, 9],
+      your_workload:  [6, 8,  4, 8, 12,6, 2],
+      his_workload:   [2, 9,  12,7, 8, 9, 8]
+      },
+      {
+        markers : "value",
+        grid:false,
+        draw_axis: false,
+        plot_padding : 0,
+        show_vertical_labels : false,
+        show_horizontal_labels : false,
+        hover_colour: "#000",
+        hover_text_colour: "#fff",
+        datalabels: {
+          workload:       "My workload",
+          your_workload:  "Your workload",
+          his_workload:   "His workload"
+        }
+      });
+</code></pre>
+  <script>
+    var areagraph4 = new Ico.AreaGraph($('areagraph4'),
+      {
+      workload:       [8, 10, 6, 12,7, 6, 9],
+      your_workload:  [6, 8,  4, 8, 12,6, 2],
+      his_workload:   [2, 9,  12,7, 8, 9, 8]
+      },
+      {
+        markers : "value",
+        grid:false,
+        draw_axis: false,
+        plot_padding : 0,
+        show_vertical_labels : false,
+        show_horizontal_labels : false,
+        hover_colour: "#000",
+        hover_text_colour: "#fff",
+        datalabels: {
+          workload:       "My workload",
+          your_workload:  "Your workload",
+          his_workload:   "His workload"
+        }
+      });
+  </script>
     <h3>Area graph options</h3>
+  <dl>
+    <dt>markers</dt>
+    <dd>
+        Line graph: display markers on the datapoint. (string)<br>
+        Possible options:
+        <ul>
+          <li>"circle" - displays a circle</li>
+          <li>"value" - displays a hover with the value</li>
+        </ul>
+        <em>Default value: false</em>
+    </dd>
+    <dt>marker_size</dt>
+    <dd>
+        The size of the marker (number)<br>
+        <em>Default value: 5</em>
+    </dd>
+    <dt>hide_empty_label_grid</dt>
+    <dd>
+        hide the vertical gridlines for all empty label on the horizontal axis. (boolean)<br>
+        <em>Default value: false</em>
+    </dd>
+    <dt>area_opacity</dt>
+    <dd>
+        set a specific opacity for the area's. If none is given, single areas will be opaque, and multiple will get an opacity of 1.5/number-of-areas. (number between 0 and 1)<br>
+        <em>Default value: false</em>
+    </dd>
+  </dl>
+  <h2 id="stack">Stacked area graphs</h2>
+    <p>Area graphs only support positive ranges.</p>
 
-  <h2>Stacked area graphs</h2>
+
+  <p style="clear:both"><strong>Stack graph:</strong></p>
+  <div id="stackgraph" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var stackgraph = new Ico.StackGraph($('stackgraph'),
+      {
+      workload:       [8, 10, 6, 1,7, 6, 9],
+      your_workload:  [6, 8,  4, 1, 12,6, 2],
+      his_workload:   [2, 9,  12,2, 8, 9, 8]
+      });
+</code></pre>
+  <script>
+    var stackgraph = new Ico.StackGraph($('stackgraph'),
+      {
+      workload:       [8, 10, 6, 1,7, 6, 9],
+      your_workload:  [6, 8,  4, 1, 12,6, 2],
+      his_workload:   [2, 9,  12,2, 8, 9, 8]
+      });
+  </script>
+
+  <p style="clear:both"><strong>Stack graph with custom options:</strong></p>
+  <div id="stackgraph2" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var stackgraph2 = new Ico.StackGraph($('stackgraph2'),
+      {
+      workload:       [8, 10, 6, 1,7, 6, 9],
+      your_workload:  [6, 8,  4, 1, 12,6, 2],
+      his_workload:   [2, 9,  12,2, 8, 9, 8]
+      },
+      {
+        markers : "value",
+        draw_axis: false,
+        plot_padding : 0,
+        hover_text_colour: "#fff",
+        datalabels: {
+          workload:       "My workload",
+          your_workload:  "Your workload",
+          his_workload:   "His workload"
+        }
+      });
+</code></pre>
+  <script>
+    var stackgraph2 = new Ico.StackGraph($('stackgraph2'),
+      {
+      workload:       [8, 10, 6, 1,7, 6, 9],
+      your_workload:  [6, 8,  4, 1, 12,6, 2],
+      his_workload:   [2, 9,  12,2, 8, 9, 8]
+      },
+      {
+        markers : "value",
+        draw_axis: false,
+        plot_padding : 0,
+        hover_text_colour: "#fff",
+        datalabels: {
+          workload:       "My workload",
+          your_workload:  "Your workload",
+          his_workload:   "His workload"
+        }
+      });
+  </script>
+
+  <p style="clear:both"><strong>Stack line graph:</strong></p>
+  <div id="stackgraph3" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var stackgraph3 = new Ico.StackGraph($('stackgraph3'),
+      {
+      workload:       [8, 10, 6, 1,7, 6, 9],
+      your_workload:  [6, 8,  4, 1, 12,6, 2],
+      his_workload:   [2, 9,  12,2, 8, 9, 8]
+      },
+      {
+        stacked_fill : false,
+        markers : "value"
+      });
+</code></pre>
+  <script>
+    var stackgraph3 = new Ico.StackGraph($('stackgraph3'),
+      {
+      workload:       [8, 10, 6, 1,7, 6, 9],
+      your_workload:  [6, 8,  4, 1, 12,6, 2],
+      his_workload:   [2, 9,  12,2, 8, 9, 8]
+      },
+      {
+        stacked_fill : false,
+        markers : "value"
+      });
+  </script>
     <h3>Stacked area graph options</h3>
+  <dl>
+    <dt>markers</dt>
+    <dd>
+        Line graph: display markers on the datapoint. (string)<br>
+        Possible options:
+        <ul>
+          <li>"circle" - displays a circle</li>
+          <li>"value" - displays a hover with the value</li>
+        </ul>
+        <em>Default value: false</em>
+    </dd>
+    <dt>marker_size</dt>
+    <dd>
+        The size of the marker (number)<br>
+        <em>Default value: 5</em>
+    </dd>
+    <dt>hide_empty_label_grid</dt>
+    <dd>
+        hide the vertical gridlines for all empty label on the horizontal axis. (boolean)<br>
+        <em>Default value: false</em>
+    </dd>
+    <dt>stacked_fill</dt>
+    <dd>
+        specify if the stacked areas should be filled area's or lines (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
+  </dl>
+  <h2 id="bar">Bar graphs</h2>
+    <p style="clear:both"><strong>Bar graph:</strong></p>
+  <div id="bargraph" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <script>
+    var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);
+  </script>
 
-  <h2>Bar graphs</h2>
+    <p style="clear:both"><strong>Bar graph with custom options:</strong></p>
+  <div id="bargraph2" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>     var bargraph2 = new Ico.BarGraph($('bargraph2'),
+    [31, 12, 12, 10, 6, 4, 26],
+    {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    colour: '#4b80b6',
+    meanline: true,
+    vertical_label_unit: "%",
+    bargraph_lastcolour: "#666666",
+    hover_colour : "#006677",
+    datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
+    });
+    </code></pre>
+  <script>
+    var bargraph2 = new Ico.BarGraph($('bargraph2'),
+    [31, 12, 12, 10, 6, 4, 26],
+    {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    colour: '#4b80b6',
+    meanline: true,
+    vertical_label_unit: "%",
+    bargraph_lastcolour: "#666666",
+    hover_colour : "#006677",
+    datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
+    });
+  </script>
+
+  <p style="clear:both"><strong>Bar graph with negative values:</strong></p>
+  <div id="bargraph3" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var bargraph = new Ico.BarGraph($('bargraph3'),
+    [31, 12, -12, -10, 6, -4, 26],
+    {
+     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+     colour: '#4b80b6',
+     meanline : true,
+     hover_colour : "#006677",
+     bargraph_negativecolour : "#660000",
+     datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
+    });</code></pre>
+  <script>
+    var bargraph = new Ico.BarGraph($('bargraph3'),
+    [31, 12, -12, -10, 6, -4, 26],
+    {
+     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+     colour: '#4b80b6',
+     hover_colour : "#006677",
+     meanline : true,
+     bargraph_negativecolour : "#660000",
+     datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
+    });
+  </script>
+
     <h3>Bar graph options</h3>
+  <dl>
+    <dt>bargraph_lastcolour</dt>
+    <dd>
+        select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+        <em>Default value: false</em>
+    </dd>
+    <dt>bargraph_negativecolour</dt>
+    <dd>
+        select a different colour for negative values in a bargraph (string, example: "#fff")<br />
+        <em>Default value: false</em>
+    </dd>
+  </dl>
 
-  <h2>Horizontal bar graphs</h2>
+  <h2 id="horizontalbar">Horizontal bar graphs</h2>
     <h3>Horizontal bar options</h3>
 
-  <h2>Sparkline</h2>
+  <h2 id="sparkline">Sparkline</h2>
     <h3>Sparkline options</h3>
 
-  <h2>Sparkbar</h2>
+  <h2 id="sparkbar">Sparkbar</h2>
     <h3>Sparkbar options</h3>
+    </div>
   </body>
 </html>
 

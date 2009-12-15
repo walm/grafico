@@ -16,12 +16,29 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   startPlot: function (cursor, x, y, colour) {
     cursor.moveTo(x, y);
   },
+  drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
 
+    if (this.options.markers === 'circle') {
+      this.drawGraphMarkers(index, x, y, colour, datalabel, element);
+    } else if (this.options.markers === 'value') {
+      this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
+    }
+    if (index === 0) {
+      return this.startPlot(cursor, x-0.5, y, colour);
+    }
+
+    if (this.options.curve_amount) {
+      cursor.cplineTo(x, y, this.options.curve_amount);
+    } else {
+      cursor.lineTo(x, y);
+    }
+  },
   drawGraphMarkers: function (index, x, y, colour, datalabel, element) {
     var circle = this.paper.circle(x, y, this.options.marker_size),
         old_marker_size = this.options.marker_size,
         new_marker_size;
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
+    this.globalMarkerSet.push(circle);
 
     circle.node.onmouseover = function (e) {
       new_marker_size = parseInt(1.7*old_marker_size, 10);
@@ -36,19 +53,22 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     if (this.options.odd_horizontal_offset>1) {
           index += this.options.odd_horizontal_offset;
       }
-    index -= this.options.stacked ? 1 : 0;
+    index -= this.options.stacked_fill || this.options.area ? 1 : 0;
     var currentset = this.options.stacked ? this.real_data : this.data_sets,
         currentvalue = currentset.collect(function (data_set) {return data_set[1][index];})[graphindex],
         vertical_label_unit = this.options.vertical_label_unit||"";
 
     if (currentvalue) {
-      currentvalue = currentvalue.toString().split('.');
+      currentvalue = ""+currentvalue.toString().split('.');
       if (currentvalue[1]) {
         currentvalue[1] = currentvalue[1].truncate(3, '');
       }
     }
+    if (
+      (this.options.line||this.options.stacked) || //if the option is a line graph
+      ((this.options.stacked_fill||this.options.area) && index != -1) && //if it's stacked or an area and it's not the first
+      typeof currentvalue != "undefined") { //if there is a current value
 
-    if (!this.options.stacked || (this.options.stacked && index !== -1 && typeof(currentvalue) !== "undefined")) {
       var rectx = x-(this.step/2),
           recty = this.options.stacked ? y-(this.graph_height/18): y-(this.graph_height/6),
           rectw = this.step,
@@ -100,30 +120,13 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
         hoverSet.animate({opacity:0},200);
       };
     }
-  },
-  drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
-
-    if (this.options.markers === 'circle') {
-      this.drawGraphMarkers(index, x, y, colour, datalabel, element);
-    } else if (this.options.markers === 'value') {
-      this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
-    }
-    if (index === 0) {
-      return this.startPlot(cursor, x, y, colour);
-    }
-
-    if (this.options.curve_amount) {
-      cursor.cplineTo(x, y, this.options.curve_amount);
-    } else {
-      cursor.lineTo(x, y);
-    }
   }
 });
 
 Ico.AreaGraph = Class.create(Ico.LineGraph, {
 
   chartDefaults: function () {
-    return { area:true };
+    return { area:true, area_opacity:false };
   },
   setChartSpecificOptions: function () {
     if (typeof this.options.curve_amount === 'undefined') {
@@ -132,19 +135,19 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
   },
   drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
     var filltype = this.options.area||this.options.stacked_fill;
-
     if (this.options.markers === 'circle') {
       if (filltype === true) {
         if (index !== 0 && index !== coords.length-1) {
-          this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+          this.drawGraphMarkers(index, x, y, colour, datalabel, element);
         }
       } else {
-         this.drawGraphMarkers(index,cursor,x,y,colour, datalabel, element);
+         this.drawGraphMarkers(index, x, y, colour, datalabel, element);
       }
     } else if (this.options.markers === 'value') {
       this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
     }
 
+    x -= 0.5
     if (index === 0) {
       return this.startPlot(cursor, x, y, colour);
     }
