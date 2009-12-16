@@ -59,7 +59,6 @@
   <p>Ico graphs are initiated via this function call:</p>
   <pre><code>   var foo = new Ico.GraphType($(element), data, options);</code></pre>
   <p>$(element) is a prototype id selector, data is an object or array (depending on the graph) and options is optional and an object.</p>
-  <p>The base graph options are applicable to all graphs except for the sparklines and sparkbars.</p>
 
   <h3>Dependencies</h3>
   <ul>
@@ -142,9 +141,8 @@
     </dd>
     <dt>meanline</dt>
     <dd>
-        Display a line on the average of all datapoints (object or boolean, example: { 'stroke-width': '2px', stroke: '#000' })<br>
-        object example:
-        <em>Default value: false</em>
+        Display a line on the average of all datapoints. Accepts all <a href="http://raphaeljs.com/reference.html#attr">Raphael parameters</a> (object or boolean, example: { 'stroke-width': '2px', stroke: '#000' })<br>
+        <em>Default value: false, setting it to true will draw a 2px grey line.</em>
     </dd>
     <dt>padding_top</dt>
     <dd>
@@ -202,6 +200,7 @@
     {
       grid :                  true,
       plot_padding :          0,
+      stroke_width :          3,
       font_size :             11,
       vertical_label_unit :   "hr",
       colours :               {workload: '#4b80b6'},
@@ -220,6 +219,7 @@
     {
       grid :                  true,
       plot_padding :          0,
+      stroke_width :          3,
       font_size :             11,
       vertical_label_unit :   "hr",
       colours :               {workload: '#4b80b6'},
@@ -253,8 +253,7 @@
           your_workload:  "Your workload",
           his_workload:   "His workload"
         }
-      });
-</code></pre>
+      });</code></pre>
   <script>
     var linegraph3 = new Ico.LineGraph($('linegraph3'),
       {
@@ -283,8 +282,7 @@
       a : [8, -10, 6, 12,7, -6, -9],
       b : [6, 8,  -4, 8, -12,6, 2],
       c : [2, 9,  12,7, 8, -9, 8]
-      });
-</code></pre>
+      });</code></pre>
   <script>
     var linegraph4 = new Ico.LineGraph($('linegraph4'),
       {
@@ -321,6 +319,10 @@
         If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
         <em>Default value: true</em>
     </dd>
+    <dd>
+        specify the width of the lines in pixels (number)<br />
+        <em>Default value: 5</em>
+    </dd>
   </dl>
 
   <h2 id="area">Area graphs</h2>
@@ -352,8 +354,7 @@
       draw_axis :             false,
       labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
       datalabels :            {workload:'My workload'},
-    });
-  </code></pre>
+    });</code></pre>
   <script>
     var areagraph2 = new Ico.AreaGraph($('areagraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
     {
@@ -381,8 +382,7 @@
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
       his_workload:   [2, 9,  12,7, 8, 9, 8]
-      });
-</code></pre>
+      });</code></pre>
   <script>
     var areagraph3 = new Ico.AreaGraph($('areagraph3'),
       {
@@ -413,8 +413,7 @@
           your_workload:  "Your workload",
           his_workload:   "His workload"
         }
-      });
-</code></pre>
+      });</code></pre>
   <script>
     var areagraph4 = new Ico.AreaGraph($('areagraph4'),
       {
@@ -477,8 +476,7 @@
       workload:       [8, 10, 6, 1,7, 6, 9],
       your_workload:  [6, 8,  4, 1, 12,6, 2],
       his_workload:   [2, 9,  12,2, 8, 9, 8]
-      });
-</code></pre>
+      });</code></pre>
   <script>
     var stackgraph = new Ico.StackGraph($('stackgraph'),
       {
@@ -506,8 +504,7 @@
           your_workload:  "Your workload",
           his_workload:   "His workload"
         }
-      });
-</code></pre>
+      });</code></pre>
   <script>
     var stackgraph2 = new Ico.StackGraph($('stackgraph2'),
       {
@@ -539,8 +536,7 @@
       {
         stacked_fill : false,
         markers : "value"
-      });
-</code></pre>
+      });</code></pre>
   <script>
     var stackgraph3 = new Ico.StackGraph($('stackgraph3'),
       {
@@ -580,9 +576,15 @@
         specify if the stacked areas should be filled area's or lines (boolean)<br>
         <em>Default value: true</em>
     </dd>
+    <dt>stroke_width</dt>
+    <dd>
+        specify the width of the lines in pixels, only used if stacked_fill is false. (number)<br />
+        <em>Default value: 5</em>
+    </dd>
   </dl>
   <h2 id="bar">Bar graphs</h2>
-    <p style="clear:both"><strong>Bar graph:</strong></p>
+  <p>Bar graphs support posivite and negative ranges.</p>
+  <p style="clear:both"><strong>Bar graph:</strong></p>
   <div id="bargraph" style="height:170px;display:block;width:500px""></div>
   <pre style="display:block;width:700px"><code>    var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
@@ -591,18 +593,17 @@
 
     <p style="clear:both"><strong>Bar graph with custom options:</strong></p>
   <div id="bargraph2" style="height:170px;display:block;width:500px""></div>
-  <pre style="display:block;width:700px"><code>     var bargraph2 = new Ico.BarGraph($('bargraph2'),
+  <pre style="display:block;width:700px"><code>    var bargraph2 = new Ico.BarGraph($('bargraph2'),
     [31, 12, 12, 10, 6, 4, 26],
     {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    colour: '#4b80b6',
-    meanline: true,
-    vertical_label_unit: "%",
-    bargraph_lastcolour: "#666666",
-    hover_colour : "#006677",
-    datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
-    });
-    </code></pre>
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+      colour: '#4b80b6',
+      meanline: true,
+      vertical_label_unit: "%",
+      bargraph_lastcolour: "#666666",
+      hover_colour : "#006677",
+      datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
+    });</code></pre>
   <script>
     var bargraph2 = new Ico.BarGraph($('bargraph2'),
     [31, 12, 12, 10, 6, 4, 26],
@@ -622,12 +623,12 @@
   <pre style="display:block;width:700px"><code>    var bargraph = new Ico.BarGraph($('bargraph3'),
     [31, 12, -12, -10, 6, -4, 26],
     {
-     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-     colour: '#4b80b6',
-     meanline : true,
-     hover_colour : "#006677",
-     bargraph_negativecolour : "#660000",
-     datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+      colour: '#4b80b6',
+      meanline : true,
+      hover_colour : "#006677",
+      bargraph_negativecolour : "#660000",
+      datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
     });</code></pre>
   <script>
     var bargraph = new Ico.BarGraph($('bargraph3'),
@@ -657,11 +658,102 @@
   </dl>
 
   <h2 id="horizontalbar">Horizontal bar graphs</h2>
+  <p>Horizontal bar graphs only support positive ranges.</p>
+  <p style="clear:both"><strong>Horizontal Bar graph:</strong></p>
+  <div id="horizgraph" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <script>
+    var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);
+  </script>
+
+  <p style="clear:both"><strong>Horizontal Bar graph with custom options:</strong></p>
+  <div id="horizgraph2" style="height:170px;display:block;width:500px""></div>
+  <pre style="display:block;width:700px"><code>    var horizgraph2 = new Ico.HorizontalBarGraph($('horizgraph2'),
+    [30, 12, 12, 10, 6, 4, 26],
+    {
+      horizontal_rounded : true,
+      draw_axis : false,
+      colour: '#4b80b6',
+      meanline: true,
+      vertical_label_unit: "%",
+      bargraph_lastcolour: "#666666",
+      hover_colour : "#006677",
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
+    });</code></pre>
+  <script>
+    var horizgraph2 = new Ico.HorizontalBarGraph($('horizgraph2'),
+      [30, 12, 12, 10, 6, 4, 26],
+      {
+        horizontal_rounded : true,
+        draw_axis : false,
+        colour: '#4b80b6',
+        meanline: true,
+        vertical_label_unit: "%",
+        bargraph_lastcolour: "#666666",
+        hover_colour : "#006677",
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
+      }
+      );
+  </script>
     <h3>Horizontal bar options</h3>
-
+  <dl>
+    <dt>bargraph_lastcolour</dt>
+    <dd>
+        select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+        <em>Default value: false</em>
+    </dd>
+    <dt>horizontal_rounded</dt>
+    <dd>
+        round the ends of horizontal bar graphs (boolean)<br />
+        <em>Default value: false</em>
+    </dd>
+  </dl>
   <h2 id="sparkline">Sparkline</h2>
+  <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkline1" style="height:17px;display:inline-block;width:150px""></span>
+  <pre style="display:block;width:700px"><code>    var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <script>
+    var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);
+  </script>
+  <p style="clear:both"><strong>Sparkline with custom options:</strong> <span id="sparkline2" style="height:17px;display:inline-block;width:150px""></span>
+  <pre style="display:block;width:700px"><code>    var sparkline2 = new Ico.SparkLine($('sparkline2'), [30, 12, 12, 10, 6, 4, 26],
+    {
+      stroke_width : 3,
+      colour: '#4b80b6',
+      highlight: {index: 2, colour: "#f00"},
+      acceptable_range: [0,20],
+      background_colour: "#ddd"
+    });</code></pre>
+  <script>
+    var sparkline2 = new Ico.SparkLine($('sparkline2'), [30, 12, 12, 10, 6, 4, 26],
+    {
+      stroke_width : 3,
+      colour: '#4b80b6',
+      highlight: {index: 2, colour: "#f00"},
+      acceptable_range: [0,20],
+      background_colour: "#ddd"
+    });
+  </script>
     <h3>Sparkline options</h3>
-
+  <dl>
+    <dt>stroke_width</dt>
+    <dd>
+        specify the width of the sparkline in pixels (number)<br />
+        <em>Default value: 1</em>
+    </dd>
+    <dt>highlight</dt>
+    <dd>
+        draw a circle on one of the datapoints (object, example: {index: 2, colour: "#f00"}) <br />
+        colour is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
+        <em>Default value: false, setting it to true will draw a red dot on the last datapoint.</em>
+    </dd>
+    <dt>acceptable_range</dt>
+    <dd>
+        draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
+        <em>Default value: false, needs an explicit background colour</em>
+    </dd>
+  </dl>
   <h2 id="sparkbar">Sparkbar</h2>
     <h3>Sparkbar options</h3>
     </div>

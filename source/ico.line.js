@@ -1,7 +1,11 @@
 
 Ico.LineGraph = Class.create(Ico.BaseGraph, {
   chartDefaults: function () {
-    return{line : true, start_at_zero : true};
+    return{
+      line : true,
+      start_at_zero : true,
+      stroke_width : 5
+    };
   },
   setChartSpecificOptions: function () {
     if (typeof this.options.curve_amount === 'undefined') {
@@ -124,9 +128,11 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
 });
 
 Ico.AreaGraph = Class.create(Ico.LineGraph, {
-
   chartDefaults: function () {
-    return { area:true, area_opacity:false };
+    return {
+      area:true,
+      area_opacity:false
+    };
   },
   setChartSpecificOptions: function () {
     if (typeof this.options.curve_amount === 'undefined') {
@@ -164,7 +170,11 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
 
 Ico.StackGraph = Class.create(Ico.AreaGraph, {
   chartDefaults: function () {
-    return { stacked_fill:true, stacked:true };
+    return {
+      stacked:true,
+      stacked_fill:true,
+      stroke_width : 5
+    };
   },
   normaliserOptions: function () {
   },

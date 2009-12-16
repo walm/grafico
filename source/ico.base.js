@@ -352,32 +352,20 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
       y = this.graph_height + this.y_padding_top;
       for (var i = 0; i < this.y_label_count+1; i++) {
-        if ((this.options.horizontalbar_grid && i === this.y_label_count)|| !this.options.horizontalbar_grid) {
           path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
           path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y, 10)+0.5);
-        }
         y = y - (this.graph_height / this.y_label_count);
       }
 
       x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset;
       x_labels = this.options.labels.length;
 
-      if (!this.bar_padding) {
-        for (var i = 0; i < x_labels; i++) {
-          if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
-            path.moveTo(parseInt(x, 10), this.y_padding_top);
-            path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
-          }
-          x = x + this.step;
+      for (var i = 0; i < x_labels; i++) {
+        if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
+          path.moveTo(parseInt(x, 10), this.y_padding_top);
+          path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
         }
-      }
-      if (this.bar_padding) {
-          //left side
-          path.moveTo(parseInt(this.x_padding_left, 10)-0.5, this.y_padding_top);
-          path.lineTo(parseInt(this.x_padding_left, 10)-0.5, this.y_padding_top + this.graph_height);
-          //right side
-          path.moveTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top);
-          path.lineTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top + this.graph_height);
+        x = x + this.step;
       }
   },
 
@@ -415,7 +403,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       coords.unshift([coords[0][0] , y_offset]);
       coords.push([coords[coords.length-1][0] , y_offset]);
     } else {
-      cursor = this.paper.path().attr({stroke: colour, 'stroke-width': '5px'});
+      cursor = this.paper.path().attr({stroke: colour, 'stroke-width': this.options.stroke_width + "px"});
     }
 
     if (this.options.datalabels) {
@@ -509,8 +497,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawMeanLine: function (data) {
     var cursor = this.paper.path().attr(this.options.meanline),
         offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length;
-
-        offset = this.options.bar ? offset + ((this.zero_value) * (this.graph_height / this.y_label_count)) : offset;
+        offset = this.options.bar ? offset + (this.zero_value * (this.graph_height / this.y_label_count)) : offset;
 
     cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset);
     cursor.lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom - offset);

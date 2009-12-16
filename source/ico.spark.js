@@ -5,7 +5,12 @@ Ico.SparkLine = Class.create(Ico.Base, {
 
     this.options = {
       highlight:              false,
-      stroke_width:           1
+      stroke_width:           1,
+      colour : "#000",
+      width: parseInt(element.getStyle('width'), 10),
+      height: parseInt(element.getStyle('height'), 10),
+      acceptable_range : false,
+
     };
     Object.extend(this.options, options || { });
 
@@ -49,10 +54,11 @@ Ico.SparkLine = Class.create(Ico.Base, {
   },
 
   showHighlight: function (data) {
-    var size = 2,
+    var size = 1+this.options.stroke_width/2,
         x = this.options.width - size,
         i = this.options.highlight.index || data.length - 1,
         y = data[i] + (size / 2).round(),
+        colour = this.options.highlight.colour || "#f00",
         circle;
 
     // Find the x position if it's not the last value
@@ -60,8 +66,8 @@ Ico.SparkLine = Class.create(Ico.Base, {
       x = this.step * this.options.highlight.index;
     }
 
-    circle = this.paper.circle(x, this.options.height - y, size);
-    circle.attr({ stroke: false, fill: this.options.highlight.colour});
+    circle = this.paper.circle(x, this.options.height - y + size/2, size);
+    circle.attr({ stroke: false, fill: colour});
   }
 });
 
