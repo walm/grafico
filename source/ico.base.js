@@ -25,9 +25,8 @@ Ico.Base = Class.create({
     var out, i, len;
     if (Object.prototype.toString.call(obj) === '[object Array]') {
         out = [];
-        i = 0;
         len = obj.length;
-        for (i; i < len; i++) {
+        for (i = 0; i < len; i++) {
             out[i] = arguments.callee(obj[i]);
         }
         return out;
@@ -294,10 +293,6 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       this.drawWatermark();
     }
 
-    if (this.options.draw_axis) {
-      this.drawAxis();
-    }
-
     if (this.options.show_vertical_labels) {
       this.drawVerticalLabels();
     }
@@ -310,9 +305,14 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         this.drawLinesInit(this);
     }
 
+    if (this.options.draw_axis) {
+      this.drawAxis();
+    }
+
     if (this.start_value !== 0) {
       this.drawFocusHint();
     }
+
     if (this.options.meanline) {
       this.drawMeanLine(this.normaliseData(this.flat_data));
     }
@@ -395,7 +395,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         } else {
           rel_opacity = 1.5/this.data_sets.collect(function (data_set){return data_set.length;}).length;
         }
-        cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0', 'fill-opacity':rel_opacity});
+        cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0', opacity:rel_opacity, 'stroke-opacity':0});
 
       } else {
         cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0'});

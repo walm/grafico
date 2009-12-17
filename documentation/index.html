@@ -26,6 +26,11 @@
       width:500px;
       height:170px;
     }
+   .sparkexample {
+      height:17px;
+      display:inline-block;
+      width:150px
+    }
     </style>
 
     <script src="../dependencies/prototype.js" type="text/javascript" charset="utf-8"></script>
@@ -193,12 +198,14 @@
   <div id="linegraph" class="example"></div>
   <pre><code>   var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
+  });
   </script>
 
   <p style="clear:both"><strong>Line graph with custom options:</strong></p>
 
-  <div id="linegraph2" style="height:170px;display:block;width:500px"></div>
+  <div id="linegraph2" class="example"></div>
   <pre><code>var linegraph2 = new Ico.LineGraph($('linegraph'),
 { workload: [8, 10, 6, 12, 7, 6, 9] },
 {
@@ -219,6 +226,7 @@
   datalabels :            {workload:'My workload'},
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var linegraph2 = new Ico.LineGraph($('linegraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
     {
       grid :                  true,
@@ -236,8 +244,8 @@
       labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
       hide_empty_label_grid : true,
       datalabels :            {workload:'My workload'},
-    }
-    );
+    });
+  });
   </script>
 
 <p style="clear:both"><strong>Line graph with multiple lines:</strong></p>
@@ -259,6 +267,7 @@
   }
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var linegraph3 = new Ico.LineGraph($('linegraph3'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
@@ -275,6 +284,7 @@
           his_workload:   "His workload"
         }
       });
+  });
   </script>
 
 <p style="clear:both"><strong>Line graph with multiple lines and negative values:</strong></p>
@@ -288,12 +298,14 @@
   c : [2, 9,  12,7, 8, -9, 8]
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var linegraph4 = new Ico.LineGraph($('linegraph4'),
       {
       a : [8, -10, 6, 12,7, -6, -9],
       b : [6, 8,  -4, 8, -12,6, 2],
       c : [2, 9,  12,7, 8, -9, 8]
       });
+  });
   </script>
 <p style="clear:both">.</p>
   <h3>Line graph options:</h3>
@@ -336,12 +348,14 @@
     <div id="areagraph" class="example"></div>
     <pre><code>var areagraph = new Ico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
     <script>
+  Event.observe(window, 'load', function() {
       var areagraph = new Ico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
-    </script>
+    });
+  </script>
 
       <p style="clear:both"><strong>Area graph with custom options:</strong></p>
 
-  <div id="areagraph2" style="height:170px;display:block;width:500px"></div>
+  <div id="areagraph2" class="example"></div>
   <pre><code>var areagraph2 = new Ico.AreaGraph($('areagraph2'),
 { workload: [8, 10, 6, 12, 7, 6, 9] },
 {
@@ -361,6 +375,7 @@
   datalabels :            {workload:'My workload'},
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var areagraph2 = new Ico.AreaGraph($('areagraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
     {
       grid :                  true,
@@ -378,6 +393,7 @@
       labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
       datalabels :            {workload:'My workload'},
     });
+  });
   </script>
 
 <p style="clear:both"><strong>Area graph with multiple areas:</strong></p>
@@ -389,12 +405,14 @@
   his_workload:   [2, 9,  12,7, 8, 9, 8]
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var areagraph3 = new Ico.AreaGraph($('areagraph3'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
       his_workload:   [2, 9,  12,7, 8, 9, 8]
       });
+  });
   </script>
 <p style="clear:both"><strong>Area graph with multiple areas and custom options:</strong></p>
   <div id="areagraph4" class="example"></div>
@@ -420,6 +438,7 @@
   }
       });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var areagraph4 = new Ico.AreaGraph($('areagraph4'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
@@ -441,6 +460,7 @@
           his_workload:   "His workload"
         }
       });
+  });
   </script>
     <h3>Area graph options</h3>
   <dl>
@@ -483,12 +503,14 @@
   his_workload:   [2, 9,  12,2, 8, 9, 8]
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var stackgraph = new Ico.StackGraph($('stackgraph'),
       {
       workload:       [8, 10, 6, 1,7, 6, 9],
       your_workload:  [6, 8,  4, 1, 12,6, 2],
       his_workload:   [2, 9,  12,2, 8, 9, 8]
       });
+  });
   </script>
 
   <p style="clear:both"><strong>Stack graph with custom options:</strong></p>
@@ -512,6 +534,7 @@
   }
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var stackgraph2 = new Ico.StackGraph($('stackgraph2'),
       {
       workload:       [8, 10, 6, 1,7, 6, 9],
@@ -530,6 +553,7 @@
           his_workload:   "His workload"
         }
       });
+  });
   </script>
 
   <p style="clear:both"><strong>Stack line graph:</strong></p>
@@ -545,6 +569,7 @@
   markers : "value"
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var stackgraph3 = new Ico.StackGraph($('stackgraph3'),
       {
       workload:       [8, 10, 6, 1,7, 6, 9],
@@ -555,6 +580,7 @@
         stacked_fill : false,
         markers : "value"
       });
+  });
   </script>
     <h3>Stacked area graph options</h3>
   <dl>
@@ -595,7 +621,9 @@
   <div id="bargraph" class="example"></div>
   <pre><code>var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);
+  });
   </script>
 
     <p style="clear:both"><strong>Bar graph with custom options:</strong></p>
@@ -612,6 +640,7 @@
   datalabels :          {one: ["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var bargraph2 = new Ico.BarGraph($('bargraph2'),
     [31, 12, 12, 10, 6, 4, 26],
     {
@@ -623,6 +652,7 @@
     hover_colour : "#006677",
     datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
     });
+  });
   </script>
 
   <p style="clear:both"><strong>Bar graph with negative values:</strong></p>
@@ -638,6 +668,7 @@
   datalabels :              {one: ["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var bargraph = new Ico.BarGraph($('bargraph3'),
     [31, 12, -12, -10, 6, -4, 26],
     {
@@ -648,6 +679,7 @@
      bargraph_negativecolour : "#660000",
      datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
     });
+  });
   </script>
 
     <h3>Bar graph options</h3>
@@ -670,7 +702,9 @@
   <div id="horizgraph" class="example"></div>
   <pre><code>var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);
+  });
   </script>
 
   <p style="clear:both"><strong>Horizontal Bar graph with custom options:</strong></p>
@@ -690,6 +724,7 @@
   datalabels :          {one:["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var horizgraph2 = new Ico.HorizontalBarGraph($('horizgraph2'),
       [30, 12, 12, 10, 6, 4, 26],
       {
@@ -704,6 +739,7 @@
         labels: ["January", "February", "March", "April", "May", "June", "July"],
         datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
       });
+  });
   </script>
     <h3>Horizontal bar options</h3>
   <dl>
@@ -719,13 +755,17 @@
     </dd>
   </dl>
   <h2 id="sparkline">Sparkline</h2>
-  <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkline1" style="height:17px;display:inline-block;width:150px""></span>
+  <p>Sparklines support posivite and negative ranges.</p>
+  <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkline1" class="sparkexample"></span>
   <pre><code>var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);
+  });
   </script>
-  <p style="clear:both"><strong>Sparkline with custom options:</strong> <span id="sparkline2" style="height:17px;display:inline-block;width:150px""></span>
-  <pre><code>var sparkline2 = new Ico.SparkLine($('sparkline2'), [30, 12, 12, 10, 6, 4, 26],
+  <p style="clear:both"><strong>Sparkline with custom options:</strong> <span id="sparkline2" class="sparkexample"></span>
+  <pre><code>var sparkline2 = new Ico.SparkLine($('sparkline2'),
+[30, 12, 12, 10, 6, 4, 26],
 {
   stroke_width :      3,
   colour :            '#4b80b6',
@@ -734,6 +774,7 @@
   background_colour : "#ddd"
 });</code></pre>
   <script>
+  Event.observe(window, 'load', function() {
     var sparkline2 = new Ico.SparkLine($('sparkline2'), [30, 12, 12, 10, 6, 4, 26],
     {
       stroke_width : 3,
@@ -742,6 +783,7 @@
       acceptable_range: [0,20],
       background_colour: "#ddd"
     });
+  });
   </script>
     <h3>Sparkline options</h3>
   <dl>
@@ -763,7 +805,47 @@
     </dd>
   </dl>
   <h2 id="sparkbar">Sparkbar</h2>
+  <p style="clear:both"><strong>Sparkbar:</strong> <span id="sparkbar1" class="sparkexample"></span>
+  <pre><code>var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);
+  });
+  </script>
+  <p style="clear:both"><strong>SparkBar with custom options:</strong> <span id="sparkbar2" class="sparkexample"></span>
+  <pre><code>var sparkbar2 = new Ico.SparkBar($('sparkbar2'),
+[30, 12, 12, 10, 6, 4, 26],
+{
+  colour :            '#4b80b6',
+  acceptable_range :  [0,20],
+  background_colour : "#ddd"
+  bargraph_lastcolour: "#000"
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var sparkbar2 = new Ico.SparkBar($('sparkbar2'), [30, 12, 12, 10, 6, 4, 26],
+    {
+      colour: '#4b80b6',
+      acceptable_range: [0,20],
+      background_colour: "#ddd",
+      bargraph_lastcolour: "#000"
+    });
+  });
+  </script>
+
     <h3>Sparkbar options</h3>
+    <dl>
+      <dt>bargraph_lastcolour</dt>
+      <dd>
+          select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+          <em>Default value: false</em>
+      </dd>
+      <dt>acceptable_range</dt>
+      <dd>
+          draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
+          <em>Default value: false, needs an explicit background colour</em>
+      </dd>
+    </dl>
     </div>
   </body>
 </html>

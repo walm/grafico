@@ -9,8 +9,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
       colour : "#000",
       width: parseInt(element.getStyle('width'), 10),
       height: parseInt(element.getStyle('height'), 10),
-      acceptable_range : false,
-
+      acceptable_range : false
     };
     Object.extend(this.options, options || { });
 
@@ -78,21 +77,20 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
   drawLines: function (label, colour, data) {
     var lastcolor = this.options.bargraph_lastcolour,
         width = this.step > 2 ? this.step - 1 : this.step,
-        x = width;
-
+        x = width/2;
 
     data.each(function (value,index) {
       var colour2, line;
-      if (lastcolor && index === data.length-1 ){
-        colour2 = lastcolor;
-      } else {
-        colour2 = colour;
-      }
+
+      colour2 = lastcolor && index === data.length-1 ? lastcolor : colour;
       line = this.paper.path().attr({ stroke: colour2, 'stroke-width': width });
       line.moveTo(x, this.options.height - value);
       line.lineTo(x, this.options.height);
       x = x + this.step;
     }.bind(this));
+  },
+  showHighlight: function (data) {
+    //to be implemented
   }
 });
 

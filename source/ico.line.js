@@ -153,7 +153,7 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
       this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
     }
 
-    x -= 0.5
+    x -= 0.5;
     if (index === 0) {
       return this.startPlot(cursor, x, y, colour);
     }
