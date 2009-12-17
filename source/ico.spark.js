@@ -93,4 +93,30 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
     //to be implemented
   }
 });
+Ico.SparkArea = Class.create(Ico.SparkLine, {
+  drawLines: function (label, colour, data) {
+    var fillopacity = colour,
+        strokecolour = colour,
+        fillopacity = 0.2;
+
+    if(typeof colour == "object") {
+      fillcolour = colour[1];
+      strokecolour = colour[0];
+      fillopacity = 1;
+    }
+
+    var line = this.paper.path().attr({fill: fillcolour,  stroke: fillcolour, "stroke-width" : 0, "stroke-opacity" : 0, opacity: fillopacity})
+        .moveTo(0,this.options.height)
+        .lineTo(0, this.options.height - data.first()),
+        line2 = this.paper.path().attr({stroke: strokecolour, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
+        x = 0;
+
+    data.slice(1).each(function (value) {
+      x = x + this.step;
+      line.lineTo(x, this.options.height - value);
+      line2.lineTo(x, this.options.height - value);
+    }.bind(this));
+    line.lineTo(x,this.options.height);
+  }
+});
 

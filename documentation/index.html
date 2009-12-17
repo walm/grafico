@@ -21,7 +21,7 @@
     h3 {display:block;background:#eee;padding:0.5em}
     h3+*{clear:left;}
 
-    pre {background:#eee;width:auto;padding:1em}
+    pre {background:#eee;width:auto;padding:1em;overflow:hidden}
     .example {
       width:500px;
       height:170px;
@@ -60,6 +60,7 @@
         <li><a href="#horizontalbar">Horizontal bar graphs</a></li>
         <li><a href="#sparkline">Sparklines</a></li>
         <li><a href="#sparkbar">Sparkbars</a></li>
+        <li><a href="#sparkarea">Sparkareas</a></li>
       </ul>
     </div>
 
@@ -694,6 +695,11 @@
         select a different colour for negative values in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
+    <dt>colour</dt>
+    <dd>
+        Select the colour for the bars (string)<br>
+        <em>Default value: random colour</em>
+    </dd>
   </dl>
 
   <h2 id="horizontalbar">Horizontal bar graphs</h2>
@@ -753,6 +759,11 @@
         round the ends of horizontal bar graphs (boolean)<br />
         <em>Default value: false</em>
     </dd>
+    <dt>colour</dt>
+    <dd>
+        Select the colour for the bars (string)<br>
+        <em>Default value: random colour</em>
+    </dd>
   </dl>
   <h2 id="sparkline">Sparkline</h2>
   <p>Sparklines support posivite and negative ranges.</p>
@@ -803,6 +814,11 @@
         draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
         <em>Default value: false, needs an explicit background colour</em>
     </dd>
+    <dt>colour</dt>
+    <dd>
+        Set the colour (string)<br>
+        <em>Default value: black</em>
+    </dd>
   </dl>
   <h2 id="sparkbar">Sparkbar</h2>
   <p style="clear:both"><strong>Sparkbar:</strong> <span id="sparkbar1" class="sparkexample"></span>
@@ -845,7 +861,64 @@
           draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
           <em>Default value: false, needs an explicit background colour</em>
       </dd>
+    <dt>colour</dt>
+    <dd>
+        Set the colour (string)<br>
+        <em>Default value: black</em>
+    </dd>
     </dl>
+
+      <h2 id="sparkarea">Sparkarea</h2>
+  <p>SparkArea support posivite and negative ranges.</p>
+  <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkarea1" class="sparkexample"></span>
+  <pre><code>var sparkarea = new Ico.SparkLine($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var sparkarea = new Ico.SparkArea($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);
+  });
+  </script>
+  <p style="clear:both"><strong>Sparkarea with custom options:</strong> <span id="sparkarea2" class="sparkexample"></span>
+  <pre><code>var sparkarea2 = new Ico.SparkLine($('sparkarea2'),
+[30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26],
+{
+  stroke_width : 1,
+  colour: ['#4b80b6',"#ddd"],
+  highlight: {index: 20, colour: "#f00"},
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var sparkarea2 = new Ico.SparkArea($('sparkarea2'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26],
+    {
+      stroke_width : 2,
+      colour: ['#4b80b6',"#ddd"],
+      highlight: {index: 20, colour: "#f00"}
+    });
+  });
+  </script>
+    <h3>Sparkarea options</h3>
+  <dl>
+    <dt>stroke_width</dt>
+    <dd>
+        specify the width of the sparkline in pixels (number)<br />
+        <em>Default value: 1</em>
+    </dd>
+    <dt>highlight</dt>
+    <dd>
+        draw a circle on one of the datapoints (object, example: {index: 2, colour: "#f00"}) <br />
+        colour is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
+        <em>Default value: false, setting it to true will draw a red dot on the last datapoint.</em>
+    </dd>
+    <dt>acceptable_range</dt>
+    <dd>
+        draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
+        <em>Default value: false, needs an explicit background colour</em>
+    </dd>
+        <dt>colour</dt>
+    <dd>
+        Set the colour. If given an array, the first value will be used for the stroke and the second for the area. If given a string, it will be used for both, with the area being given 0.2 opacity.  (string or array)<br>
+        <em>Default value: black</em>
+    </dd>
+  </dl>
     </div>
   </body>
 </html>
