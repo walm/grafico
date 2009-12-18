@@ -1,3 +1,11 @@
+/**
+ * Ico - SVG graphing library - base file
+ *
+ * Copyright (c) 2009 Kilian Valkhof (kilianvalkhof.com) - Originally developed by Alex Young (http://alexyoung.org)
+ * Visit ico.kilianvalkhof.com for more information and changelogs.
+ * Licensed under the MIT license. http://www.opensource.org/licenses/mit-license.php
+ *
+ */
 "use strict";
 var Ico = {
   Base: {},
@@ -148,7 +156,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
       hover_colour:           '',                                    // hover color if there are datalabels
       watermark:              false,
-      watermark_orientation:  false,                                 // determine position of watermark. currently available is bottomright and middle
+      watermark_location:  false,                                 // determine position of watermark. currently available is bottomright and middle
       hide_empty_label_grid:  false,                                 // hide gridlines for labels with no value
       left_padding:           false                                  // set a standard leftpadding regardless of label width
     };
@@ -332,7 +340,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         thisgraph = this;
     watermarkimg.onload = function (){
       var right, bottom, image;
-      if (thisgraph.options.watermark_orientation === "middle") {
+      if (thisgraph.options.watermark_location === "middle") {
           right = (thisgraph.graph_width - watermarkimg.width)/2 + thisgraph.x_padding_left;
           bottom = (thisgraph.graph_height - watermarkimg.height)/2 + thisgraph.y_padding_top;
       } else {
@@ -445,7 +453,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
   drawMeanLine: function (data) {
     var cursor = this.paper.path().attr(this.options.meanline),
-        offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length;
+        offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length - 0.5;
         offset = this.options.bar ? offset + (this.zero_value * (this.graph_height / this.y_label_count)) : offset;
 
     cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset);

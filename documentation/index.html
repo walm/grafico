@@ -44,9 +44,14 @@
 <body>
   <div id="wrap">
   <h1>Ico graphing library Documentation</h1>
-  <p>Ico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.org">Prototype.js</a>. It is originally developed by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>, but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a>.</p>
-
-  <p>Ico's basic principles are to provide <strong>good, clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte.</p>
+  <p>Ico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.org">Prototype.js</a>. It is originally developed by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>, but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a>. Ico's basic principles are to provide <strong>good, clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte, while still being <strong>flexible to implement</strong> and providing <strong>numerous api options</strong> to tweak the look of the graphs..</p>
+  <p>Some key things Ico supports:</p>
+  <ul>
+    <li><strong>Flexible ranges</strong> Ico select the best range to display your data at</li>
+    <li><strong>Hover options</strong> display additional information such as the value when hovering over charts</li>
+    <li><strong>Mean lines</strong> A single line that display the mean.</li>
+    <li><strong>Watermarks</strong> Use an image as a watermark over your graphs</li>
+  </ul>
 
     <div id="menu">
       <h2>Menu</h2>
@@ -73,6 +78,18 @@
   <ul>
     <li><a href="http://raphaeljs.com">Raphaël</a> 1.0+</li>
     <li><a href="http://prototypejs.org">Prototype.js</a> 1.6+</li>
+  </ul>
+
+  <h3>Supported graph types:</h3>
+  <ul>
+        <li>Line graphs</li>
+        <li>Area graphs</li>
+        <li>Stacked area graphs</li>
+        <li>Bar graphs</li>
+        <li>Horizontal bar graphs</li>
+        <li>Sparklines</li>
+        <li>Sparkbars</li>
+        <li>Sparkareas</li>
   </ul>
 
   <h3>Base graph options:</h3>
@@ -179,7 +196,7 @@
         Add in an image to be used as watermark. (link to image or image element)<br>
         <em>Default value: false</em>
     </dd>
-    <dt>watermark_orientation</dt>
+    <dt>watermark_location</dt>
     <dd>
         where the watermark should be placed. default is the bottom right, can be placed in the center with "middle" (string)<br>
         <em>Default value: bottom right</em>
@@ -249,7 +266,7 @@
   });
   </script>
 
-<p style="clear:both"><strong>Line graph with multiple lines:</strong></p>
+<p style="clear:both"><strong>Line graph with multiple lines and a watermark:</strong></p>
   <div id="linegraph3" class="example"></div>
   <pre><code>var linegraph3 = new Ico.LineGraph($('linegraph3'),
 {
@@ -261,6 +278,8 @@
   markers:            "circle",
   hover_colour:       "#000",
   hover_text_colour : "#fff",
+  watermark : "Screenshot.png",
+  watermark_location : "middle",
   datalabels: {
     workload:       "My workload",
     your_workload:  "Your workload",
@@ -279,6 +298,8 @@
         markers: "circle",
         hover_colour: "#000",
         hover_text_colour: "#fff",
+        watermark : "Screenshot.png",
+        watermark_location : "middle",
         datalabels: {
           workload:       "My workload",
           your_workload:  "Your workload",
@@ -870,7 +891,7 @@
 
       <h2 id="sparkarea">Sparkarea</h2>
   <p>SparkArea support posivite and negative ranges.</p>
-  <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkarea1" class="sparkexample"></span>
+  <p style="clear:both"><strong>SparkArea:</strong> <span id="sparkarea1" class="sparkexample"></span>
   <pre><code>var sparkarea = new Ico.SparkLine($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {

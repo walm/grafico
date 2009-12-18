@@ -1,3 +1,12 @@
+/**
+ * Ico - SVG graphing library - sparkline, sparkbar and sparkarea file
+ *
+ * Copyright (c) 2009 Kilian Valkhof (kilianvalkhof.com) - Originally developed by Alex Young (http://alexyoung.org)
+ * Visit ico.kilianvalkhof.com for more information and changelogs.
+ * Licensed under the MIT license. http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+"use strict";
 Ico.SparkLine = Class.create(Ico.Base, {
   initialize: function (element, data, options) {
     this.element = element;
