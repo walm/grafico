@@ -6,7 +6,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
     this.options = {
       highlight:              false,
       stroke_width:           1,
-      colour : "#000",
+      colour : this.makeRandomColour(),
       width: parseInt(element.getStyle('width'), 10),
       height: parseInt(element.getStyle('height'), 10),
       acceptable_range : false
@@ -28,7 +28,10 @@ Ico.SparkLine = Class.create(Ico.Base, {
   calculateStep: function () {
     return this.options.width / (this.data.length - 1);
   },
-
+  makeRandomColour: function () {
+    var colour = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+    return colour;
+  },
   normalise: function (value) {
     return (this.options.height / this.data.max()) * value;
   },
