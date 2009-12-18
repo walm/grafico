@@ -212,9 +212,11 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
     /* Define in child class */
   },
+
   calculateStep: function () {
     /* Define in child classes */
   },
+
   getMousePos: function (e) {
     var posx = 0,
         posy = 0,
@@ -231,6 +233,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     mousepos = {x : posx , y : posy};
     return mousepos;
   },
+
   makeRandomColours: function (number) {
     var colours = {};
     this.data_sets.each(function (data) {
@@ -346,6 +349,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     };
     watermarkimg.src = watermark.src || watermark;
   },
+
   drawGrid: function () {
     var path = this.paper.path().attr({ stroke: this.options.grid_colour}),
         y, x, x_labels;
