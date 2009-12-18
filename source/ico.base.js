@@ -411,63 +411,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
 
     if (this.options.datalabels) {
-      var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke",
-          hover_colour = this.options.hover_colour|| colour;
-
-      var hoverSet = this.paper.set(),
-          textpadding = 4,
-          text = this.paper.text(cursor.attrs.x, cursor.attrs.y-(this.options.font_size*1.5)-textpadding, datalabel);
-      text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
-
-      var textbox = text.getBBox(),
-          roundRect= this.paper.rect(
-            text.attrs.x-(textbox.width/2)-textpadding,
-            text.attrs.y-(textbox.height/2)-textpadding,
-            textbox.width+(textpadding*2),
-            textbox.height+(textpadding*2),
-            textpadding*1.5);
-      roundRect.attr({fill: this.options.label_colour,opacity: 1, stroke : 0, "stroke-color":this.options.label_colour});
-
-      text.toFront();
-      hoverSet.push(roundRect,text).attr({opacity:0}).toFront();
-      this.checkHoverPos({rect:roundRect,set:hoverSet});
-      this.globalHoverSet.push(hoverSet);
-
-      cursor.node.onmouseover = function (e) {
-        if (colorattr==="fill") { cursor.animate({fill : hover_colour,stroke : hover_colour}, 200);}
-        else {                    cursor.animate({stroke : hover_colour}, 200);}
-
-        var mousepos = this.getMousePos(e);
-        hoverSet[0].attr({
-          x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
-          y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
-          opacity:1});
-        hoverSet[1].attr({
-          x:mousepos.x-element.offsetLeft,
-          y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
-          opacity:1});
-
-        cursor.node.onmousemove = function (e) {
-          var mousepos = this.getMousePos(e);
-          hoverSet[0].attr({
-            x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
-            y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
-            opacity:1});
-          hoverSet[1].attr({
-            x:mousepos.x-element.offsetLeft,
-            y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
-            opacity:1});
-          this.checkHoverPos(roundRect,hoverSet);
-        }.bind(this);
-      }.bind(this);
-
-      cursor.node.onmouseout = function () {
-        if (colorattr==="fill") { cursor.animate({fill : colour,stroke : colour}, 200);}
-        else {                    cursor.animate({stroke : colour}, 200);}
-        hoverSet.attr({opacity:0});
-      };
+        this.drawHover(cursor, datalabel, element, colour);
     }
-
     $A(coords).each(function (coord, index) {
       var x = coord[0],
           y = coord[1];
@@ -566,8 +511,67 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     }
     this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
+
   drawHorizontalLabels: function () {
     this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
+  },
+
+  drawHover: function(cursor, datalabel, element, colour) {
+    var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke",
+        hover_colour = this.options.hover_colour|| colour,
+        hoverSet = this.paper.set(),
+        textpadding = 4,
+        text = this.paper.text(cursor.attrs.x, cursor.attrs.y-(this.options.font_size*1.5)-textpadding, datalabel),
+        textbox, roundrect;
+
+    text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
+    textbox = text.getBBox();
+    roundRect= this.paper.rect(
+          text.attrs.x-(textbox.width/2)-textpadding,
+          text.attrs.y-(textbox.height/2)-textpadding,
+          textbox.width+(textpadding*2),
+          textbox.height+(textpadding*2),
+          textpadding*1.5)
+          .attr({fill: this.options.label_colour,opacity: 1, stroke : 0, "stroke-color":this.options.label_colour});
+
+    text.toFront();
+    hoverSet.push(roundRect,text).attr({opacity:0}).toFront();
+    this.checkHoverPos({rect:roundRect,set:hoverSet});
+    this.globalHoverSet.push(hoverSet);
+
+    cursor.node.onmouseover = function (e) {
+      if (colorattr==="fill") { cursor.animate({fill : hover_colour,stroke : hover_colour}, 200);}
+      else {                    cursor.animate({stroke : hover_colour}, 200);}
+
+      var mousepos = this.getMousePos(e);
+      hoverSet[0].attr({
+        x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
+        y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
+        opacity:1});
+      hoverSet[1].attr({
+        x:mousepos.x-element.offsetLeft,
+        y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
+        opacity:1});
+
+      cursor.node.onmousemove = function (e) {
+        var mousepos = this.getMousePos(e);
+        hoverSet[0].attr({
+          x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
+          y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
+          opacity:1});
+        hoverSet[1].attr({
+          x:mousepos.x-element.offsetLeft,
+          y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
+          opacity:1});
+        this.checkHoverPos(roundRect,hoverSet);
+      }.bind(this);
+    }.bind(this);
+
+    cursor.node.onmouseout = function () {
+      if (colorattr==="fill") { cursor.animate({fill : colour,stroke : colour}, 200);}
+      else {                    cursor.animate({stroke : colour}, 200);}
+      hoverSet.attr({opacity:0});
+    };
   },
   checkHoverPos: function (elements) {
     var diff, rect, rectsize, set, marker, nib, textpadding;

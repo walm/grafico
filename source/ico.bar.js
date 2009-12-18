@@ -49,52 +49,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     }
 
     if (this.options.datalabels) {
-      var hover_colour = this.options.hover_colour || colour2,
-          hoverSet = this.paper.set(),
-          text,
-          hoverbar = this.paper.rect(x-(this.bar_width/2), this.y_padding_top, this.bar_width, this.options.height);
-
-      datalabel = datalabel[index].toString();
-      text = this.paper.text(bargraph.attrs.x+(this.bar_width/2), bargraph.attrs.y-(this.options.font_size*1.5), datalabel);
-      hoverbar.attr({fill: colour2, 'stroke-width': 0, stroke : colour2,opacity:0});
-      text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
-
-      var textbox = text.getBBox(),
-          textpadding = 4,
-          roundRect= this.paper.rect(
-            text.attrs.x-(textbox.width/2)-textpadding,
-            text.attrs.y-(textbox.height/2)-textpadding,
-            textbox.width+(textpadding*2),
-            textbox.height+(textpadding*2),
-            textpadding*1.5);
-      roundRect.attr({fill: this.options.label_colour,opacity: 1});
-
-      var nib = this.paper.path();
-      nib.attr({fill: this.options.label_colour,opacity: 1});
-      nib.moveTo(hoverbar.attrs.x+(this.bar_width/2)-textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
-      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2),text.attrs.y+(textbox.height/2)+(textpadding*2)+0.5);
-      nib.lineTo(hoverbar.attrs.x+(this.bar_width/2)+textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
-      nib.andClose();
-
-      text.toFront();
-      hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
-      hoverbar.toFront();
-      this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
-      this.globalHoverSet.push(hoverSet);
-      this.globalBlockSet.push(hoverbar);
-      if (roundRect.attrs.y < 0) {
-        hoverSet.translate(0,1+(roundRect.attrs.y*-1));
-      }
-
-      hoverbar.node.onmouseover = function (e) {
-        bargraph.animate({fill: hover_colour,stroke:hover_colour}, 200);
-        hoverSet.animate({opacity:1}, 200);
-      }.bind(this);
-
-      hoverbar.node.onmouseout = function (e) {
-        bargraph.animate({fill: colour2,stroke:colour2}, 200);
-        hoverSet.animate({opacity:0}, 200);
-      };
+      this.drawGraphValueMarkers(x, index, bargraph, datalabel, colour2);
     }
 
     x = x + this.step;
@@ -144,6 +99,54 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     //right side
     path.moveTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top);
     path.lineTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top + this.graph_height);
+  },
+  drawGraphValueMarkers: function(x, index, bargraph, datalabel, colour) {
+   var hover_colour = this.options.hover_colour || colour,
+        hoverSet = this.paper.set(),
+        text,
+        hoverbar = this.paper.rect(x-(this.bar_width/2), this.y_padding_top, this.bar_width, this.options.height);
+
+    datalabel = datalabel[index].toString();
+    text = this.paper.text(bargraph.attrs.x+(this.bar_width/2), bargraph.attrs.y-(this.options.font_size*1.5), datalabel);
+    hoverbar.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0});
+    text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
+
+    var textbox = text.getBBox(),
+        textpadding = 4,
+        roundRect= this.paper.rect(
+          text.attrs.x-(textbox.width/2)-textpadding,
+          text.attrs.y-(textbox.height/2)-textpadding,
+          textbox.width+(textpadding*2),
+          textbox.height+(textpadding*2),
+          textpadding*1.5);
+    roundRect.attr({fill: this.options.label_colour,opacity: 1});
+
+    var nib = this.paper.path();
+    nib.attr({fill: this.options.label_colour,opacity: 1});
+    nib.moveTo(hoverbar.attrs.x+(this.bar_width/2)-textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
+    nib.lineTo(hoverbar.attrs.x+(this.bar_width/2),text.attrs.y+(textbox.height/2)+(textpadding*2)+0.5);
+    nib.lineTo(hoverbar.attrs.x+(this.bar_width/2)+textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
+    nib.andClose();
+
+    text.toFront();
+    hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
+    hoverbar.toFront();
+    this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
+    this.globalHoverSet.push(hoverSet);
+    this.globalBlockSet.push(hoverbar);
+    if (roundRect.attrs.y < 0) {
+      hoverSet.translate(0,1+(roundRect.attrs.y*-1));
+    }
+
+    hoverbar.node.onmouseover = function (e) {
+      bargraph.animate({fill: hover_colour,stroke:hover_colour}, 200);
+      hoverSet.animate({opacity:1}, 200);
+    }.bind(this);
+
+    hoverbar.node.onmouseout = function (e) {
+      bargraph.animate({fill: colour,stroke:colour}, 200);
+      hoverSet.animate({opacity:0}, 200);
+    };
   }
 });
 

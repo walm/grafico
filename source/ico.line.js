@@ -40,17 +40,18 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   drawGraphMarkers: function (index, x, y, colour, datalabel, element) {
     var circle = this.paper.circle(x, y, this.options.marker_size),
         old_marker_size = this.options.marker_size,
+        colour2 = this.options.hover_colour || colour,
         new_marker_size;
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_colour, fill: colour });
     this.globalMarkerSet.push(circle);
 
     circle.node.onmouseover = function (e) {
       new_marker_size = parseInt(1.7*old_marker_size, 10);
-      circle.animate({r:new_marker_size},200);
+      circle.animate({r : new_marker_size,fill : colour2}, 200);
     }.bind(this);
 
     circle.node.onmouseout = function () {
-      circle.animate({r:old_marker_size},200);
+      circle.animate({r : old_marker_size, fill : colour}, 200);
     };
   },
   drawGraphValueMarkers: function (index, x, y, colour, datalabel, element, graphindex) {
