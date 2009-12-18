@@ -95,7 +95,7 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
 });
 Ico.SparkArea = Class.create(Ico.SparkLine, {
   drawLines: function (label, colour, data) {
-    var fillopacity = colour,
+    var fillcolour = colour,
         strokecolour = colour,
         fillopacity = 0.2;
 
