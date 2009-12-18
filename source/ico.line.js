@@ -150,16 +150,21 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
   },
   drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
     var filltype = this.options.area||this.options.stacked_fill;
-    if (this.options.markers === 'circle') {
-      if (filltype === true) {
-        if (index !== 0 && index !== coords.length-1) {
+
+    if(filltype === true) {
+      if (index !== 0 && index !== coords.length-1) {
+        if (this.options.markers === 'circle') {
           this.drawGraphMarkers(index, x, y, colour, datalabel, element);
+        } else {
+          this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
         }
-      } else {
-         this.drawGraphMarkers(index, x, y, colour, datalabel, element);
       }
-    } else if (this.options.markers === 'value') {
-      this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
+    } else {
+      if (this.options.markers === 'circle') {
+        this.drawGraphMarkers(index, x, y, colour, datalabel, element);
+      } else {
+        this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
+      }
     }
 
     x -= 0.5;
