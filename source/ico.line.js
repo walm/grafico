@@ -155,14 +155,14 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
       if (index !== 0 && index !== coords.length-1) {
         if (this.options.markers === 'circle') {
           this.drawGraphMarkers(index, x, y, colour, datalabel, element);
-        } else {
+        } else if (this.options.markers === 'value') {
           this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
         }
       }
     } else {
       if (this.options.markers === 'circle') {
         this.drawGraphMarkers(index, x, y, colour, datalabel, element);
-      } else {
+      } else if (this.options.markers === 'value') {
         this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
       }
     }
