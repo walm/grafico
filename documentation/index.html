@@ -357,6 +357,7 @@
         If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
         <em>Default value: true</em>
     </dd>
+    <dt>stroke_width</dt>
     <dd>
         specify the width of the lines in pixels (number)<br />
         <em>Default value: 5</em>
@@ -449,6 +450,7 @@
   grid :                    false,
   draw_axis :               false,
   plot_padding :            0,
+  stroke_width :            5,
   show_vertical_labels :    false,
   show_horizontal_labels :  false,
   hover_colour :            "#000",
@@ -472,6 +474,7 @@
         grid:false,
         draw_axis: false,
         plot_padding : 0,
+        stroke_width :5,
         show_vertical_labels : false,
         show_horizontal_labels : false,
         hover_colour: "#000",
@@ -511,6 +514,12 @@
         set a specific opacity for the area's. If none is given, single areas will be opaque, and multiple will get an opacity of 1.5/number-of-areas. (number between 0 and 1)<br>
         <em>Default value: false</em>
     </dd>
+    <dt>stroke_width</dt>
+    <dd>
+        specify the width of the lines in pixels (number)<br />
+        <em>Default value: 0</em>
+    </dd>
+
   </dl>
   <h2 id="stack">Stacked area graphs</h2>
     <p>Area graphs only support positive ranges.</p>

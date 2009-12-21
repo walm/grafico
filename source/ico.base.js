@@ -197,13 +197,17 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if (this.options.meanline === true) {
       this.options.meanline = { 'stroke-width': '2px', stroke: '#BBBBBB' };
     }
-    /* global hoverSet */
+    /* global Sets */
     this.globalMarkerSet = this.paper.set();
     this.globalHoverSet = this.paper.set();
     this.globalBlockSet = this.paper.set();
+    this.globalAreaLineSet = this.paper.set();
+
 
     this.setChartSpecificOptions();
     this.draw();
+
+    this.globalAreaLineSet.toFront();
     this.globalMarkerSet.toFront();
     this.globalHoverSet.toFront();
     this.globalBlockSet.toFront();
@@ -385,6 +389,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     var coords = this.calculateCoords(data),
         y_offset = (this.graph_height + this.y_padding_top),
         cursor,
+        cursor2,
         odd_horizontal_offset,
         rel_opacity;
 
@@ -402,16 +407,13 @@ Ico.BaseGraph = Class.create(Ico.Base, {
 
     if (this.options.stacked_fill||this.options.area) {
       if (this.options.area) {
-        if(this.options.area_opacity) {
-          rel_opacity = this.options.area_opacity;
-        } else {
-          rel_opacity = 1.5/this.data_sets.collect(function (data_set){return data_set.length;}).length;
-        }
+        rel_opacity = this.options.area_opacity ? this.options.area_opacity : 1.5/this.data_sets.collect(function (data_set){return data_set.length;}).length;
         cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0', opacity:rel_opacity, 'stroke-opacity':0});
-
       } else {
         cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0'});
       }
+
+      //add first and last to fill the area
       coords.unshift([coords[0][0] , y_offset]);
       coords.push([coords[coords.length-1][0] , y_offset]);
     } else {
@@ -421,11 +423,24 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     if (this.options.datalabels) {
         this.drawHover(cursor, datalabel, element, colour);
     }
+
     $A(coords).each(function (coord, index) {
       var x = coord[0],
           y = coord[1];
-          this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element,graphindex);
+      this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element, graphindex);
     }.bind(this));
+
+    if(this.options.area) {
+      cursor2 = this.paper.path().attr({stroke: colour, 'stroke-width': this.options.stroke_width + "px"});
+      coords.remove(0);
+      coords.remove(-1);
+      $A(coords).each(function (coord, index) {
+          var x = coord[0],
+              y = coord[1];
+          this.drawPlot(index, cursor2, x, y, colour, coords, datalabel, element, graphindex, true);
+      }.bind(this));
+      this.globalAreaLineSet.push(cursor2);
+    }
   },
 
   calculateCoords: function (data) {
@@ -662,6 +677,11 @@ Array.prototype.variance = function () {
 
 Array.prototype.standard_deviation = function () {
   return Math.sqrt(this.variance());
+};
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
 };
 
 /* Raphael path methods. Supporting methods to make dealing with arrays easier */

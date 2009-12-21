@@ -35,6 +35,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     } else if (this.options.markers === 'value') {
       this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
     }
+
     if (index === 0) {
       return this.startPlot(cursor, x-0.5, y, colour);
     }
@@ -140,7 +141,8 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
   chartDefaults: function () {
     return {
       area:true,
-      area_opacity:false
+      area_opacity:false,
+      stroke_width : 0
     };
   },
   setChartSpecificOptions: function () {
@@ -148,25 +150,26 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
       this.options.curve_amount = 10;
     }
   },
-  drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
+  drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex, dontdraw) {
     var filltype = this.options.area||this.options.stacked_fill;
 
-    if(filltype === true) {
-      if (index !== 0 && index !== coords.length-1) {
+    if(!dontdraw) {
+      if(filltype === true) {
+        if (index !== 0 && index !== coords.length-1) {
+          if (this.options.markers === 'circle') {
+            this.drawGraphMarkers(index, x, y, colour, datalabel, element);
+          } else if (this.options.markers === 'value') {
+            this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
+          }
+        }
+      } else {
         if (this.options.markers === 'circle') {
           this.drawGraphMarkers(index, x, y, colour, datalabel, element);
         } else if (this.options.markers === 'value') {
           this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
         }
       }
-    } else {
-      if (this.options.markers === 'circle') {
-        this.drawGraphMarkers(index, x, y, colour, datalabel, element);
-      } else if (this.options.markers === 'value') {
-        this.drawGraphValueMarkers(index, x, y, colour, datalabel, element, graphindex);
-      }
     }
-
     x -= 0.5;
     if (index === 0) {
       return this.startPlot(cursor, x, y, colour);
