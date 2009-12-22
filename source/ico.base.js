@@ -156,9 +156,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
       hover_colour:           '',                                    // hover color if there are datalabels
       watermark:              false,
-      watermark_location:  false,                                 // determine position of watermark. currently available is bottomright and middle
+      watermark_location:     false,                                 // determine position of watermark. currently available is bottomright and middle
       hide_empty_label_grid:  false,                                 // hide gridlines for labels with no value
-      left_padding:           false                                  // set a standard leftpadding regardless of label width
+      left_padding:           false,                                  // set a standard leftpadding regardless of label width
+      label_rotation:         0
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -536,7 +537,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
 
   drawHorizontalLabels: function () {
-    this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1]);
+    var extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {};
+    this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1], extra_options);
   },
 
   drawHover: function(cursor, datalabel, element, colour) {

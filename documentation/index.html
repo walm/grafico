@@ -206,6 +206,11 @@
         Set a standard left spacing regardless of vertical axis label width (number)<br>
         <em>Default value: false</em>
     </dd>
+    <dt>label_rotation</dt>
+    <dd>
+        rotate the horizontal labels, in degrees. known limitation: it rotates around the center of the label (number)<br>
+        <em>Default value: 0</em>
+    </dd>
   </dl>
 
 
@@ -224,12 +229,13 @@
   <p style="clear:both"><strong>Line graph with custom options:</strong></p>
 
   <div id="linegraph2" class="example"></div>
-  <pre><code>var linegraph2 = new Ico.LineGraph($('linegraph'),
-{ workload: [8, 10, 6, 12, 7, 6, 9] },
+  <pre><code>var linegraph2 = new Ico.LineGraph($('linegraph2'),{ workload: [0, 0, 8, 10, 6, 12, 7, 6, 9] },
 {
   grid :                  true,
   plot_padding :          0,
+  start_at_zero :         false,
   stroke_width :          3,
+  label_rotation :        -30,
   font_size :             11,
   vertical_label_unit :   "hr",
   colours :               {workload: '#4b80b6'},
@@ -245,11 +251,13 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var linegraph2 = new Ico.LineGraph($('linegraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
+    var linegraph2 = new Ico.LineGraph($('linegraph2'),{ workload: [0, 0, 8, 10, 6, 12, 7, 6, 9] },
     {
       grid :                  true,
       plot_padding :          0,
+      start_at_zero :         false,
       stroke_width :          3,
+      label_rotation :        -30,
       font_size :             11,
       vertical_label_unit :   "hr",
       colours :               {workload: '#4b80b6'},
@@ -519,7 +527,11 @@
         specify the width of the lines in pixels (number)<br />
         <em>Default value: 0</em>
     </dd>
-
+    <dt>start_at_zero</dt>
+    <dd>
+        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
   </dl>
   <h2 id="stack">Stacked area graphs</h2>
     <p>Area graphs only support positive ranges.</p>
@@ -645,6 +657,11 @@
         specify the width of the lines in pixels, only used if stacked_fill is false. (number)<br />
         <em>Default value: 5</em>
     </dd>
+    <dt>start_at_zero</dt>
+    <dd>
+        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
   </dl>
   <h2 id="bar">Bar graphs</h2>
   <p>Bar graphs support posivite and negative ranges.</p>
@@ -665,6 +682,7 @@
   labels :              ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
   colour :              '#4b80b6',
   meanline :            true,
+  label_rotation :      -30,
   vertical_label_unit : "%",
   bargraph_lastcolour : "#666666",
   hover_colour :        "#006677",
@@ -678,6 +696,7 @@
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
     colour: '#4b80b6',
     meanline: true,
+    label_rotation :      -30,
     vertical_label_unit: "%",
     bargraph_lastcolour: "#666666",
     hover_colour : "#006677",
@@ -751,6 +770,7 @@
   horizontal_rounded :  true,
   draw_axis :           false,
   grid :                false,
+  label_rotation :      -30,
   colour :              '#4b80b6',
   meanline :            true,
   vertical_label_unit : "%",
@@ -767,6 +787,7 @@
         horizontal_rounded : true,
         draw_axis : false,
         grid:false,
+        label_rotation :      -30,
         colour: '#4b80b6',
         meanline: true,
         vertical_label_unit: "%",
