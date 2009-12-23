@@ -215,7 +215,6 @@
 
 
   <h2 id="line">Line graphs</h2>
-  <p>Line graphs accept ranges of negative and positive numbers.</p>
   <p><strong>Line graph with the default rendering (no options):</strong></p>
 
   <div id="linegraph" class="example"></div>
@@ -534,8 +533,7 @@
     </dd>
   </dl>
   <h2 id="stack">Stacked area graphs</h2>
-    <p>Area graphs only support positive ranges.</p>
-
+    <p>Stacked area graphs only support positive ranges.</p>
 
   <p style="clear:both"><strong>Stack graph:</strong></p>
   <div id="stackgraph" class="example"></div>
@@ -664,7 +662,6 @@
     </dd>
   </dl>
   <h2 id="bar">Bar graphs</h2>
-  <p>Bar graphs support positive and negative ranges.</p>
   <p style="clear:both"><strong>Bar graph:</strong></p>
   <div id="bargraph" class="example"></div>
   <pre><code>var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);</code></pre>
@@ -752,7 +749,6 @@
   </dl>
 
   <h2 id="horizontalbar">Horizontal bar graphs</h2>
-  <p>Horizontal bar graphs support positive and negative ranges.</p>
   <p style="clear:both"><strong>Horizontal Bar graph:</strong></p>
   <div id="horizgraph" class="example"></div>
   <pre><code>var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
@@ -843,7 +839,6 @@
     </dd>
   </dl>
   <h2 id="sparkline">Sparkline</h2>
-  <p>Sparklines support positive and negative ranges.</p>
   <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkline1" class="sparkexample"></span>
   <pre><code>var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
@@ -919,7 +914,6 @@
     </dd>
   </dl>
   <h2 id="sparkbar">Sparkbar</h2>
-  <p>Sparkbars support positive and negative ranges.</p>
   <p style="clear:both"><strong>Sparkbar:</strong> <span id="sparkbar1" class="sparkexample"></span>
   <pre><code>var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
@@ -983,6 +977,11 @@
           draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
           <em>Default value: false, needs an explicit background colour</em>
       </dd>
+    <dt>zeroline</dt>
+    <dd>
+        Display a line on the zero line. Accepts all Raphael parameters (object or boolean, example: { 'stroke-width': '1px', stroke: '#000' })
+        <em>Default value: false, setting it to true will draw a 1px grey line.</em>
+    </dd>
     <dt>colour</dt>
     <dd>
         Set the colour (string)<br>
@@ -991,7 +990,6 @@
     </dl>
 
       <h2 id="sparkarea">Sparkarea</h2>
-  <p>SparkAreas support positive and negative ranges.</p>
   <p style="clear:both"><strong>SparkArea:</strong> <span id="sparkarea1" class="sparkexample"></span>
   <pre><code>var sparkarea = new Ico.SparkLine($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
@@ -1035,7 +1033,12 @@
         draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
         <em>Default value: false, needs an explicit background colour</em>
     </dd>
-        <dt>colour</dt>
+    <dt>zeroline</dt>
+    <dd>
+        Display a line on the zero line. Accepts all Raphael parameters (object or boolean, example: { 'stroke-width': '1px', stroke: '#000' })
+        <em>Default value: false, setting it to true will draw a 1px grey line.</em>
+    </dd>
+    <dt>colour</dt>
     <dd>
         Set the colour. If given an array, the first value will be used for the stroke and the second for the area. If given a string, it will be used for both, with the area being given 0.2 opacity.  (string or array)<br>
         <em>Default value: random colour</em>
