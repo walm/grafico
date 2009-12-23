@@ -858,7 +858,7 @@
   stroke_width :      3,
   colour :            '#4b80b6',
   highlight :         {index: 2, colour: "#f00"},
-  acceptable_range :  [0,20],
+  acceptable_range :  [10,20],
   background_colour : "#ddd"
 });</code></pre>
   <script>
@@ -868,8 +868,24 @@
       stroke_width : 3,
       colour: '#4b80b6',
       highlight: {index: 2, colour: "#f00"},
-      acceptable_range: [0,20],
+      acceptable_range: [10,20],
       background_colour: "#ddd"
+    });
+  });
+  </script>
+
+  <p style="clear:both"><strong>Sparkline with negative values:</strong> <span id="sparkline3" class="sparkexample"></span>
+  <pre><code>var sparkline = new Ico.SparkLine($('sparkline3'),
+[30, 12, 12, 10, 6, 4, 26]
+{
+  zeroline : true
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var sparkline3 = new Ico.SparkLine($('sparkline3'),
+    [30, 12, -12, -10, 6, 4, 26],
+    {
+      zeroline : true
     });
   });
   </script>
@@ -891,6 +907,11 @@
         draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
         <em>Default value: false, needs an explicit background colour</em>
     </dd>
+    <dt>zeroline</dt>
+    <dd>
+        Display a line on the zero line. Accepts all Raphael parameters (object or boolean, example: { 'stroke-width': '1px', stroke: '#000' })
+        <em>Default value: false, setting it to true will draw a 1px grey line.</em>
+    </dd>
     <dt>colour</dt>
     <dd>
         Set the colour (string)<br>
@@ -898,12 +919,15 @@
     </dd>
   </dl>
   <h2 id="sparkbar">Sparkbar</h2>
-   <p>Sparkbars support positive ranges.</p>
+  <p>Sparkbars support positive and negative ranges.</p>
   <p style="clear:both"><strong>Sparkbar:</strong> <span id="sparkbar1" class="sparkexample"></span>
   <pre><code>var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);
+    var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26],
+    {
+      zeroline : true
+    });
   });
   </script>
   <p style="clear:both"><strong>SparkBar with custom options:</strong> <span id="sparkbar2" class="sparkexample"></span>
@@ -926,12 +950,32 @@
     });
   });
   </script>
-
+  <p style="clear:both"><strong>Sparkbar with negative values:</strong> <span id="sparkbar3" class="sparkexample"></span>
+  <pre><code>var sparkbar3 = new Ico.SparkBar($('sparkbar3'),
+[30, -12, 12, -10, -6, -4, 26],
+{
+  zeroline : true,
+  bargraph_negativecolour : "#660"
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var sparkbar3 = new Ico.SparkBar($('sparkbar3'), [30, -12, 12, -10, -6, -4, 26],
+    {
+      zeroline : true,
+      bargraph_negativecolour : "#660"
+    });
+  });
+  </script>
     <h3>Sparkbar options</h3>
     <dl>
       <dt>bargraph_lastcolour</dt>
       <dd>
           select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+          <em>Default value: false</em>
+      </dd>
+      <dt>bargraph_negativecolour</dt>
+      <dd>
+          select a different colour for negative values in a bargraph (string, example: "#fff")<br />
           <em>Default value: false</em>
       </dd>
       <dt>acceptable_range</dt>
@@ -952,7 +996,7 @@
   <pre><code>var sparkarea = new Ico.SparkLine($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkarea = new Ico.SparkArea($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);
+    var sparkarea = new Ico.SparkArea($('sparkarea1'), [-30, -12, -12, -10, -16, -14, -26, -12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);
   });
   </script>
   <p style="clear:both"><strong>Sparkarea with custom options:</strong> <span id="sparkarea2" class="sparkexample"></span>

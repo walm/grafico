@@ -18,7 +18,8 @@ Ico.SparkLine = Class.create(Ico.Base, {
       colour : this.makeRandomColour(),
       width: parseInt(element.getStyle('width'), 10),
       height: parseInt(element.getStyle('height'), 10),
-      acceptable_range : false
+      acceptable_range : false,
+      zeroline : false
     };
     Object.extend(this.options, options || { });
 
@@ -26,7 +27,7 @@ Ico.SparkLine = Class.create(Ico.Base, {
     this.paper = new Raphael(this.element, this.options.width, this.options.height);
     if (this.options.acceptable_range) {
       this.background = this.paper.rect(0, this.options.height - this.normalise(this.options.acceptable_range[1]),
-                                        this.options.width, this.options.height - this.normalise(this.options.acceptable_range[0]));
+                                        this.options.width, this.normalise(this.options.acceptable_range[0]));
     } else {
       this.background = this.paper.rect(0, 0, this.options.width, this.options.height);
     }
@@ -42,11 +43,25 @@ Ico.SparkLine = Class.create(Ico.Base, {
     return colour;
   },
   normalise: function (value) {
-    return (this.options.height / this.data.max()) * value;
+    if(this.data.min() < 0 ) {
+      value -= this.data.min();
+    }
+    return (this.options.height / (this.data.max()-this.data.min())) * value;
   },
 
   draw: function () {
-    var data = this.normaliseData(this.data);
+    var data = this.normaliseData(this.data),
+        zero_value;
+
+    if(this.options.zeroline && this.data.min() < 0 ) {
+      this.options.zeroline = (this.options.zeroline === true) ? { 'stroke-width': '1px', stroke: '#BBBBBB' } : this.options.zeroline;
+      zero_value = parseInt(this.options.height - this.normalise(0));
+      this.paper.path()
+        .attr(this.options.zeroline)
+        .moveTo(0, zero_value)
+        .lineTo(this.options.width, zero_value);
+    }
+
     this.drawLines('', this.options.colour, data);
 
     if (this.options.highlight) {
@@ -56,11 +71,12 @@ Ico.SparkLine = Class.create(Ico.Base, {
 
   drawLines: function (label, colour, data) {
     var line = this.paper.path().attr({ stroke: colour, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
-        x = 0;
+        x = 0,
+        offset = this.data.min() < 0 ? this.options.stroke_width : 0;
 
     data.slice(1).each(function (value) {
       x = x + this.step;
-      line.lineTo(x, this.options.height - value);
+      line.lineTo(x, this.options.height - value - offset);
     }.bind(this));
   },
 
@@ -89,7 +105,8 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
   drawLines: function (label, colour, data) {
     var lastcolor = this.options.bargraph_lastcolour,
         width = this.step > 2 ? this.step - 1 : this.step,
-        x = width/2;
+        x = width/2,
+        zero_value = this.normalise(0);
 
     data.each(function (value,index) {
       var colour2, line;
@@ -97,7 +114,11 @@ Ico.SparkBar = Class.create(Ico.SparkLine, {
       colour2 = lastcolor && index === data.length-1 ? lastcolor : colour;
       line = this.paper.path().attr({ stroke: colour2, 'stroke-width': width });
       line.moveTo(x, this.options.height - value);
-      line.lineTo(x, this.options.height);
+      line.lineTo(x, this.options.height - zero_value);
+      if(value < zero_value) {
+        var negcolour = this.options.bargraph_negativecolour || colour2
+        line.attr({stroke:negcolour});
+      }
       x = x + this.step;
     }.bind(this));
   },
@@ -109,7 +130,8 @@ Ico.SparkArea = Class.create(Ico.SparkLine, {
   drawLines: function (label, colour, data) {
     var fillcolour = colour,
         strokecolour = colour,
-        fillopacity = 0.2;
+        fillopacity = 0.2,
+        zero_value = this.normalise(0);
 
     if(typeof colour == "object") {
       fillcolour = colour[1];
@@ -118,7 +140,7 @@ Ico.SparkArea = Class.create(Ico.SparkLine, {
     }
 
     var line = this.paper.path().attr({fill: fillcolour,  stroke: fillcolour, "stroke-width" : 0, "stroke-opacity" : 0, opacity: fillopacity})
-        .moveTo(0,this.options.height)
+        .moveTo(0,this.options.height - zero_value)
         .lineTo(0, this.options.height - data.first()),
         line2 = this.paper.path().attr({stroke: strokecolour, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
         x = 0;
@@ -128,7 +150,7 @@ Ico.SparkArea = Class.create(Ico.SparkLine, {
       line.lineTo(x, this.options.height - value);
       line2.lineTo(x, this.options.height - value);
     }.bind(this));
-    line.lineTo(x,this.options.height);
+    line.lineTo(x,this.options.height - zero_value);
   }
 });
 

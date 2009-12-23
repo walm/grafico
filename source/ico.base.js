@@ -194,10 +194,8 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     this.paper = new Raphael(this.element, this.options.width, this.options.height);
     this.background = this.paper.rect(this.x_padding_left, this.y_padding_top, this.graph_width, this.graph_height);
     this.background.attr({fill: this.options.background_colour, stroke: 'none' });
+    this.options.meanline = (this.options.meanline === true) ? { 'stroke-width': '2px', stroke: '#BBBBBB' } : this.options.meanline;
 
-    if (this.options.meanline === true) {
-      this.options.meanline = { 'stroke-width': '2px', stroke: '#BBBBBB' };
-    }
     /* global Sets */
     this.globalMarkerSet = this.paper.set();
     this.globalHoverSet = this.paper.set();
