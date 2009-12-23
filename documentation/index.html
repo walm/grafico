@@ -664,7 +664,7 @@
     </dd>
   </dl>
   <h2 id="bar">Bar graphs</h2>
-  <p>Bar graphs support posivite and negative ranges.</p>
+  <p>Bar graphs support positive and negative ranges.</p>
   <p style="clear:both"><strong>Bar graph:</strong></p>
   <div id="bargraph" class="example"></div>
   <pre><code>var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);</code></pre>
@@ -752,7 +752,7 @@
   </dl>
 
   <h2 id="horizontalbar">Horizontal bar graphs</h2>
-  <p>Horizontal bar graphs only support positive ranges.</p>
+  <p>Horizontal bar graphs support positive and negative ranges.</p>
   <p style="clear:both"><strong>Horizontal Bar graph:</strong></p>
   <div id="horizgraph" class="example"></div>
   <pre><code>var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
@@ -798,11 +798,37 @@
       });
   });
   </script>
+    <p style="clear:both"><strong>Horizontal Bar graph with negative values</strong></p>
+  <div id="horizgraph3" class="example"></div>
+  <pre><code>var horizgraph = new Ico.HorizontalBarGraph($('horizgraph3'),
+[30, -12, 12, 10, -6, -4, 26],
+{
+  bargraph_negativecolour:"#f00",
+  horizontal_rounded:true,
+  datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var horizgraph3 = new Ico.HorizontalBarGraph($('horizgraph3'),
+    [30, -12, 12, 10, -6, -4, 26],
+    {
+      bargraph_negativecolour:"#f00",
+      horizontal_rounded:true,
+      datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
+    });
+  });
+  </script>
+
     <h3>Horizontal bar options</h3>
   <dl>
     <dt>bargraph_lastcolour</dt>
     <dd>
         select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+        <em>Default value: false</em>
+    </dd>
+    <dt>bargraph_negativecolour</dt>
+    <dd>
+        select a different colour for negative values in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
     <dt>horizontal_rounded</dt>
@@ -817,7 +843,7 @@
     </dd>
   </dl>
   <h2 id="sparkline">Sparkline</h2>
-  <p>Sparklines support posivite and negative ranges.</p>
+  <p>Sparklines support positive and negative ranges.</p>
   <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkline1" class="sparkexample"></span>
   <pre><code>var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
@@ -872,7 +898,7 @@
     </dd>
   </dl>
   <h2 id="sparkbar">Sparkbar</h2>
-   <p>Sparkbars support posivite ranges.</p>
+   <p>Sparkbars support positive ranges.</p>
   <p style="clear:both"><strong>Sparkbar:</strong> <span id="sparkbar1" class="sparkexample"></span>
   <pre><code>var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
@@ -921,7 +947,7 @@
     </dl>
 
       <h2 id="sparkarea">Sparkarea</h2>
-  <p>SparkAreas support posivite and negative ranges.</p>
+  <p>SparkAreas support positive and negative ranges.</p>
   <p style="clear:both"><strong>SparkArea:</strong> <span id="sparkarea1" class="sparkexample"></span>
   <pre><code>var sparkarea = new Ico.SparkLine($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
