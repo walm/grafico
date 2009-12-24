@@ -95,75 +95,76 @@
   <h3>Base graph options:</h3>
 
   <dl>
-    <dt>width</dt>
+    <dt>background_colour</dt>
     <dd>
-        Specify the width of the element (number)<br>
-        <em>Default value: width of $(element)</em>
-    </dd>
-    <dt>height</dt>
-    <dd>
-        Specify the height of the element (number)<br>
-        <em>Default value: height of $(element)</em>
-    </dd>
-    <dt>labels</dt>
-    <dd>
-        The labels being displayed on the horizontal axis (array of strings)<br>
-        <em>Default value: numerical</em>
-    </dd>
-    <dt>grid</dt>
-    <dd>
-        draw a grid or not (boolean)<br>
-        <em>Default value: true</em>
-    </dd>
-    <dt>plot_padding</dt>
-    <dd>
-        Padding at the start and end of the graph (number)<br>
-        <em>Default value: 10</em>
-    </dd>
-    <dt>font_size</dt>
-    <dd>
-        The font-size for the axis and hovers (number)<br>
-        <em>Default value: 10</em>
-    </dd>
-    <dt>show_vertical_labels</dt>
-    <dd>
-        Show the vertical axis and gridlines (boolean)<br>
-        <em>Default value: true</em>
-    </dd>
-    <dt>show_horizontal_labels</dt>
-    <dd>
-        Show the horizontal axis and gridline (boolean)<br>
-        <em>Default value: true</em>
-    </dd>
-    <dt>vertical_label_unit</dt>
-    <dd>
-        append a unit to the vertical axis and text in the hover (string)<br>
-        <em>Default value: empty</em>
+        The background colour of the graph (string, example: "#fff")<br>
+        <em>Default value: backgroundcolor of $(element), else #fff</em>
     </dd>
     <dt>colours</dt>
     <dd>
         Select the colours for the lines or bars (object)<br>
         <em>Default value: random colours</em>
     </dd>
-    <dt>background_colour</dt>
+    <dt>datalabels</dt>
     <dd>
-        The background colour of the graph (string, example: "#fff")<br>
-        <em>Default value: backgroundcolor of $(element), else #fff</em>
+        for line graphs: Add a hover with the text, and append the text to the marker hover, per line (object, example: {workload:'My workload'})<br>
+        for bar graphs: append a text per bar.  (object, example: {workload: ["1","2","5"]})<br>
+        <em>Default value: empty</em>
     </dd>
-    <dt>label_colour</dt>
+    <dt>draw_axis</dt>
     <dd>
-        The colour of the axis, axis values and hovers (string, example: "#fff")<br>
-        <em>Default value: "#000" </em>
+        show or hide the axis lines (boolean)<br>
+        <em>Default value: true</em>
+    </dd>
+    <dt>font_size</dt>
+    <dd>
+        The font-size for the axis and hovers (number)<br>
+        <em>Default value: 10</em>
+    </dd>
+    <dt>grid</dt>
+    <dd>
+        draw a grid or not (boolean)<br>
+        <em>Default value: true</em>
     </dd>
     <dt>grid_colour</dt>
     <dd>
         The colour of the gridlines (string, example: "#fff") <br>
         <em>Default value: "#ccc"</em>
     </dd>
+    <dt>height</dt>
+    <dd>
+        Specify the height of the element (number)<br>
+        <em>Default value: height of $(element)</em>
+    </dd>
+    <dt>hover_colour</dt>
+    <dd>
+        colour a bar or line should fade to on hover (string, example: "#fff")<br>
+        <em>Default value: empty</em>
+    </dd>
     <dt>hover_text_colour</dt>
     <dd>
         the colour of the text in the hovers (string, example: "#fff")<br>
         <em>Default value: "#fff"</em>
+    </dd>
+    <dt>labels</dt>
+    <dd>
+        The labels being displayed on the horizontal axis (array of strings)<br>
+        <em>Default value: numerical</em>
+    </dd>
+    <dt>label_colour</dt>
+    <dd>
+        The colour of the axis, axis values and hovers (string, example: "#fff")<br>
+        <em>Default value: "#000" </em>
+    </dd>
+    <dt>label_rotation</dt>
+    <dd>
+        rotate the horizontal labels, in degrees. known limitation: it rotates around the center of the label (number)<br>
+        <em>Default value: 0</em>
+    </dd>
+    <dt>left_padding</dt>
+    <dd>
+        Set a standard left spacing regardless of vertical axis label width (number)<br>
+        <em>Default value: false</em>
     </dd>
     <dt>meanline</dt>
     <dd>
@@ -175,20 +176,24 @@
         The amount of padding above the graph (number)<br>
         <em>Default value: 20</em>
     </dd>
-    <dt>draw_axis</dt>
+    <dt>plot_padding</dt>
     <dd>
-        show or hide the axis lines (boolean)<br>
+        Padding at the start and end of the graph (number)<br>
+        <em>Default value: 10</em>
+    </dd>
+    <dt>show_horizontal_labels</dt>
+    <dd>
+        Show the horizontal axis and gridline (boolean)<br>
         <em>Default value: true</em>
     </dd>
-    <dt>datalabels</dt>
+    <dt>show_vertical_labels</dt>
     <dd>
-        for line graphs: Add a hover with the text, and append the text to the marker hover, per line (object, example: {workload:'My workload'})<br>
-        for bar graphs: append a text per bar.  (object, example: {workload: ["1","2","5"]})<br>
-        <em>Default value: empty</em>
+        Show the vertical axis and gridlines (boolean)<br>
+        <em>Default value: true</em>
     </dd>
-    <dt>hover_colour</dt>
+    <dt>vertical_label_unit</dt>
     <dd>
-        colour a bar or line should fade to on hover (string, example: "#fff")<br>
+        append a unit to the vertical axis and text in the hover (string)<br>
         <em>Default value: empty</em>
     </dd>
     <dt>watermark</dt>
@@ -201,18 +206,12 @@
         where the watermark should be placed. default is the bottom right, can be placed in the center with "middle" (string)<br>
         <em>Default value: bottom right</em>
     </dd>
-    <dt>left_padding</dt>
+    <dt>width</dt>
     <dd>
-        Set a standard left spacing regardless of vertical axis label width (number)<br>
-        <em>Default value: false</em>
-    </dd>
-    <dt>label_rotation</dt>
-    <dd>
-        rotate the horizontal labels, in degrees. known limitation: it rotates around the center of the label (number)<br>
-        <em>Default value: 0</em>
+        Specify the width of the element (number)<br>
+        <em>Default value: width of $(element)</em>
     </dd>
   </dl>
-
 
   <h2 id="line">Line graphs</h2>
   <p><strong>Line graph with the default rendering (no options):</strong></p>
@@ -496,6 +495,11 @@
   </script>
     <h3>Area graph options</h3>
   <dl>
+    <dt>area_opacity</dt>
+    <dd>
+        set a specific opacity for the area's. If none is given, single areas will be opaque, and multiple will get an opacity of 1.5/number-of-areas. (number between 0 and 1)<br>
+        <em>Default value: false</em>
+    </dd>
     <dt>markers</dt>
     <dd>
         Line graph: display markers on the datapoint. (string)<br>
@@ -516,20 +520,15 @@
         hide the vertical gridlines for all empty label on the horizontal axis. (boolean)<br>
         <em>Default value: false</em>
     </dd>
-    <dt>area_opacity</dt>
+    <dt>start_at_zero</dt>
     <dd>
-        set a specific opacity for the area's. If none is given, single areas will be opaque, and multiple will get an opacity of 1.5/number-of-areas. (number between 0 and 1)<br>
-        <em>Default value: false</em>
+        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        <em>Default value: true</em>
     </dd>
     <dt>stroke_width</dt>
     <dd>
         specify the width of the lines in pixels (number)<br />
         <em>Default value: 0</em>
-    </dd>
-    <dt>start_at_zero</dt>
-    <dd>
-        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
-        <em>Default value: true</em>
     </dd>
   </dl>
   <h2 id="stack">Stacked area graphs</h2>
@@ -650,15 +649,15 @@
         specify if the stacked areas should be filled area's or lines (boolean)<br>
         <em>Default value: true</em>
     </dd>
-    <dt>stroke_width</dt>
-    <dd>
-        specify the width of the lines in pixels, only used if stacked_fill is false. (number)<br />
-        <em>Default value: 5</em>
-    </dd>
     <dt>start_at_zero</dt>
     <dd>
         If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
         <em>Default value: true</em>
+    </dd>
+    <dt>stroke_width</dt>
+    <dd>
+        specify the width of the lines in pixels, only used if stacked_fill is false. (number)<br />
+        <em>Default value: 5</em>
     </dd>
   </dl>
   <h2 id="bar">Bar graphs</h2>
@@ -827,15 +826,15 @@
         select a different colour for negative values in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
-    <dt>horizontal_rounded</dt>
-    <dd>
-        round the ends of horizontal bar graphs (boolean)<br />
-        <em>Default value: false</em>
-    </dd>
     <dt>colour</dt>
     <dd>
         Select the colour for the bars (string)<br>
         <em>Default value: random colour</em>
+    </dd>
+    <dt>horizontal_rounded</dt>
+    <dd>
+        round the ends of horizontal bar graphs (boolean)<br />
+        <em>Default value: false</em>
     </dd>
   </dl>
   <h2 id="sparkline">Sparkline</h2>
@@ -886,10 +885,15 @@
   </script>
     <h3>Sparkline options</h3>
   <dl>
-    <dt>stroke_width</dt>
+    <dt>acceptable_range</dt>
     <dd>
-        specify the width of the sparkline in pixels (number)<br />
-        <em>Default value: 1</em>
+        draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
+        <em>Default value: false, needs an explicit background colour</em>
+    </dd>
+    <dt>colour</dt>
+    <dd>
+        Set the colour (string)<br>
+        <em>Default value: random colour</em>
     </dd>
     <dt>highlight</dt>
     <dd>
@@ -897,20 +901,15 @@
         colour is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
         <em>Default value: false, setting it to true will draw a red dot on the last datapoint.</em>
     </dd>
-    <dt>acceptable_range</dt>
+    <dt>stroke_width</dt>
     <dd>
-        draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
-        <em>Default value: false, needs an explicit background colour</em>
+        specify the width of the sparkline in pixels (number)<br />
+        <em>Default value: 1</em>
     </dd>
     <dt>zeroline</dt>
     <dd>
         Display a line on the zero line. Accepts all Raphael parameters (object or boolean, example: { 'stroke-width': '1px', stroke: '#000' })
         <em>Default value: false, setting it to true will draw a 1px grey line.</em>
-    </dd>
-    <dt>colour</dt>
-    <dd>
-        Set the colour (string)<br>
-        <em>Default value: random colour</em>
     </dd>
   </dl>
   <h2 id="sparkbar">Sparkbar</h2>
@@ -961,7 +960,13 @@
   });
   </script>
     <h3>Sparkbar options</h3>
+
     <dl>
+      <dt>acceptable_range</dt>
+      <dd>
+          draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
+          <em>Default value: false, needs an explicit background colour</em>
+      </dd>
       <dt>bargraph_lastcolour</dt>
       <dd>
           select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
@@ -972,21 +977,16 @@
           select a different colour for negative values in a bargraph (string, example: "#fff")<br />
           <em>Default value: false</em>
       </dd>
-      <dt>acceptable_range</dt>
+      <dt>colour</dt>
       <dd>
-          draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
-          <em>Default value: false, needs an explicit background colour</em>
+          Set the colour (string)<br>
+          <em>Default value: random colour</em>
       </dd>
-    <dt>zeroline</dt>
-    <dd>
-        Display a line on the zero line. Accepts all Raphael parameters (object or boolean, example: { 'stroke-width': '1px', stroke: '#000' })
-        <em>Default value: false, setting it to true will draw a 1px grey line.</em>
-    </dd>
-    <dt>colour</dt>
-    <dd>
-        Set the colour (string)<br>
-        <em>Default value: random colour</em>
-    </dd>
+      <dt>zeroline</dt>
+      <dd>
+          Display a line on the zero line. Accepts all Raphael parameters (object or boolean, example: { 'stroke-width': '1px', stroke: '#000' })
+          <em>Default value: false, setting it to true will draw a 1px grey line.</em>
+      </dd>
     </dl>
 
       <h2 id="sparkarea">Sparkarea</h2>
@@ -1017,10 +1017,15 @@
   </script>
     <h3>Sparkarea options</h3>
   <dl>
-    <dt>stroke_width</dt>
+    <dt>acceptable_range</dt>
     <dd>
-        specify the width of the sparkline in pixels (number)<br />
-        <em>Default value: 1</em>
+        draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
+        <em>Default value: false, needs an explicit background colour</em>
+    </dd>
+    <dt>colour</dt>
+    <dd>
+        Set the colour. If given an array, the first value will be used for the stroke and the second for the area. If given a string, it will be used for both, with the area being given 0.2 opacity.  (string or array)<br>
+        <em>Default value: random colour</em>
     </dd>
     <dt>highlight</dt>
     <dd>
@@ -1028,20 +1033,15 @@
         colour is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
         <em>Default value: false, setting it to true will draw a red dot on the last datapoint.</em>
     </dd>
-    <dt>acceptable_range</dt>
+    <dt>stroke_width</dt>
     <dd>
-        draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
-        <em>Default value: false, needs an explicit background colour</em>
+        specify the width of the sparkline in pixels (number)<br />
+        <em>Default value: 1</em>
     </dd>
     <dt>zeroline</dt>
     <dd>
         Display a line on the zero line. Accepts all Raphael parameters (object or boolean, example: { 'stroke-width': '1px', stroke: '#000' })
         <em>Default value: false, setting it to true will draw a 1px grey line.</em>
-    </dd>
-    <dt>colour</dt>
-    <dd>
-        Set the colour. If given an array, the first value will be used for the stroke and the second for the area. If given a string, it will be used for both, with the area being given 0.2 opacity.  (string or array)<br>
-        <em>Default value: random colour</em>
     </dd>
   </dl>
     </div>
