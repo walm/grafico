@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <title>Ico graphing library documentation</title>
+
+    <link href="http://github.com/Kilian/sencss/raw/master/sen.css" rel="stylesheet" type="text/css">
+    <style>
+    #wrap {
+      width:700px;
+      padding:2em;
+      margin:0 auto;
+    }
+    #menu {
+      width:150px;
+      position:fixed;
+      top:2em;
+      margin-left:-172px;
+    }
+    h2 {display:block;background:#ccc;padding:0.5em}
+    h3 {display:block;background:#eee;padding:0.5em}
+    h1+p {-moz-column-count:2;-webkit-column-count:3;}
+
+    .example {
+      width:100%;
+      height:150px;
+    }
+    .infoblock {
+      width:50%;
+      float:left;
+    }
+    </style>
+
+    <script src="dependencies/prototype.js" type="text/javascript" charset="utf-8"></script>
+    <script src="dependencies/raphael.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/ico.base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/ico.line.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/ico.bar.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/ico.spark.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+
+<body>
+  <div id="wrap">
+  <div id="areagraph4" class="example"></div>
+  <script>
+  Event.observe(window, 'load', function() {
+    var areagraph4 = new Ico.AreaGraph($('areagraph4'),
+      {
+      workload:       [8, 10, 6, 12,7, 6, 9],
+      your_workload:  [6, 8,  4, 8, 12,6, 2],
+      his_workload:   [2, 9,  12,7, 8, 9, 8]
+      },
+      {
+        markers : "value",
+        grid:false,
+        draw_axis: false,
+        plot_padding : 0,
+        show_vertical_labels : false,
+        show_horizontal_labels : false,
+        hover_text_colour: "#fff",
+        datalabels: {
+          workload:       "Areagraph 1",
+          your_workload:  "Areagraph 2",
+          his_workload:   "Areagraph 3"
+        }
+      });
+  });
+  </script>
+  <h1>Ico graphing library <em>version x.x</em></h1>
+
+  <p>Ico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a>
+  and <a href="http://prototypejs.org">Prototype.js</a>. It is originally developed
+  by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>,
+  but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a>
+  at <a href="http://wakoopa.com">Wakoopa</a>. Ico's basic principles are to provide <strong>good,
+  clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte, while still
+  being <strong>flexible to implement</strong> and providing <strong>numerous api options</strong>
+  to tweak the look of the graphs..</p>
+
+  <p>Some key things Ico supports:</p>
+  <ul>
+    <li><strong>Flexible ranges</strong> Ico select the best range to display your data at</li>
+    <li><strong>Hover options</strong> display additional information such as the value when hovering over charts</li>
+    <li><strong>Mean lines</strong> A single line that display the mean.</li>
+    <li><strong>Watermarks</strong> Use an image as a watermark over your graphs</li>
+  </ul>
+
+  <div class="infoblock">
+  <h2>Downloads</h2>
+  <ul>
+    <li><a href="source/ico.base.js">ico.base.js</a> 26kb</li>
+    <li><a href="source/ico.line.js">ico.line.js</a> 7kb</li>
+    <li><a href="source/ico.bar.js">ico.bar.js</a> 12kb</li>
+    <li><a href="source/ico.spark.js">ico.spark.js</a> 5kb</li>
+  </ul>
+
+  <ul>
+    <li><a href="packaged/ico.min.js">ico.min.js</a> 30kb</li>
+  </ul>
+  </div>
+  <div class="infoblock">
+  <h2>Supported graph types</h2>
+  <ul>
+        <li>Line graphs</li>
+        <li>Area graphs</li>
+        <li>Stacked area graphs</li>
+        <li>Bar graphs</li>
+        <li>Horizontal bar graphs</li>
+        <li>Sparklines</li>
+        <li>Sparkbars</li>
+        <li>Sparkareas</li>
+  </ul>
+  </div>
+  <div class="infoblock">
+  <h2>Dependencies</h2>
+  <ul>
+    <li><a href="http://raphaeljs.com">Raphaël</a> 1.0+</li>
+    <li><a href="http://prototypejs.org">Prototype.js</a> 1.6+</li>
+  </ul>
+  </div>
+  <div class="infoblock">
+  <h2>Documentation</h2>
+  <p>Ico has full documentation and examples available on the <a href="documentation/index.html">documentation page</a>.
+  <strong>This page might be slow to load</strong> because it contains a lot of examples.</p>
+  </div>
+    </div>
+  </body>
+</html>
+
