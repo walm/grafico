@@ -577,7 +577,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
         if (nib && marker) {
           set.translate(0,set.getBBox().height+(textpadding*2));
           marker.translate(0,-set.getBBox().height-(textpadding*2));
-          nib.translate(0,-rectsize.height-textpadding+1).scale(1,-1);
+          nib.translate(0,-rectsize.height-textpadding+1.5).scale(1,-1);
         } else {
           diff = rect.attrs.y;
           set.translate(0,1+(diff*-1));
@@ -607,10 +607,10 @@ Ico.BaseGraph = Class.create(Ico.Base, {
   },
   drawNib: function (text, textbox, textpadding) {
     return this.paper.path()
-    .attr({fill: this.options.label_colour,opacity: 1})
-    .moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5)
-    .lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(textpadding*2)+0.5)
-    .lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5)
+    .attr({fill: this.options.label_colour,opacity: 1, stroke: this.options.label_colour, 'stroke-width':'1px'})
+    .moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding-1.5)
+    .lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(textpadding*2)-1.5)
+    .lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding-1.5)
     .andClose();
   },
   drawRoundRect : function(text, textbox, textpadding) {
@@ -619,7 +619,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
     text.attrs.y-(textbox.height/2)-textpadding,
     textbox.width+(textpadding*2),
     textbox.height+(textpadding*2),
-    textpadding*1.5).attr({fill: this.options.label_colour,opacity: 1});
+    textpadding*1.5).attr({fill: this.options.label_colour,opacity: 1, stroke: this.options.label_colour, 'stroke-width':0});
   }
 });
 
