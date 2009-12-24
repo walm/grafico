@@ -25,20 +25,18 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
     this.step = this.calculateStep();
     this.grid_start_offset = this.bar_padding - 1;
   },
-
   calculateBarWidth: function () {
     return (this.graph_width / this.data_size) - this.bar_padding;
   },
-
   calculateStep: function () {
     return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
   },
-
   drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element) {
     var start_y = this.options.height - this.y_padding_bottom - (this.zero_value * (this.graph_height / this.y_label_count)),
         lastcolor = this.options.bargraph_lastcolour,
         negativecolor = this.options.bargraph_negativecolour,
         colour2;
+
     x = x + this.bar_padding;
     y = this.options.height - this.y_padding_bottom - y - (this.zero_value * (this.graph_height / this.y_label_count));
 
@@ -48,13 +46,8 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
       colour2 = y < 0 ? negativecolor : colour;
     }
 
-    var bargraph =
-      this.paper.rect(x-(this.bar_width/2),
-                      start_y,
-                      this.bar_width,
-                      y);
+    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y, this.bar_width, y).attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
 
-    bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
     if( y < 0) {
       bargraph.attr({height:-bargraph.attrs.height});
     } else {
@@ -76,9 +69,9 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
   },
   drawGrid: function () {
     var path = this.paper.path().attr({ stroke: this.options.grid_colour}),
-        y, x, x_labels, x_step;
+        y = this.graph_height + this.y_padding_top,
+        x, x_labels, x_step;
 
-    y = this.graph_height + this.y_padding_top;
     if(!this.options.horizontalbar) {
       for (var i = 0; i < this.y_label_count+1; i++) {
         path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
@@ -98,7 +91,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
       x_labels = this.y_label_count;
       x_step = this.options.horizontalbar ? this.graph_width / this.y_label_count : this.step;
 
-      for (var i = 0; i < x_labels; i++) {
+      for (i = 0; i < x_labels; i++) {
         if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
           path.moveTo(parseInt(x, 10), this.y_padding_top);
           path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
@@ -127,20 +120,8 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
 
     var textbox = text.getBBox(),
         textpadding = 4,
-        roundRect= this.paper.rect(
-          text.attrs.x-(textbox.width/2)-textpadding,
-          text.attrs.y-(textbox.height/2)-textpadding,
-          textbox.width+(textpadding*2),
-          textbox.height+(textpadding*2),
-          textpadding*1.5);
-    roundRect.attr({fill: this.options.label_colour,opacity: 1});
-
-    var nib = this.paper.path();
-    nib.attr({fill: this.options.label_colour,opacity: 1});
-    nib.moveTo(hoverbar.attrs.x+(this.bar_width/2)-textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
-    nib.lineTo(hoverbar.attrs.x+(this.bar_width/2),text.attrs.y+(textbox.height/2)+(textpadding*2)+0.5);
-    nib.lineTo(hoverbar.attrs.x+(this.bar_width/2)+textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
-    nib.andClose();
+        roundRect= this.drawRoundRect(text, textbox, textpadding),
+        nib = this.drawNib(text, textbox, textpadding);
 
     text.toFront();
     hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
@@ -207,21 +188,17 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
     $A(data).each(function (value, index) {
       var colour2,
-          value = value / this.graph_width * (this.graph_width - offset);
           horizontal_rounded = this.options.horizontal_rounded ? this.bar_width/2 : 0,
-          bargraph = this.paper.rect(
-            x,
-            y,
-            value,
-            this.bar_width,
-            horizontal_rounded);
+          bargraph;
 
       if (lastcolor && index === data.length-1){
         colour2 = lastcolor;
       } else {
         colour2 = value < 0 ? negativecolor : colour;
       }
-      bargraph.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+
+      value = value / this.graph_width * (this.graph_width - offset);
+      bargraph = this.paper.rect(x, y, value, this.bar_width, horizontal_rounded).attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
 
       if(value < 0) {
         bargraph.attr({width:-bargraph.attrs.width}).translate(value,0);
@@ -256,20 +233,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
 
         var textbox = text.getBBox(),
             textpadding = 4,
-            roundRect= this.paper.rect(
-              text.attrs.x-(textbox.width/2)-textpadding,
-              text.attrs.y-(textbox.height/2)-textpadding,
-              textbox.width+(textpadding*2),
-              textbox.height+(textpadding*2),
-              textpadding*1.5);
-        roundRect.attr({fill: this.options.label_colour,opacity: 1});
-
-        var nib = this.paper.path();
-        nib.attr({fill: this.options.label_colour,opacity: 1});
-        nib.moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
-        nib.lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(textpadding*2)+0.5);
-        nib.lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding+0.5);
-        nib.andClose();
+            roundRect= this.drawRoundRect(text, textbox, textpadding),
+            nib = this.drawNib(text, textbox, textpadding);
 
         text.toFront();
         hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
@@ -291,9 +256,7 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
           hoverSet.animate({opacity:0}, 200);
         };
       }
-
       y = y + this.step;
-
     }.bind(this));
   },
 
@@ -301,13 +264,8 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
   drawFocusHint: function () {
     var length = 5,
         x = this.x_padding_left+length*2,
-        y = this.options.height - this.y_padding_bottom-length/2;
-    var cursor = this.paper.path().attr({stroke: this.options.label_colour, 'stroke-width': 2});
-
-    cursor.moveTo(x, y);
-    cursor.lineTo(x - length, y + length);
-    cursor.moveTo(x - length, y);
-    cursor.lineTo(x - (length * 2), y + length);
+        y = this.options.height - this.y_padding_bottom-length/2,
+        cursor = this.paper.path().attr({stroke: this.options.label_colour, 'stroke-width': 2}).moveTo(x, y).lineTo(x - length, y + length).moveTo(x - length, y).lineTo(x - (length * 2), y + length);
   },
 
   drawVerticalLabels: function () {
@@ -326,13 +284,12 @@ Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
     }
     this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options.font_size + 7) * -1]);
   },
-    drawMeanLine: function (data) {
-    var cursor = this.paper.path().attr(this.options.meanline),
-        offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length;
-        offset = this.options.bar ? offset + (this.zero_value * (this.graph_height / this.y_label_count)) : offset;
+  drawMeanLine: function (data) {
+  var cursor = this.paper.path().attr(this.options.meanline),
+      offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length;
+      offset = this.options.bar ? offset + (this.zero_value * (this.graph_height / this.y_label_count)) : offset;
 
-        cursor.moveTo(this.x_padding_left - 1 + offset, this.y_padding_top);
-        cursor.lineTo(this.x_padding_left - 1 + offset, this.y_padding_top + this.graph_height);
+      cursor.moveTo(this.x_padding_left - 1 + offset, this.y_padding_top).lineTo(this.x_padding_left - 1 + offset, this.y_padding_top + this.graph_height);
   }
 });
 

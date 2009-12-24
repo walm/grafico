@@ -102,23 +102,10 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
       }
       var hoverSet = this.paper.set(),
           textpadding = 4,
-          text = this.paper.text(circle.attrs.cx, circle.attrs.cy-(this.options.font_size*1.5)-2*textpadding, datalabel);
-      text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
-      var textbox = text.getBBox(),
-          roundRect= this.paper.rect(
-            text.attrs.x-(textbox.width/2)-textpadding,
-            text.attrs.y-(textbox.height/2)-textpadding,
-            textbox.width+(textpadding*2),
-            textbox.height+(textpadding*2),
-            textpadding*1.5);
-      roundRect.attr({fill : this.options.label_colour, opacity : 1, stroke : 0, "stroke-color":this.options.label_colour});
-
-      var nib = this.paper.path();
-      nib.attr({fill: this.options.label_colour, opacity: 1, stroke : 0, "stroke-color" : this.options.label_colour});
-      nib.moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding-1.5);
-      nib.lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(2*textpadding-0.5));
-      nib.lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding-1.5);
-      nib.andClose();
+          text = this.paper.text(circle.attrs.cx, circle.attrs.cy-(this.options.font_size*1.5)-2*textpadding, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1}),
+          textbox = text.getBBox(),
+          roundRect= this.drawRoundRect(text, textbox, textpadding),
+          nib = this.drawNib(text, textbox, textpadding);
 
       text.toFront();
       hoverSet.push(circle,roundRect,nib,text).attr({opacity:0}).toFront();
