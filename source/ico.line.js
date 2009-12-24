@@ -12,19 +12,15 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
     return{
       line : true,
       start_at_zero : true,
-      stroke_width : 5
+      stroke_width : 5,
+      curve_amount : 10
     };
   },
   setChartSpecificOptions: function () {
-    if (typeof this.options.curve_amount === 'undefined') {
-      this.options.curve_amount = 10;
-    }
   },
-
   calculateStep: function () {
     return (this.graph_width - (this.options.plot_padding * 2)) / (this.data_size - 1);
   },
-
   startPlot: function (cursor, x, y, colour) {
     cursor.moveTo(x, y);
   },

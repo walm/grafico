@@ -231,6 +231,7 @@
 {
   grid :                  true,
   plot_padding :          0,
+  curve_amount :          0,
   start_at_zero :         false,
   stroke_width :          3,
   label_rotation :        -30,
@@ -253,6 +254,7 @@
     {
       grid :                  true,
       plot_padding :          0,
+      curve_amount :          0,
       start_at_zero :         false,
       stroke_width :          3,
       label_rotation :        -30,
@@ -338,9 +340,14 @@
 <p style="clear:both">.</p>
   <h3>Line graph options:</h3>
   <dl>
+    <dt>curve_amount</dt>
+    <dd>
+      specify the curvature of linegraphs. 0 is hard edges (number)<br />
+      <em>Default value: 10</em>
+    </dd>
     <dt>markers</dt>
     <dd>
-        Line graph: display markers on the datapoint. (string)<br>
+        Display markers on the datapoint. (string)<br>
         Possible options:
         <ul>
           <li>"circle" - displays a circle</li>
