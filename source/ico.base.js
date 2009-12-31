@@ -61,13 +61,14 @@ Ico.Normaliser = Class.create({
     this.max = data.max();
     this.standard_deviation = data.standard_deviation();
     this.range = 0;
-    this.step = this.labelStep(this.max - this.min);
+    this.same_values = this.min == this.max;
+    this.step = this.same_values ? this.labelStep(Math.abs(this.min)) : this.labelStep(this.max - this.min);
     this.start_value = this.calculateStart();
     this.process();
   },
   calculateStart: function () {
     var min = this.options.start_value !== null && this.min >= 0 ? this.options.start_value : this.min,
-        start_value = this.round(min, 1);
+        start_value = this.same_values ? (this.min - this.step * 5) : this.round(min, 1);
 
     /* This is a boundary condition */
     if (this.min > 0 && start_value > this.min) {
@@ -92,7 +93,7 @@ Ico.Normaliser = Class.create({
     return roundedValue;
   },
   process: function () {
-    this.range = this.max - this.start_value;
+    this.range = this.same_values ? Math.abs(this.max) : this.max - this.start_value;
     this.step = this.labelStep(this.range);
     if (this.range / this.step > 15) {
       this.step *= 3;
