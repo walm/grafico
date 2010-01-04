@@ -58,7 +58,8 @@
       var normaliser = new Ico.Normaliser([-57,-31,-87,66,-30,-77,-88,-75,-20,-48,-56,-91,16,-41,-87,-69,-65,-62,58,-15,-49,-75,-42,-78,-79]);
       assertEqual(30, normaliser.step);
       assertEqual(-91, normaliser.min);
-
+      assertEqual(166, normaliser.range);
+      
       /* The start value should round down to the nearest readable value */
       assertEqual(-100, normaliser.start_value);
     }},
@@ -77,10 +78,25 @@
     }},
 
     test_same_values: function() { with(this) {
-      var normaliser = new Ico.Normaliser([20, 20], { start_value: 0 });
-      assertEqual(3, normaliser.step);
-      assertEqual(20, normaliser.range);
-      assertEqual(0, normaliser.start_value);
+      var normaliser = new Ico.Normaliser([10, 10]);
+      assertEqual(1,  normaliser.step);
+      assertEqual(10, normaliser.range);
+      assertEqual(5,  normaliser.start_value);
+    }},
+
+    test_same_small_values: function() { with(this) {
+      var normaliser = new Ico.Normaliser([1, 1]);
+      assertEqual(0.1, normaliser.step);
+      assertEqual(0.5, normaliser.start_value);
+      assertEqual(1,   normaliser.range);
+    }},
+
+    test_same_negative_values: function() { with(this) {
+      var normaliser = new Ico.Normaliser([-10, -10]);
+      assertEqual(1,   normaliser.step);
+      assertEqual(-15, normaliser.start_value);
+      /* Range always assumed positive */
+      assertEqual(10, normaliser.range);
     }},
 
     test_19_20: function() { with(this) {
