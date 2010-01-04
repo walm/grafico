@@ -12,6 +12,7 @@ task :package => [:require_compiler] do
 
   File.open(packaged, "w") do |f|
     f.write Closure::Compiler.new.compile(contents)
+    puts "packaged to " + (File.size?(packaged)/1000).to_s + "Kb in " + packaged
   end
 end
 
@@ -24,3 +25,4 @@ task :require_compiler do
     abort
   end
 end
+
