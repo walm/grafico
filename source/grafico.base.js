@@ -608,10 +608,10 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   },
   drawNib: function (text, textbox, textpadding) {
     return this.paper.path()
-    .attr({fill: this.options.label_colour,opacity: 1, stroke: this.options.label_colour, 'stroke-width':'1px'})
-    .moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding-1.5)
-    .lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(textpadding*2)-1.5)
-    .lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding-1.5)
+    .attr({fill: this.options.label_colour, opacity: 1, stroke: this.options.label_colour, 'stroke-width':'0px'})
+    .moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding-1)
+    .lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(textpadding*2))
+    .lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding-1)
     .andClose();
   },
   drawRoundRect : function(text, textbox, textpadding) {
@@ -620,7 +620,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     text.attrs.y-(textbox.height/2)-textpadding,
     textbox.width+(textpadding*2),
     textbox.height+(textpadding*2),
-    textpadding*1.5).attr({fill: this.options.label_colour,opacity: 1, stroke: this.options.label_colour, 'stroke-width':0});
+    textpadding*1.5).attr({fill: this.options.label_colour,opacity: 1, stroke: this.options.label_colour, 'stroke-width':'0px'});
   }
 });
 
