@@ -8,6 +8,7 @@
  */
 "use strict";
 var Grafico = {
+  Version: "1.0",
   Base: {},
 
   Normaliser: {},
