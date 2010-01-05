@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf8">
-    <title>Ico graphing library</title>
+    <title>Grafico graphing library</title>
 
     <link href="http://github.com/Kilian/sencss/raw/master/sen.css" rel="stylesheet" type="text/css">
     <style>
@@ -33,10 +33,10 @@
 
     <script src="dependencies/prototype.js" type="text/javascript" charset="utf-8"></script>
     <script src="dependencies/raphael.js" type="text/javascript" charset="utf-8"></script>
-    <script src="source/ico.base.js" type="text/javascript" charset="utf-8"></script>
-    <script src="source/ico.line.js" type="text/javascript" charset="utf-8"></script>
-    <script src="source/ico.bar.js" type="text/javascript" charset="utf-8"></script>
-    <script src="source/ico.spark.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/grafico.base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/grafico.line.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/grafico.bar.js" type="text/javascript" charset="utf-8"></script>
+    <script src="source/grafico.spark.js" type="text/javascript" charset="utf-8"></script>
   </head>
 
 <body>
@@ -44,7 +44,7 @@
   <div id="areagraph4" class="example"></div>
   <script>
   Event.observe(window, 'load', function() {
-    var areagraph4 = new Ico.AreaGraph($('areagraph4'),
+    var areagraph4 = new Grafico.AreaGraph($('areagraph4'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -66,20 +66,20 @@
       });
   });
   </script>
-  <h1>Ico graphing library <em>version x.x</em></h1>
+  <h1>Grafico graphing library <em>version x.x</em></h1>
 
-  <p>Ico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a>
+  <p>Grafico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a>
   and <a href="http://prototypejs.org">Prototype.js</a>. It is originally developed
   by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>,
   but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a>
-  at <a href="http://wakoopa.com">Wakoopa</a>. Ico's basic principles are to provide <strong>good,
+  at <a href="http://wakoopa.com">Wakoopa</a>. Grafico's basic principles are to provide <strong>good,
   clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte, while still
   being <strong>flexible to implement</strong> and providing <strong>numerous api options</strong>
   to tweak the look of the graphs..</p>
 
-  <p>Some key things Ico supports:</p>
+  <p>Some key things Grafico supports:</p>
   <ul>
-    <li><strong>Flexible ranges</strong> Ico select the best range to display your data at</li>
+    <li><strong>Flexible ranges</strong> Grafico select the best range to display your data at</li>
     <li><strong>Hover options</strong> display additional information such as the value when hovering over charts</li>
     <li><strong>Mean lines</strong> A single line that display the mean.</li>
     <li><strong>Watermarks</strong> Use an image as a watermark over your graphs</li>
@@ -88,14 +88,14 @@
   <div class="infoblock">
   <h2>Downloads</h2>
   <ul>
-    <li><a href="source/ico.base.js">ico.base.js</a> 26kb</li>
-    <li><a href="source/ico.line.js">ico.line.js</a> 7kb</li>
-    <li><a href="source/ico.bar.js">ico.bar.js</a> 12kb</li>
-    <li><a href="source/ico.spark.js">ico.spark.js</a> 5kb</li>
+    <li><a href="source/grafico.base.js">grafico.base.js</a> 26kb</li>
+    <li><a href="source/grafico.line.js">grafico.line.js</a> 7kb</li>
+    <li><a href="source/grafico.bar.js">grafico.bar.js</a> 12kb</li>
+    <li><a href="source/grafico.spark.js">grafico.spark.js</a> 5kb</li>
   </ul>
 
   <ul>
-    <li><a href="packaged/ico.min.js">ico.min.js</a> 30kb</li>
+    <li><a href="packaged/grafico.min.js">grafico.min.js</a> 30kb</li>
   </ul>
   </div>
   <div class="infoblock">
@@ -120,7 +120,7 @@
   </div>
   <div class="infoblock">
   <h2>Documentation</h2>
-  <p>Ico has full documentation and examples available on the <a href="documentation/index.html">documentation page</a>.
+  <p>Grafico has full documentation and examples available on the <a href="documentation/index.html">documentation page</a>.
   <strong>This page might be slow to load</strong> because it contains a lot of examples.</p>
   </div>
     </div>

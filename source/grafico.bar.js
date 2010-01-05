@@ -1,13 +1,13 @@
 /**
- * Ico - SVG graphing library - bargraph and horizontal bar graph file
+ * Grafico - SVG graphing library - bargraph and horizontal bar graph file
  *
  * Copyright (c) 2009 Kilian Valkhof (kilianvalkhof.com) - Originally developed by Alex Young (http://alexyoung.org)
- * Visit ico.kilianvalkhof.com for more information and changelogs.
+ * Visit grafico.kilianvalkhof.com for more information and changelogs.
  * Licensed under the MIT license. http://www.opensource.org/licenses/mit-license.php
  *
  */
 "use strict";
-Ico.BarGraph = Class.create(Ico.BaseGraph, {
+Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
   chartDefaults: function () {
     return {
       bar : true,
@@ -145,7 +145,7 @@ Ico.BarGraph = Class.create(Ico.BaseGraph, {
   }
 });
 
-Ico.HorizontalBarGraph = Class.create(Ico.BarGraph, {
+Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
   chartDefaults: function () {
     return {
       bar : true,

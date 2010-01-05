@@ -1,13 +1,13 @@
 /**
- * Ico - SVG graphing library - base file
+ * Grafico - SVG graphing library - base file
  *
  * Copyright (c) 2009 Kilian Valkhof (kilianvalkhof.com) - Originally developed by Alex Young (http://alexyoung.org)
- * Visit ico.kilianvalkhof.com for more information and changelogs.
+ * Visit grafico.kilianvalkhof.com for more information and changelogs.
  * Licensed under the MIT license. http://www.opensource.org/licenses/mit-license.php
  *
  */
 "use strict";
-var Ico = {
+var Grafico = {
   Base: {},
 
   Normaliser: {},
@@ -23,7 +23,7 @@ var Ico = {
   HorizontalBarGraph: {}
 };
 
-Ico.Base = Class.create({
+Grafico.Base = Class.create({
   normaliseData: function (data) {
     return $A(data).collect(function (value) {
       return this.normalise(value);
@@ -50,7 +50,7 @@ Ico.Base = Class.create({
   }
 });
 
-Ico.Normaliser = Class.create({
+Grafico.Normaliser = Class.create({
   initialize: function (data, options) {
     this.options = {
       start_value: null
@@ -105,7 +105,7 @@ Ico.Normaliser = Class.create({
   }
 });
 
-Ico.BaseGraph = Class.create(Ico.Base, {
+Grafico.BaseGraph = Class.create(Grafico.Base, {
   initialize: function (element, data, options) {
     this.element = element;
     this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
@@ -114,7 +114,7 @@ Ico.BaseGraph = Class.create(Ico.Base, {
       this.stackData(this.data_sets);
     }
     this.flat_data = this.data_sets.collect(function (data_set) {return data_set[1]; }).flatten();
-    this.normaliser = new Ico.Normaliser(this.flat_data, this.normaliserOptions());
+    this.normaliser = new Grafico.Normaliser(this.flat_data, this.normaliserOptions());
     this.label_step = this.normaliser.step;
     this.range = this.normaliser.range;
     this.start_value = this.normaliser.start_value;
