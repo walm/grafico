@@ -9,19 +9,17 @@
 "use strict";
 var Grafico = {
   Version: "1.0",
+
   Base: {},
-
-  Normaliser: {},
-
-  SparkLine: {},
-  SparkBar: {},
-
   BaseGraph: {},
+  Normaliser: {},
   LineGraph: {},
   AreaGraph: {},
   StackGraph: {},
   BarGraph: {},
-  HorizontalBarGraph: {}
+  HorizontalBarGraph: {},
+  SparkLine: {},
+  SparkBar: {}
 };
 
 Grafico.Base = Class.create({
