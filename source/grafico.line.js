@@ -1,13 +1,13 @@
 /**
- * Ico - SVG graphing library - linegraph, areagraph and stacked areagraph file
+ * Grafico - SVG graphing library - linegraph, areagraph and stacked areagraph file
  *
  * Copyright (c) 2009 Kilian Valkhof (kilianvalkhof.com) - Originally developed by Alex Young (http://alexyoung.org)
- * Visit ico.kilianvalkhof.com for more information and changelogs.
+ * Visit grafico.kilianvalkhof.com for more information and changelogs.
  * Licensed under the MIT license. http://www.opensource.org/licenses/mit-license.php
  *
  */
 "use strict";
-Ico.LineGraph = Class.create(Ico.BaseGraph, {
+Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
   chartDefaults: function () {
     return{
       line : true,
@@ -120,7 +120,7 @@ Ico.LineGraph = Class.create(Ico.BaseGraph, {
   }
 });
 
-Ico.AreaGraph = Class.create(Ico.LineGraph, {
+Grafico.AreaGraph = Class.create(Grafico.LineGraph, {
   chartDefaults: function () {
     return {
       area:true,
@@ -168,7 +168,7 @@ Ico.AreaGraph = Class.create(Ico.LineGraph, {
   }
 });
 
-Ico.StackGraph = Class.create(Ico.AreaGraph, {
+Grafico.StackGraph = Class.create(Grafico.AreaGraph, {
   chartDefaults: function () {
     return {
       stacked:true,

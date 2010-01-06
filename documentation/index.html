@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf8">
-    <title>Ico graphing library documentation</title>
+    <title>Grafico graphing library documentation</title>
 
     <link href="http://github.com/Kilian/sencss/raw/master/sen.css" rel="stylesheet" type="text/css">
     <style>
@@ -35,25 +35,25 @@
 
     <script src="../dependencies/prototype.js" type="text/javascript" charset="utf-8"></script>
     <script src="../dependencies/raphael.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../source/ico.base.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../source/ico.line.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../source/ico.bar.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../source/ico.spark.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/grafico.base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/grafico.line.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/grafico.bar.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../source/grafico.spark.js" type="text/javascript" charset="utf-8"></script>
   </head>
 
 <body>
   <div id="wrap">
-  <h1>Ico graphing library Documentation</h1>
-  <p>Ico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.org">Prototype.js</a>.
+  <h1>Grafico graphing library Documentation</h1>
+  <p>Grafico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.org">Prototype.js</a>.
   It is originally developed by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>,
   but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a> at <a href="http://wakoopa.com">Wakoopa</a>.
-  Ico's basic principles are to provide <strong>good, clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte,
+  Grafico's basic principles are to provide <strong>good, clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte,
   while still being <strong>flexible to implement</strong> and providing <strong>numerous api options</strong> to tweak the look of the
   graphs.</p>
 
-  <p>Some key things Ico supports:</p>
+  <p>Some key things Grafico supports:</p>
   <ul>
-    <li><strong>Flexible ranges</strong> Ico select the best range to display your data at</li>
+    <li><strong>Flexible ranges</strong> Grafico select the best range to display your data at</li>
     <li><strong>Hover options</strong> display additional information such as the value when hovering over charts</li>
     <li><strong>Mean lines</strong> A single line that display the mean.</li>
     <li><strong>Watermarks</strong> Use an image as a watermark over your graphs</li>
@@ -77,8 +77,8 @@
     </div>
 
   <h2 id="basics">Basics</h2>
-  <p>Ico graphs are initiated via this function call:</p>
-  <pre><code>var foo = new Ico.GraphType($(element), data, options);</code></pre>
+  <p>Grafico graphs are initiated via this function call:</p>
+  <pre><code>var foo = new Grafico.GraphType($(element), data, options);</code></pre>
   <p>$(element) is a prototype id selector, data is an object or array (depending on the graph) and options is optional and an object.</p>
 
   <h3>Dependencies</h3>
@@ -224,17 +224,17 @@
   <p><strong>Line graph with the default rendering (no options):</strong></p>
 
   <div id="linegraph" class="example"></div>
-  <pre><code>   var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
+  <pre><code>   var linegraph = new Grafico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var linegraph = new Ico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
+    var linegraph = new Grafico.LineGraph($('linegraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
   });
   </script>
 
   <p style="clear:both"><strong>Line graph with custom options:</strong></p>
 
   <div id="linegraph2" class="example"></div>
-  <pre><code>var linegraph2 = new Ico.LineGraph($('linegraph2'),{ workload: [0, 0, 8, 10, 6, 12, 7, 6, 9] },
+  <pre><code>var linegraph2 = new Grafico.LineGraph($('linegraph2'),{ workload: [0, 0, 8, 10, 6, 12, 7, 6, 9] },
 {
   grid :                  true,
   plot_padding :          0,
@@ -257,7 +257,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var linegraph2 = new Ico.LineGraph($('linegraph2'),{ workload: [0, 0, 8, 10, 6, 12, 7, 6, 9] },
+    var linegraph2 = new Grafico.LineGraph($('linegraph2'),{ workload: [0, 0, 8, 10, 6, 12, 7, 6, 9] },
     {
       grid :                  true,
       plot_padding :          0,
@@ -283,7 +283,7 @@
 
 <p style="clear:both"><strong>Line graph with multiple lines and a watermark:</strong></p>
   <div id="linegraph3" class="example"></div>
-  <pre><code>var linegraph3 = new Ico.LineGraph($('linegraph3'),
+  <pre><code>var linegraph3 = new Grafico.LineGraph($('linegraph3'),
 {
   workload:       [8, 10, 6, 12,7, 6, 9],
   your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -303,7 +303,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var linegraph3 = new Ico.LineGraph($('linegraph3'),
+    var linegraph3 = new Grafico.LineGraph($('linegraph3'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -328,7 +328,7 @@
 
 
   <div id="linegraph4" class="example"></div>
-  <pre><code>var linegraph4 = new Ico.LineGraph($('linegraph4'),
+  <pre><code>var linegraph4 = new Grafico.LineGraph($('linegraph4'),
 {
   a : [8, -10, 6, 12,7, -6, -9],
   b : [6, 8,  -4, 8, -12,6, 2],
@@ -336,7 +336,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var linegraph4 = new Ico.LineGraph($('linegraph4'),
+    var linegraph4 = new Grafico.LineGraph($('linegraph4'),
       {
       a : [8, -10, 6, 12,7, -6, -9],
       b : [6, 8,  -4, 8, -12,6, 2],
@@ -374,7 +374,7 @@
     </dd>
     <dt>start_at_zero</dt>
     <dd>
-        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        If false, Grafico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
         <em>Default value: true</em>
     </dd>
     <dt>stroke_width</dt>
@@ -389,17 +389,17 @@
     <p><strong>Area graph with the default rendering (no options):</strong></p>
 
     <div id="areagraph" class="example"></div>
-    <pre><code>var areagraph = new Ico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
+    <pre><code>var areagraph = new Grafico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });</code></pre>
     <script>
   Event.observe(window, 'load', function() {
-      var areagraph = new Ico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
+      var areagraph = new Grafico.AreaGraph($('areagraph'),{ workload: [8, 10, 6, 12, 7, 6, 9] });
     });
   </script>
 
       <p style="clear:both"><strong>Area graph with custom options:</strong></p>
 
   <div id="areagraph2" class="example"></div>
-  <pre><code>var areagraph2 = new Ico.AreaGraph($('areagraph2'),
+  <pre><code>var areagraph2 = new Grafico.AreaGraph($('areagraph2'),
 { workload: [8, 10, 6, 12, 7, 6, 9] },
 {
   grid :                  true,
@@ -419,7 +419,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var areagraph2 = new Ico.AreaGraph($('areagraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
+    var areagraph2 = new Grafico.AreaGraph($('areagraph2'),{ workload: [8, 10, 6, 12, 7, 6, 9] },
     {
       grid :                  true,
       area_opacity :          0.5,
@@ -441,7 +441,7 @@
 
 <p style="clear:both"><strong>Area graph with multiple areas:</strong></p>
   <div id="areagraph3" class="example"></div>
-  <pre><code>var areagraph3 = new Ico.AreaGraph($('areagraph3'),
+  <pre><code>var areagraph3 = new Grafico.AreaGraph($('areagraph3'),
 {
   workload:       [8, 10, 6, 12,7, 6, 9],
   your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -449,7 +449,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var areagraph3 = new Ico.AreaGraph($('areagraph3'),
+    var areagraph3 = new Grafico.AreaGraph($('areagraph3'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -459,7 +459,7 @@
   </script>
 <p style="clear:both"><strong>Area graph with multiple areas and custom options:</strong></p>
   <div id="areagraph4" class="example"></div>
-  <pre><code>var areagraph4 = new Ico.AreaGraph($('areagraph4'),
+  <pre><code>var areagraph4 = new Grafico.AreaGraph($('areagraph4'),
 {
   workload:       [8, 10, 6, 12,7, 6, 9],
   your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -483,7 +483,7 @@
       });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var areagraph4 = new Ico.AreaGraph($('areagraph4'),
+    var areagraph4 = new Grafico.AreaGraph($('areagraph4'),
       {
       workload:       [8, 10, 6, 12,7, 6, 9],
       your_workload:  [6, 8,  4, 8, 12,6, 2],
@@ -536,7 +536,7 @@
     </dd>
     <dt>start_at_zero</dt>
     <dd>
-        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        If false, Grafico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
         <em>Default value: true</em>
     </dd>
     <dt>stroke_width</dt>
@@ -550,7 +550,7 @@
 
   <p style="clear:both"><strong>Stack graph:</strong></p>
   <div id="stackgraph" class="example"></div>
-  <pre><code>var stackgraph = new Ico.StackGraph($('stackgraph'),
+  <pre><code>var stackgraph = new Grafico.StackGraph($('stackgraph'),
 {
   workload:       [8, 10, 6, 1,7, 6, 9],
   your_workload:  [6, 8,  4, 1, 12,6, 2],
@@ -558,7 +558,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var stackgraph = new Ico.StackGraph($('stackgraph'),
+    var stackgraph = new Grafico.StackGraph($('stackgraph'),
       {
       workload:       [8, 10, 6, 1,7, 6, 9],
       your_workload:  [6, 8,  4, 1, 12,6, 2],
@@ -569,7 +569,7 @@
 
   <p style="clear:both"><strong>Stack graph with custom options:</strong></p>
   <div id="stackgraph2" class="example"></div>
-  <pre><code>var stackgraph2 = new Ico.StackGraph($('stackgraph2'),
+  <pre><code>var stackgraph2 = new Grafico.StackGraph($('stackgraph2'),
 {
   workload:       [8, 10, 6, 1,7, 6, 9],
   your_workload:  [6, 8,  4, 1, 12,6, 2],
@@ -589,7 +589,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var stackgraph2 = new Ico.StackGraph($('stackgraph2'),
+    var stackgraph2 = new Grafico.StackGraph($('stackgraph2'),
       {
       workload:       [8, 10, 6, 1,7, 6, 9],
       your_workload:  [6, 8,  4, 1, 12,6, 2],
@@ -612,7 +612,7 @@
 
   <p style="clear:both"><strong>Stack line graph:</strong></p>
   <div id="stackgraph3" class="example"></div>
-  <pre><code>var stackgraph3 = new Ico.StackGraph($('stackgraph3'),
+  <pre><code>var stackgraph3 = new Grafico.StackGraph($('stackgraph3'),
 {
   workload:       [8, 10, 6, 1,7, 6, 9],
   your_workload:  [6, 8,  4, 1, 12,6, 2],
@@ -624,7 +624,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var stackgraph3 = new Ico.StackGraph($('stackgraph3'),
+    var stackgraph3 = new Grafico.StackGraph($('stackgraph3'),
       {
       workload:       [8, 10, 6, 1,7, 6, 9],
       your_workload:  [6, 8,  4, 1, 12,6, 2],
@@ -665,7 +665,7 @@
     </dd>
     <dt>start_at_zero</dt>
     <dd>
-        If false, Ico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
+        If false, Grafico will not start drawing untill the value of a line graph becomes more than zero. (boolean)<br>
         <em>Default value: true</em>
     </dd>
     <dt>stroke_width</dt>
@@ -677,16 +677,16 @@
   <h2 id="bar">Bar graphs</h2>
   <p style="clear:both"><strong>Bar graph:</strong></p>
   <div id="bargraph" class="example"></div>
-  <pre><code>var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <pre><code>var bargraph = new Grafico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var bargraph = new Ico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);
+    var bargraph = new Grafico.BarGraph($('bargraph'), [31, 12, 12, 10, 6, 4, 26]);
   });
   </script>
 
     <p style="clear:both"><strong>Bar graph with custom options:</strong></p>
   <div id="bargraph2" class="example"></div>
-  <pre><code>var bargraph2 = new Ico.BarGraph($('bargraph2'),
+  <pre><code>var bargraph2 = new Grafico.BarGraph($('bargraph2'),
 [31, 12, 12, 10, 6, 4, 26],
 {
   labels :              ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
@@ -700,7 +700,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var bargraph2 = new Ico.BarGraph($('bargraph2'),
+    var bargraph2 = new Grafico.BarGraph($('bargraph2'),
     [31, 12, 12, 10, 6, 4, 26],
     {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
@@ -717,7 +717,7 @@
 
   <p style="clear:both"><strong>Bar graph with negative values:</strong></p>
   <div id="bargraph3" class="example"></div>
-  <pre><code>var bargraph = new Ico.BarGraph($('bargraph3'),
+  <pre><code>var bargraph = new Grafico.BarGraph($('bargraph3'),
 [31, 12, -12, -10, 6, -4, 26],
 {
   labels:                   "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
@@ -729,7 +729,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var bargraph = new Ico.BarGraph($('bargraph3'),
+    var bargraph = new Grafico.BarGraph($('bargraph3'),
     [31, 12, -12, -10, 6, -4, 26],
     {
      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
@@ -764,16 +764,16 @@
   <h2 id="horizontalbar">Horizontal bar graphs</h2>
   <p style="clear:both"><strong>Horizontal Bar graph:</strong></p>
   <div id="horizgraph" class="example"></div>
-  <pre><code>var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <pre><code>var horizgraph = new Grafico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var horizgraph = new Ico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);
+    var horizgraph = new Grafico.HorizontalBarGraph($('horizgraph'), [30, 12, 12, 10, 6, 4, 26]);
   });
   </script>
 
   <p style="clear:both"><strong>Horizontal Bar graph with custom options:</strong></p>
   <div id="horizgraph2" class="example"></div>
-  <pre><code>var horizgraph2 = new Ico.HorizontalBarGraph($('horizgraph2'),
+  <pre><code>var horizgraph2 = new Grafico.HorizontalBarGraph($('horizgraph2'),
 [30, 12, 12, 10, 6, 4, 26],
 {
   horizontal_rounded :  true,
@@ -790,7 +790,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var horizgraph2 = new Ico.HorizontalBarGraph($('horizgraph2'),
+    var horizgraph2 = new Grafico.HorizontalBarGraph($('horizgraph2'),
       [30, 12, 12, 10, 6, 4, 26],
       {
         horizontal_rounded : true,
@@ -809,7 +809,7 @@
   </script>
     <p style="clear:both"><strong>Horizontal Bar graph with negative values</strong></p>
   <div id="horizgraph3" class="example"></div>
-  <pre><code>var horizgraph = new Ico.HorizontalBarGraph($('horizgraph3'),
+  <pre><code>var horizgraph = new Grafico.HorizontalBarGraph($('horizgraph3'),
 [30, -12, 12, 10, -6, -4, 26],
 {
   bargraph_negativecolour:"#f00",
@@ -818,7 +818,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var horizgraph3 = new Ico.HorizontalBarGraph($('horizgraph3'),
+    var horizgraph3 = new Grafico.HorizontalBarGraph($('horizgraph3'),
     [30, -12, 12, 10, -6, -4, 26],
     {
       bargraph_negativecolour:"#f00",
@@ -853,14 +853,14 @@
   </dl>
   <h2 id="sparkline">Sparkline</h2>
   <p style="clear:both"><strong>Sparkline:</strong> <span id="sparkline1" class="sparkexample"></span>
-  <pre><code>var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <pre><code>var sparkline = new Grafico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkline = new Ico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);
+    var sparkline = new Grafico.SparkLine($('sparkline1'), [30, 12, 12, 10, 6, 4, 26]);
   });
   </script>
   <p style="clear:both"><strong>Sparkline with custom options:</strong> <span id="sparkline2" class="sparkexample"></span>
-  <pre><code>var sparkline2 = new Ico.SparkLine($('sparkline2'),
+  <pre><code>var sparkline2 = new Grafico.SparkLine($('sparkline2'),
 [30, 12, 12, 10, 6, 4, 26],
 {
   stroke_width :      3,
@@ -871,7 +871,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkline2 = new Ico.SparkLine($('sparkline2'), [30, 12, 12, 10, 6, 4, 26],
+    var sparkline2 = new Grafico.SparkLine($('sparkline2'), [30, 12, 12, 10, 6, 4, 26],
     {
       stroke_width : 3,
       colour: '#4b80b6',
@@ -883,14 +883,14 @@
   </script>
 
   <p style="clear:both"><strong>Sparkline with negative values:</strong> <span id="sparkline3" class="sparkexample"></span>
-  <pre><code>var sparkline = new Ico.SparkLine($('sparkline3'),
+  <pre><code>var sparkline = new Grafico.SparkLine($('sparkline3'),
 [30, 12, 12, 10, 6, 4, 26]
 {
   zeroline : true
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkline3 = new Ico.SparkLine($('sparkline3'),
+    var sparkline3 = new Grafico.SparkLine($('sparkline3'),
     [30, 12, -12, -10, 6, 4, 26],
     {
       zeroline : true
@@ -928,17 +928,17 @@
   </dl>
   <h2 id="sparkbar">Sparkbar</h2>
   <p style="clear:both"><strong>Sparkbar:</strong> <span id="sparkbar1" class="sparkexample"></span>
-  <pre><code>var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <pre><code>var sparkbar = new Grafico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkbar = new Ico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26],
+    var sparkbar = new Grafico.SparkBar($('sparkbar1'), [30, 12, 12, 10, 6, 4, 26],
     {
       zeroline : true
     });
   });
   </script>
   <p style="clear:both"><strong>SparkBar with custom options:</strong> <span id="sparkbar2" class="sparkexample"></span>
-  <pre><code>var sparkbar2 = new Ico.SparkBar($('sparkbar2'),
+  <pre><code>var sparkbar2 = new Grafico.SparkBar($('sparkbar2'),
 [30, 12, 12, 10, 6, 4, 26],
 {
   colour :            '#4b80b6',
@@ -948,7 +948,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkbar2 = new Ico.SparkBar($('sparkbar2'), [30, 12, 12, 10, 6, 4, 26],
+    var sparkbar2 = new Grafico.SparkBar($('sparkbar2'), [30, 12, 12, 10, 6, 4, 26],
     {
       colour: '#4b80b6',
       acceptable_range: [0,20],
@@ -958,7 +958,7 @@
   });
   </script>
   <p style="clear:both"><strong>Sparkbar with negative values:</strong> <span id="sparkbar3" class="sparkexample"></span>
-  <pre><code>var sparkbar3 = new Ico.SparkBar($('sparkbar3'),
+  <pre><code>var sparkbar3 = new Grafico.SparkBar($('sparkbar3'),
 [30, -12, 12, -10, -6, -4, 26],
 {
   zeroline : true,
@@ -966,7 +966,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkbar3 = new Ico.SparkBar($('sparkbar3'), [30, -12, 12, -10, -6, -4, 26],
+    var sparkbar3 = new Grafico.SparkBar($('sparkbar3'), [30, -12, 12, -10, -6, -4, 26],
     {
       zeroline : true,
       bargraph_negativecolour : "#660"
@@ -1005,14 +1005,14 @@
 
       <h2 id="sparkarea">Sparkarea</h2>
   <p style="clear:both"><strong>SparkArea:</strong> <span id="sparkarea1" class="sparkexample"></span>
-  <pre><code>var sparkarea = new Ico.SparkLine($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);</code></pre>
+  <pre><code>var sparkarea = new Grafico.SparkLine($('sparkarea1'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkarea = new Ico.SparkArea($('sparkarea1'), [-30, -12, -12, -10, -16, -14, -26, -12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);
+    var sparkarea = new Grafico.SparkArea($('sparkarea1'), [-30, -12, -12, -10, -16, -14, -26, -12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26]);
   });
   </script>
   <p style="clear:both"><strong>Sparkarea with custom options:</strong> <span id="sparkarea2" class="sparkexample"></span>
-  <pre><code>var sparkarea2 = new Ico.SparkLine($('sparkarea2'),
+  <pre><code>var sparkarea2 = new Grafico.SparkLine($('sparkarea2'),
 [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26],
 {
   stroke_width : 1,
@@ -1021,7 +1021,7 @@
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
-    var sparkarea2 = new Ico.SparkArea($('sparkarea2'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26],
+    var sparkarea2 = new Grafico.SparkArea($('sparkarea2'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26],
     {
       stroke_width : 2,
       colour: ['#4b80b6',"#ddd"],

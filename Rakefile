@@ -1,13 +1,13 @@
 require 'rubygems'
 
-desc 'Packages Ico'
+desc 'Packages Grafico'
 task :package => [:require_compiler] do
   sources  = ['base', 'line', 'bar', 'spark']
-  packaged = File.join(File.dirname(__FILE__), 'packaged', 'ico.min.js')
+  packaged = File.join(File.dirname(__FILE__), 'packaged', 'grafico.min.js')
   unpackagedsize = 0
 
   contents = sources.map do |source|
-    file = File.join(File.dirname(__FILE__), 'source', "ico.#{source}.js")
+    file = File.join(File.dirname(__FILE__), 'source', "grafico.#{source}.js")
     unpackagedsize += File.size(file)
     File.read(file)
   end.join("\n")

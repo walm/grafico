@@ -1,6 +1,6 @@
-h2. Ico graphing library
+h2. Grafico graphing library
 
-Ico is a graphing library based on "Raphaël":http://raphaeljs.com and "Prototype.js":http://prototypejs.org. It is originally developed by "Alex Young":http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael, but this version was mostly developed by "Kilian Valkhof":http://kilianvalkhof.com at "Wakoopa":http://wakoopa.com . Ico's basic principles are to provide *good, clean looking graphs*  inspired by work of Stephen Few and Edward Tufte, while still being *flexible to implement*  and providing *numerous api options*  to tweak the look of the graphs.
+Grafico is a graphing library based on "Raphaël":http://raphaeljs.com and "Prototype.js":http://prototypejs.org. It is originally developed by "Alex Young":http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael, but this version was mostly developed by "Kilian Valkhof":http://kilianvalkhof.com at "Wakoopa":http://wakoopa.com . Grafico's basic principles are to provide *good, clean looking graphs*  inspired by work of Stephen Few and Edward Tufte, while still being *flexible to implement*  and providing *numerous api options*  to tweak the look of the graphs.
 
 h3. Supported graph types:
 
@@ -13,9 +13,9 @@ h3. Supported graph types:
 * Sparkbars
 * Sparkareas
 
-h3. Some key things Ico supports:
+h3. Some key things Grafico supports:
 
-* *Flexible ranges*  Ico select the best range to display your data at
+* *Flexible ranges*  Grafico select the best range to display your data at
 * *Hover options*  display additional information such as the value when hovering over charts
 * *Mean lines*  A single line that display the mean.
 * *Watermarks*  Use an image as a watermark over your graphs
