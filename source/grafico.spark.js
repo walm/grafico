@@ -15,7 +15,7 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
     this.options = {
       highlight:              false,
       stroke_width:           1,
-      colour : this.makeRandomColour(),
+      color : this.makeRandomColour(),
       width: parseInt(element.getStyle('width'), 10),
       height: parseInt(element.getStyle('height'), 10),
       acceptable_range : false,
@@ -27,15 +27,15 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
     this.paper = new Raphael(this.element, this.options.width, this.options.height);
     this.background = this.options.acceptable_range ? this.paper.rect(0, this.options.height - this.normalise(this.options.acceptable_range[1]), this.options.width, this.normalise(this.options.acceptable_range[0])) : this.background = this.paper.rect(0, 0, this.options.width, this.options.height);
 
-    this.background.attr({fill: this.options.background_colour, stroke: 'none' });
+    this.background.attr({fill: this.options.background_color, stroke: 'none' });
     this.draw();
   },
   calculateStep: function () {
     return this.options.width / (this.data.length - 1);
   },
   makeRandomColour: function () {
-    var colour = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
-    return colour;
+    var color = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+    return color;
   },
   normalise: function (value) {
     value -= (this.data.min() < 0 ) ? this.data.min() : 0;
@@ -54,14 +54,14 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
         .lineTo(this.options.width, zero_value);
     }
 
-    this.drawLines(this.options.colour, data);
+    this.drawLines(this.options.color, data);
 
     if (this.options.highlight) {
       this.showHighlight(data);
     }
   },
-  drawLines: function (colour, data) {
-    var line = this.paper.path().attr({ stroke: colour, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
+  drawLines: function (color, data) {
+    var line = this.paper.path().attr({ stroke: color, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
         x = 0,
         offset = this.data.min() < 0 ? this.options.stroke_width : 0;
 
@@ -75,14 +75,14 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
         x = this.options.width - size,
         i = this.options.highlight.index || data.length - 1,
         y = data[i] + (size / 2).round(),
-        colour = this.options.highlight.colour || "#f00",
+        color = this.options.highlight.color || "#f00",
         circle;
 
     // Find the x position if it's not the last value
     if (typeof this.options.highlight.index !== 'undefined') {
       x = this.step * this.options.highlight.index;
     }
-    circle = this.paper.circle(x, this.options.height - y + size/2, size).attr({ stroke: false, fill: colour});
+    circle = this.paper.circle(x, this.options.height - y + size/2, size).attr({ stroke: false, fill: color});
   }
 });
 
@@ -90,7 +90,7 @@ Grafico.SparkBar = Class.create(Grafico.SparkLine, {
   calculateStep: function () {
     return this.options.width / this.data.length;
   },
-  drawLines: function (colour, data) {
+  drawLines: function (color, data) {
 
     var lastcolor = this.options.bargraph_lastcolour,
         width = this.step > 2 ? this.step - 1 : this.step,
@@ -98,14 +98,14 @@ Grafico.SparkBar = Class.create(Grafico.SparkLine, {
         zero_value = this.normalise(0);
 
     data.each(function (value,index) {
-      var colour2, line;
+      var color2, line;
 
-      colour2 = lastcolor && index === data.length-1 ? lastcolor : colour;
-      line = this.paper.path().attr({ stroke: colour2, 'stroke-width': width });
+      color2 = lastcolor && index === data.length-1 ? lastcolor : color;
+      line = this.paper.path().attr({ stroke: color2, 'stroke-width': width });
       line.moveTo(x, this.options.height - value);
       line.lineTo(x, this.options.height - zero_value);
       if(value < zero_value) {
-        var negcolour = this.options.bargraph_negativecolour || colour2;
+        var negcolour = this.options.bargraph_negativecolour || color2;
         line.attr({stroke:negcolour});
       }
       x = x + this.step;
@@ -116,15 +116,15 @@ Grafico.SparkBar = Class.create(Grafico.SparkLine, {
   }
 });
 Grafico.SparkArea = Class.create(Grafico.SparkLine, {
-  drawLines: function (colour, data) {
-    var fillcolour = colour,
-        strokecolour = colour,
+  drawLines: function (color, data) {
+    var fillcolour = color,
+        strokecolour = color,
         fillopacity = 0.2,
         zero_value = this.normalise(0);
 
-    if(typeof colour == "object") { //if two colours are specified
-      fillcolour = colour[1];
-      strokecolour = colour[0];
+    if(typeof color == "object") { //if two colors are specified
+      fillcolour = color[1];
+      strokecolour = color[0];
       fillopacity = 1;
     }
 

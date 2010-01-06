@@ -45,8 +45,8 @@
   <div id="wrap">
   <h1>Grafico graphing library Documentation</h1>
   <p>Grafico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.org">Prototype.js</a>.
-  It is originally developed by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>,
-  but this version was mostly developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a> at <a href="http://wakoopa.com">Wakoopa</a>.
+  It is originally developed as Ico by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>,
+  but this version was developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a> at <a href="http://wakoopa.com">Wakoopa</a>.
   Grafico's basic principles are to provide <strong>good, clean looking graphs</strong> inspired by work of Stephen Few and Edward Tufte,
   while still being <strong>flexible to implement</strong> and providing <strong>numerous api options</strong> to tweak the look of the
   graphs.</p>
@@ -102,15 +102,15 @@
   <h3>Base graph options:</h3>
 
   <dl>
-    <dt>background_colour</dt>
+    <dt>background_color</dt>
     <dd>
-        The background colour of the graph (string, example: "#fff")<br>
+        The background color of the graph (string, example: "#fff")<br>
         <em>Default value: backgroundcolor of $(element), else #fff</em>
     </dd>
-    <dt>colours</dt>
+    <dt>colors</dt>
     <dd>
-        Select the colours for the lines or bars (object)<br>
-        <em>Default value: random colours</em>
+        Select the colors for the lines or bars (object)<br>
+        <em>Default value: random colors</em>
     </dd>
     <dt>datalabels</dt>
     <dd>
@@ -133,9 +133,9 @@
         draw a grid or not (boolean)<br>
         <em>Default value: true</em>
     </dd>
-    <dt>grid_colour</dt>
+    <dt>grid_color</dt>
     <dd>
-        The colour of the gridlines (string, example: "#fff") <br>
+        The color of the gridlines (string, example: "#fff") <br>
         <em>Default value: "#ccc"</em>
     </dd>
     <dt>height</dt>
@@ -143,14 +143,14 @@
         Specify the height of the element (number)<br>
         <em>Default value: height of $(element)</em>
     </dd>
-    <dt>hover_colour</dt>
+    <dt>hover_color</dt>
     <dd>
-        colour a bar or line should fade to on hover (string, example: "#fff")<br>
+        color a bar or line should fade to on hover (string, example: "#fff")<br>
         <em>Default value: empty</em>
     </dd>
-    <dt>hover_text_colour</dt>
+    <dt>hover_text_color</dt>
     <dd>
-        the colour of the text in the hovers (string, example: "#fff")<br>
+        the color of the text in the hovers (string, example: "#fff")<br>
         <em>Default value: "#fff"</em>
     </dd>
     <dt>labels</dt>
@@ -158,9 +158,9 @@
         The labels being displayed on the horizontal axis (array of strings)<br>
         <em>Default value: numerical</em>
     </dd>
-    <dt>label_colour</dt>
+    <dt>label_color</dt>
     <dd>
-        The colour of the axis, axis values and hovers (string, example: "#fff")<br>
+        The color of the axis, axis values and hovers (string, example: "#fff")<br>
         <em>Default value: "#000" </em>
     </dd>
     <dt>label_rotation</dt>
@@ -244,10 +244,10 @@
   label_rotation :        -30,
   font_size :             11,
   vertical_label_unit :   "hr",
-  colours :               {workload: '#4b80b6'},
-  background_colour :     "#fff",
-  label_colour :          "#444",
-  grid_colour :           "#ccf",
+  colors :               {workload: '#4b80b6'},
+  background_color :     "#fff",
+  label_color :          "#444",
+  grid_color :           "#ccf",
   markers :               "value",
   meanline :              { 'stroke-width': '2px', stroke: '#000' },
   draw_axis :             false,
@@ -267,10 +267,10 @@
       label_rotation :        -30,
       font_size :             11,
       vertical_label_unit :   "hr",
-      colours :               {workload: '#4b80b6'},
-      background_colour :     "#fff",
-      label_colour :          "#444",
-      grid_colour :           "#ccf",
+      colors :               {workload: '#4b80b6'},
+      background_color :     "#fff",
+      label_color :          "#444",
+      grid_color :           "#ccf",
       markers :               "value",
       meanline :              { 'stroke-width': '2px', stroke: '#000' },
       draw_axis :             false,
@@ -291,8 +291,8 @@
 },
 {
   markers:            "circle",
-  hover_colour:       "#000",
-  hover_text_colour : "#fff",
+  hover_color:       "#000",
+  hover_text_color : "#fff",
   watermark : "Screenshot.png",
   watermark_location : "middle",
   datalabels: {
@@ -311,8 +311,8 @@
       },
       {
         markers: "circle",
-        hover_colour: "#000",
-        hover_text_colour: "#fff",
+        hover_color: "#000",
+        hover_text_color: "#fff",
         watermark : "Screenshot.png",
         watermark_location : "middle",
         datalabels: {
@@ -407,10 +407,10 @@
   plot_padding :          0,
   font_size :             11,
   vertical_label_unit :   "hr",
-  colours :               {workload: '#4b80b6'},
-  background_colour :     "#fff",
-  label_colour :          "#444",
-  grid_colour :           "#ccf",
+  colors :               {workload: '#4b80b6'},
+  background_color :     "#fff",
+  label_color :          "#444",
+  grid_color :           "#ccf",
   markers :               "value",
   meanline :              { 'stroke-width': '2px', stroke: '#000' },
   draw_axis :             false,
@@ -426,10 +426,10 @@
       plot_padding :          0,
       font_size :             11,
       vertical_label_unit :   "hr",
-      colours :               {workload: '#4b80b6'},
-      background_colour :     "#fff",
-      label_colour :          "#444",
-      grid_colour :           "#ccf",
+      colors :               {workload: '#4b80b6'},
+      background_color :     "#fff",
+      label_color :          "#444",
+      grid_color :           "#ccf",
       markers :               "value",
       meanline :              { 'stroke-width': '2px', stroke: '#000' },
       draw_axis :             false,
@@ -473,8 +473,8 @@
   stroke_width :            5,
   show_vertical_labels :    false,
   show_horizontal_labels :  false,
-  hover_colour :            "#000",
-  hover_text_colour :       "#fff",
+  hover_color :            "#000",
+  hover_text_color :       "#fff",
   datalabels : {
     workload:       "My workload",
     your_workload:  "Your workload",
@@ -497,8 +497,8 @@
         stroke_width :5,
         show_vertical_labels : false,
         show_horizontal_labels : false,
-        hover_colour: "#000",
-        hover_text_colour: "#fff",
+        hover_color: "#000",
+        hover_text_color: "#fff",
         datalabels: {
           workload:       "My workload",
           your_workload:  "Your workload",
@@ -511,7 +511,7 @@
   <dl>
     <dt>area_opacity</dt>
     <dd>
-        set a specific opacity for the area's. If none is given, single areas will be opaque, and multiple will get an opacity of 1.5/number-of-areas. (number between 0 and 1)<br>
+        set a specific opacity for the areas. If none is given, single areas will be opaque, and multiple will get an opacity of 1.5/number-of-areas. (number between 0 and 1)<br>
         <em>Default value: false</em>
     </dd>
     <dt>markers</dt>
@@ -579,8 +579,8 @@
   markers :           "value",
   draw_axis :         false,
   plot_padding :      0,
-  hover_text_colour : "#fff",
-  background_colour : "#fff",
+  hover_text_color : "#fff",
+  background_color : "#fff",
   datalabels: {
     workload:       "My workload",
     your_workload:  "Your workload",
@@ -599,8 +599,8 @@
         markers : "value",
         draw_axis: false,
         plot_padding : 0,
-        hover_text_colour: "#fff",
-        background_colour : "#fff",
+        hover_text_color: "#fff",
+        background_color : "#fff",
         datalabels: {
           workload:       "My workload",
           your_workload:  "Your workload",
@@ -660,7 +660,7 @@
     </dd>
     <dt>stacked_fill</dt>
     <dd>
-        specify if the stacked areas should be filled area's or lines (boolean)<br>
+        specify if the stacked areas should be filled areas or lines (boolean)<br>
         <em>Default value: true</em>
     </dd>
     <dt>start_at_zero</dt>
@@ -690,12 +690,12 @@
 [31, 12, 12, 10, 6, 4, 26],
 {
   labels :              ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-  colour :              '#4b80b6',
+  color :              '#4b80b6',
   meanline :            true,
   label_rotation :      -30,
   vertical_label_unit : "%",
   bargraph_lastcolour : "#666666",
-  hover_colour :        "#006677",
+  hover_color :        "#006677",
   datalabels :          {one: ["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
   <script>
@@ -704,12 +704,12 @@
     [31, 12, 12, 10, 6, 4, 26],
     {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    colour: '#4b80b6',
+    color: '#4b80b6',
     meanline: true,
     label_rotation :      -30,
     vertical_label_unit: "%",
     bargraph_lastcolour: "#666666",
-    hover_colour : "#006677",
+    hover_color : "#006677",
     datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
     });
   });
@@ -721,9 +721,9 @@
 [31, 12, -12, -10, 6, -4, 26],
 {
   labels:                   "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-  colour:                   '#4b80b6',
+  color:                   '#4b80b6',
   meanline :                true,
-  hover_colour :            "#006677",
+  hover_color :            "#006677",
   bargraph_negativecolour : "#660000",
   datalabels :              {one: ["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
@@ -733,8 +733,8 @@
     [31, 12, -12, -10, 6, -4, 26],
     {
      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-     colour: '#4b80b6',
-     hover_colour : "#006677",
+     color: '#4b80b6',
+     hover_color : "#006677",
      meanline : true,
      bargraph_negativecolour : "#660000",
      datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
@@ -746,18 +746,18 @@
   <dl>
     <dt>bargraph_lastcolour</dt>
     <dd>
-        select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+        select a different color for the last bar in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
     <dt>bargraph_negativecolour</dt>
     <dd>
-        select a different colour for negative values in a bargraph (string, example: "#fff")<br />
+        select a different color for negative values in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
-    <dt>colour</dt>
+    <dt>color</dt>
     <dd>
-        Select the colour for the bars (string)<br>
-        <em>Default value: random colour</em>
+        Select the color for the bars (string)<br>
+        <em>Default value: random color</em>
     </dd>
   </dl>
 
@@ -780,11 +780,11 @@
   draw_axis :           false,
   grid :                false,
   label_rotation :      -30,
-  colour :              '#4b80b6',
+  color :              '#4b80b6',
   meanline :            true,
   vertical_label_unit : "%",
   bargraph_lastcolour : "#666666",
-  hover_colour :        "#006677",
+  hover_color :        "#006677",
   labels :              ["January", "February", "March", "April", "May", "June", "July"],
   datalabels :          {one:["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
@@ -797,11 +797,11 @@
         draw_axis : false,
         grid:false,
         label_rotation :      -30,
-        colour: '#4b80b6',
+        color: '#4b80b6',
         meanline: true,
         vertical_label_unit: "%",
         bargraph_lastcolour: "#666666",
-        hover_colour : "#006677",
+        hover_color : "#006677",
         labels: ["January", "February", "March", "April", "May", "June", "July"],
         datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
       });
@@ -832,18 +832,18 @@
   <dl>
     <dt>bargraph_lastcolour</dt>
     <dd>
-        select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+        select a different color for the last bar in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
     <dt>bargraph_negativecolour</dt>
     <dd>
-        select a different colour for negative values in a bargraph (string, example: "#fff")<br />
+        select a different color for negative values in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
-    <dt>colour</dt>
+    <dt>color</dt>
     <dd>
-        Select the colour for the bars (string)<br>
-        <em>Default value: random colour</em>
+        Select the color for the bars (string)<br>
+        <em>Default value: random color</em>
     </dd>
     <dt>horizontal_rounded</dt>
     <dd>
@@ -864,20 +864,20 @@
 [30, 12, 12, 10, 6, 4, 26],
 {
   stroke_width :      3,
-  colour :            '#4b80b6',
-  highlight :         {index: 2, colour: "#f00"},
+  color :            '#4b80b6',
+  highlight :         {index: 2, color: "#f00"},
   acceptable_range :  [10,20],
-  background_colour : "#ddd"
+  background_color : "#ddd"
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
     var sparkline2 = new Grafico.SparkLine($('sparkline2'), [30, 12, 12, 10, 6, 4, 26],
     {
       stroke_width : 3,
-      colour: '#4b80b6',
-      highlight: {index: 2, colour: "#f00"},
+      color: '#4b80b6',
+      highlight: {index: 2, color: "#f00"},
       acceptable_range: [10,20],
-      background_colour: "#ddd"
+      background_color: "#ddd"
     });
   });
   </script>
@@ -902,17 +902,17 @@
     <dt>acceptable_range</dt>
     <dd>
         draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
-        <em>Default value: false, needs an explicit background colour</em>
+        <em>Default value: false, needs an explicit background color</em>
     </dd>
-    <dt>colour</dt>
+    <dt>color</dt>
     <dd>
-        Set the colour (string)<br>
-        <em>Default value: random colour</em>
+        Set the color (string)<br>
+        <em>Default value: random color</em>
     </dd>
     <dt>highlight</dt>
     <dd>
-        draw a circle on one of the datapoints (object, example: {index: 2, colour: "#f00"}) <br />
-        colour is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
+        draw a circle on one of the datapoints (object, example: {index: 2, color: "#f00"}) <br />
+        color is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
         <em>Default value: false, setting it to true will draw a red dot on the last datapoint.</em>
     </dd>
     <dt>stroke_width</dt>
@@ -941,18 +941,18 @@
   <pre><code>var sparkbar2 = new Grafico.SparkBar($('sparkbar2'),
 [30, 12, 12, 10, 6, 4, 26],
 {
-  colour :            '#4b80b6',
+  color :            '#4b80b6',
   acceptable_range :  [0,20],
-  background_colour : "#ddd"
+  background_color : "#ddd"
   bargraph_lastcolour: "#000"
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
     var sparkbar2 = new Grafico.SparkBar($('sparkbar2'), [30, 12, 12, 10, 6, 4, 26],
     {
-      colour: '#4b80b6',
+      color: '#4b80b6',
       acceptable_range: [0,20],
-      background_colour: "#ddd",
+      background_color: "#ddd",
       bargraph_lastcolour: "#000"
     });
   });
@@ -979,22 +979,22 @@
       <dt>acceptable_range</dt>
       <dd>
           draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
-          <em>Default value: false, needs an explicit background colour</em>
+          <em>Default value: false, needs an explicit background color</em>
       </dd>
       <dt>bargraph_lastcolour</dt>
       <dd>
-          select a different colour for the last bar in a bargraph (string, example: "#fff")<br />
+          select a different color for the last bar in a bargraph (string, example: "#fff")<br />
           <em>Default value: false</em>
       </dd>
       <dt>bargraph_negativecolour</dt>
       <dd>
-          select a different colour for negative values in a bargraph (string, example: "#fff")<br />
+          select a different color for negative values in a bargraph (string, example: "#fff")<br />
           <em>Default value: false</em>
       </dd>
-      <dt>colour</dt>
+      <dt>color</dt>
       <dd>
-          Set the colour (string)<br>
-          <em>Default value: random colour</em>
+          Set the color (string)<br>
+          <em>Default value: random color</em>
       </dd>
       <dt>zeroline</dt>
       <dd>
@@ -1016,16 +1016,16 @@
 [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26],
 {
   stroke_width : 1,
-  colour: ['#4b80b6',"#ddd"],
-  highlight: {index: 20, colour: "#f00"},
+  color: ['#4b80b6',"#ddd"],
+  highlight: {index: 20, color: "#f00"},
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
     var sparkarea2 = new Grafico.SparkArea($('sparkarea2'), [30, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26, 12, 12, 10, 6, 4, 26],
     {
       stroke_width : 2,
-      colour: ['#4b80b6',"#ddd"],
-      highlight: {index: 20, colour: "#f00"}
+      color: ['#4b80b6',"#ddd"],
+      highlight: {index: 20, color: "#f00"}
     });
   });
   </script>
@@ -1034,17 +1034,17 @@
     <dt>acceptable_range</dt>
     <dd>
         draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
-        <em>Default value: false, needs an explicit background colour</em>
+        <em>Default value: false, needs an explicit background color</em>
     </dd>
-    <dt>colour</dt>
+    <dt>color</dt>
     <dd>
-        Set the colour. If given an array, the first value will be used for the stroke and the second for the area. If given a string, it will be used for both, with the area being given 0.2 opacity.  (string or array)<br>
-        <em>Default value: random colour</em>
+        Set the color. If given an array, the first value will be used for the stroke and the second for the area. If given a string, it will be used for both, with the area being given 0.2 opacity.  (string or array)<br>
+        <em>Default value: random color</em>
     </dd>
     <dt>highlight</dt>
     <dd>
-        draw a circle on one of the datapoints (object, example: {index: 2, colour: "#f00"}) <br />
-        colour is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
+        draw a circle on one of the datapoints (object, example: {index: 2, color: "#f00"}) <br />
+        color is the color of the circle, index is the datapoint to be highlighted (zero-based) <br />
         <em>Default value: false, setting it to true will draw a red dot on the last datapoint.</em>
     </dd>
     <dt>stroke_width</dt>

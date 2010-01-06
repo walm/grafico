@@ -8,7 +8,7 @@
  */
 "use strict";
 var Grafico = {
-  Version: "1.0",
+  Version: "0.9",
 
   Base: {},
   BaseGraph: {},
@@ -123,11 +123,11 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.data_size = this.longestDataSetLength();
 
 
-    /* If one colour is specified, map it to a compatible set */
-    if (options && options.colour) {
-      options.colours = {};
+    /* If one color is specified, map it to a compatible set */
+    if (options && options.color) {
+      options.colors = {};
       this.data_sets.keys().each(function (key) {
-        options.colours[key] = options.colour;
+        options.colors[key] = options.color;
       });
     }
 
@@ -141,18 +141,18 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       show_horizontal_labels: true,
       show_vertical_labels:   true,
       vertical_label_unit:    '',
-      colours:                this.makeRandomColours(),             // Line colours
-      background_colour:      element.getStyle('backgroundColor'),
-      label_colour:           '#000',                               // Label text colour
-      grid_colour:            '#ccc',                               // Grid line colour
-      hover_text_colour:      '#fff',                               // hover colour
+      colors:                this.makeRandomColours(),             // Line colors
+      background_color:      element.getStyle('backgroundColor'),
+      label_color:           '#000',                               // Label text color
+      grid_color:            '#ccc',                               // Grid line color
+      hover_text_color:      '#fff',                               // hover color
       markers:                false,                                // false, circle, value
       marker_size:            5,
       meanline:               false,
       padding_top:            20,
       draw_axis:              true,
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
-      hover_colour:           '',                                    // hover color if there are datalabels
+      hover_color:           '',                                    // hover color if there are datalabels
       watermark:              false,
       watermark_location:     false,                                 // determine position of watermark. currently available is bottomright and middle
       hide_empty_label_grid:  false,                                 // hide gridlines for labels with no value
@@ -192,7 +192,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     /* Drawing */
     this.paper = new Raphael(this.element, this.options.width, this.options.height);
     this.background = this.paper.rect(this.x_padding_left, this.y_padding_top, this.graph_width, this.graph_height);
-    this.background.attr({fill: this.options.background_colour, stroke: 'none' });
+    this.background.attr({fill: this.options.background_color, stroke: 'none' });
     this.options.meanline = (this.options.meanline === true) ? { 'stroke-width': '2px', stroke: '#BBBBBB' } : this.options.meanline;
 
     /* global Sets */
@@ -216,7 +216,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   chartDefaults: function () {
     /* Define in child class */
   },
-  drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element, graphindex) {
+  drawPlot: function (index, cursor, x, y, color, coords, datalabel, element, graphindex) {
     /* Define in child class */
   },
   calculateStep: function () {
@@ -239,11 +239,11 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     return mousepos;
   },
   makeRandomColours: function (number) {
-    var colours = {};
+    var colors = {};
     this.data_sets.each(function (data) {
-      colours[data[0]] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+      colors[data[0]] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
     });
-    return colours;
+    return colors;
   },
   longestDataSetLength: function () {
     var length = 0;
@@ -320,7 +320,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   drawLinesInit: function (thisgraph) {
 
     thisgraph.data_sets.each(function (data, index) {
-      thisgraph.drawLines(data[0], thisgraph.options.colours[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element,index);
+      thisgraph.drawLines(data[0], thisgraph.options.colors[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element,index);
     }.bind(thisgraph));
   },
   drawWatermark: function () {
@@ -380,7 +380,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     }
   },
   drawGrid: function () {
-    var path = this.paper.path().attr({ stroke: this.options.grid_colour}),
+    var path = this.paper.path().attr({ stroke: this.options.grid_color}),
         y, x, x_labels;
 
       y = this.graph_height + this.y_padding_top;
@@ -401,7 +401,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
         x = x + this.step;
       }
   },
-  drawLines: function (label, colour, data, datalabel, element,graphindex) {
+  drawLines: function (label, color, data, datalabel, element,graphindex) {
     var coords = this.calculateCoords(data),
         y_offset = (this.graph_height + this.y_padding_top),
         cursor,
@@ -424,36 +424,36 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     if (this.options.stacked_fill||this.options.area) {
       if (this.options.area) {
         rel_opacity = this.options.area_opacity ? this.options.area_opacity : 1.5/this.data_sets.collect(function (data_set){return data_set.length;}).length;
-        cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0', opacity:rel_opacity, 'stroke-opacity':0});
+        cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0', opacity:rel_opacity, 'stroke-opacity':0});
       } else {
-        cursor = this.paper.path().attr({stroke: colour, fill: colour, 'stroke-width': '0'});
+        cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0'});
       }
 
       //add first and last to fill the area
       coords.unshift([coords[0][0] , y_offset]);
       coords.push([coords[coords.length-1][0] , y_offset]);
     } else {
-      cursor = this.paper.path().attr({stroke: colour, 'stroke-width': this.options.stroke_width + "px"});
+      cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
     }
 
     if (this.options.datalabels) {
-        this.drawHover(cursor, datalabel, element, colour);
+        this.drawHover(cursor, datalabel, element, color);
     }
 
     $A(coords).each(function (coord, index) {
       var x = coord[0],
           y = coord[1];
-      this.drawPlot(index, cursor, x, y, colour, coords, datalabel, element, graphindex);
+      this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
     }.bind(this));
 
     if(this.options.area && this.options.stroke_width > 0) {
-      cursor2 = this.paper.path().attr({stroke: colour, 'stroke-width': this.options.stroke_width + "px"});
+      cursor2 = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
       coords.remove(0);
       coords.remove(-1);
       $A(coords).each(function (coord, index) {
           var x = coord[0],
               y = coord[1];
-          this.drawPlot(index, cursor2, x, y, colour, coords, datalabel, element, graphindex, true);
+          this.drawPlot(index, cursor2, x, y, color, coords, datalabel, element, graphindex, true);
       }.bind(this));
       this.globalAreaLineSet.push(cursor2);
     }
@@ -472,7 +472,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     var length = 5,
         x = this.x_padding_left + (length / 2) - 1,
         y = this.options.height - this.y_padding_bottom,
-        cursor = this.paper.path().attr({stroke: this.options.label_colour, 'stroke-width': 2});
+        cursor = this.paper.path().attr({stroke: this.options.label_color, 'stroke-width': 2});
 
     cursor.moveTo(x, y);
     cursor.lineTo(x - length, y - length);
@@ -487,7 +487,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset).lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom - offset);
   },
   drawAxis: function () {
-    var cursor = this.paper.path().attr({stroke: this.options.label_colour});
+    var cursor = this.paper.path().attr({stroke: this.options.label_color});
 
     //horizontal
     cursor.moveTo(parseInt(this.x_padding_left, 10)-0.5,                    this.options.height - parseInt(this.y_padding_bottom, 10) + 0.5);
@@ -520,8 +520,8 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     /* Start at the origin */
     var x = parseInt(this.x_padding_left, 10) - 0.5 + x_offset(start_offset),
         y = this.options.height - this.y_padding_bottom + y_offset(start_offset),
-        cursor = this.paper.path().attr({stroke: this.options.label_colour}),
-        font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: this.options.label_colour};
+        cursor = this.paper.path().attr({stroke: this.options.label_color}),
+        font_options = {"font": this.options.font_size + 'px "Arial"', stroke: "none", fill: this.options.label_color};
 
     Object.extend(font_options, extra_font_options || {});
 
@@ -547,12 +547,12 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     var extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {};
     this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1], extra_options);
   },
-  drawHover: function(cursor, datalabel, element, colour) {
+  drawHover: function(cursor, datalabel, element, color) {
     var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke",
-        hover_colour = this.options.hover_colour|| colour,
+        hover_color = this.options.hover_color|| color,
         hoverSet = this.paper.set(),
         textpadding = 4,
-        text = this.paper.text(cursor.attrs.x, cursor.attrs.y-(this.options.font_size*1.5)-textpadding, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1}),
+        text = this.paper.text(cursor.attrs.x, cursor.attrs.y-(this.options.font_size*1.5)-textpadding, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
         textbox = text.getBBox(),
         roundRect = this.drawRoundRect(text, textbox, textpadding);
 
@@ -562,8 +562,8 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.globalHoverSet.push(hoverSet);
 
     cursor.node.onmouseover = function (e) {
-      if (colorattr==="fill") { cursor.animate({fill : hover_colour,stroke : hover_colour}, 200);}
-      else {                    cursor.animate({stroke : hover_colour}, 200);}
+      if (colorattr==="fill") { cursor.animate({fill : hover_color,stroke : hover_color}, 200);}
+      else {                    cursor.animate({stroke : hover_color}, 200);}
 
       var mousepos = this.getMousePos(e);
       hoverSet[0].attr({
@@ -590,8 +590,8 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     }.bind(this);
 
     cursor.node.onmouseout = function () {
-      if (colorattr==="fill") { cursor.animate({fill : colour,stroke : colour}, 200);}
-      else {                    cursor.animate({stroke : colour}, 200);}
+      if (colorattr==="fill") { cursor.animate({fill : color,stroke : color}, 200);}
+      else {                    cursor.animate({stroke : color}, 200);}
       hoverSet.attr({opacity:0});
     };
   },
@@ -642,7 +642,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   },
   drawNib: function (text, textbox, textpadding) {
     return this.paper.path()
-    .attr({fill: this.options.label_colour, opacity: 1, stroke: this.options.label_colour, 'stroke-width':'0px'})
+    .attr({fill: this.options.label_color, opacity: 1, stroke: this.options.label_color, 'stroke-width':'0px'})
     .moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding-1)
     .lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(textpadding*2))
     .lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding-1)
@@ -654,7 +654,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     text.attrs.y-(textbox.height/2)-textpadding,
     textbox.width+(textpadding*2),
     textbox.height+(textpadding*2),
-    textpadding*1.5).attr({fill: this.options.label_colour,opacity: 1, stroke: this.options.label_colour, 'stroke-width':'0px'});
+    textpadding*1.5).attr({fill: this.options.label_color,opacity: 1, stroke: this.options.label_color, 'stroke-width':'0px'});
   }
 });
 
