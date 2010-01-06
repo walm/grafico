@@ -20,7 +20,9 @@ var Grafico = {
   HorizontalBarGraph: {},
   SparkLine: {},
   SparkBar: {}
-};
+},
+Ico = Grafico; // here for compatibility
+
 
 Grafico.Base = Class.create({
   normaliseData: function (data) {
