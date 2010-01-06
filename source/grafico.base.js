@@ -8,7 +8,7 @@
  */
 "use strict";
 var Grafico = {
-  Version: "1.0",
+  Version: "0.9",
 
   Base: {},
   BaseGraph: {},
