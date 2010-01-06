@@ -31,22 +31,22 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
   calculateStep: function () {
     return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
   },
-  drawPlot: function (index, cursor, x, y, colour, coords, datalabel, element) {
+  drawPlot: function (index, cursor, x, y, color, coords, datalabel, element) {
     var start_y = this.options.height - this.y_padding_bottom - (this.zero_value * (this.graph_height / this.y_label_count)),
         lastcolor = this.options.bargraph_lastcolour,
         negativecolor = this.options.bargraph_negativecolour,
-        colour2;
+        color2;
 
     x = x + this.bar_padding;
     y = this.options.height - this.y_padding_bottom - y - (this.zero_value * (this.graph_height / this.y_label_count));
 
     if (lastcolor && index === coords.length-1){
-      colour2 = lastcolor;
+      color2 = lastcolor;
     } else {
-      colour2 = y < 0 ? negativecolor : colour;
+      color2 = y < 0 ? negativecolor : color;
     }
 
-    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y, this.bar_width, y).attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y, this.bar_width, y).attr({fill: color2, 'stroke-width': 0, stroke : color2});
 
     if( y < 0) {
       bargraph.attr({height:-bargraph.attrs.height});
@@ -55,7 +55,7 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     }
 
     if (this.options.datalabels) {
-      this.drawGraphValueMarkers(x, index, bargraph, datalabel, colour2);
+      this.drawGraphValueMarkers(x, index, bargraph, datalabel, color2);
     }
 
     x = x + this.step;
@@ -68,7 +68,7 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1], extra_options);
   },
   drawGrid: function () {
-    var path = this.paper.path().attr({ stroke: this.options.grid_colour}),
+    var path = this.paper.path().attr({ stroke: this.options.grid_color}),
         y = this.graph_height + this.y_padding_top,
         x, x_labels, x_step;
 
@@ -107,16 +107,16 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     path.moveTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top);
     path.lineTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top + this.graph_height);
   },
-  drawGraphValueMarkers: function(x, index, bargraph, datalabel, colour) {
-   var hover_colour = this.options.hover_colour || colour,
+  drawGraphValueMarkers: function(x, index, bargraph, datalabel, color) {
+   var hover_color = this.options.hover_color || color,
         hoverSet = this.paper.set(),
         text,
         hoverbar = this.paper.rect(x-(this.bar_width/2), this.y_padding_top, this.bar_width, this.options.height);
 
     datalabel = datalabel[index].toString();
     text = this.paper.text(bargraph.attrs.x+(this.bar_width/2), bargraph.attrs.y-(this.options.font_size*1.5), datalabel);
-    hoverbar.attr({fill: colour, 'stroke-width': 0, stroke : colour,opacity:0});
-    text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
+    hoverbar.attr({fill: color, 'stroke-width': 0, stroke : color,opacity:0});
+    text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1});
 
     var textbox = text.getBBox(),
         textpadding = 4,
@@ -134,12 +134,12 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     }
 
     hoverbar.node.onmouseover = function (e) {
-      bargraph.animate({fill: hover_colour,stroke:hover_colour}, 200);
+      bargraph.animate({fill: hover_color,stroke:hover_color}, 200);
       hoverSet.animate({opacity:1}, 200);
     }.bind(this);
 
     hoverbar.node.onmouseout = function (e) {
-      bargraph.animate({fill: colour,stroke:colour}, 200);
+      bargraph.animate({fill: color,stroke:color}, 200);
       hoverSet.animate({opacity:0}, 200);
     };
   }
@@ -178,7 +178,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
   calculateStep: function () {
     return (this.graph_height - (this.options.plot_padding * 2)) / this.data_size;
   },
-  drawLines: function (label, colour, data, datalabel, element, graphindex) {
+  drawLines: function (label, color, data, datalabel, element, graphindex) {
     var y = this.y_padding_top + (this.bar_padding/2) -0.5,
         offset = this.zero_value * (this.graph_width / this.y_label_count),
         x = this.x_padding_left + offset - 0.5,
@@ -187,18 +187,18 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
     this.datalabel = datalabel;
 
     $A(data).each(function (value, index) {
-      var colour2,
+      var color2,
           horizontal_rounded = this.options.horizontal_rounded ? this.bar_width/2 : 0,
           bargraph;
 
       if (lastcolor && index === data.length-1){
-        colour2 = lastcolor;
+        color2 = lastcolor;
       } else {
-        colour2 = value < 0 ? negativecolor : colour;
+        color2 = value < 0 ? negativecolor : color;
       }
 
       value = value / this.graph_width * (this.graph_width - offset);
-      bargraph = this.paper.rect(x, y, value, this.bar_width, horizontal_rounded).attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+      bargraph = this.paper.rect(x, y, value, this.bar_width, horizontal_rounded).attr({fill: color2, 'stroke-width': 0, stroke : color2});
 
       if(value < 0) {
         bargraph.attr({width:-bargraph.attrs.width}).translate(value,0);
@@ -207,7 +207,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
       if (horizontal_rounded){
         var bargraphset = this.paper.set();
             bargraph2 = this.paper.rect(x, y, value - this.bar_width/2, this.bar_width);
-            bargraph2.attr({fill: colour2, 'stroke-width': 0, stroke : colour2});
+            bargraph2.attr({fill: color2, 'stroke-width': 0, stroke : color2});
         bargraph.toFront();
         bargraphset.push(bargraph2, bargraph);
 
@@ -217,7 +217,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
       }
 
       if (this.options.datalabels) {
-      var hover_colour = this.options.hover_colour || colour2,
+      var hover_color = this.options.hover_color || color2,
           hoverSet = this.paper.set(),
           text,
           hoverbar = this.paper.rect(this.x_padding_left,
@@ -227,8 +227,8 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
 
         datalabel = this.datalabel[index].toString();
         text = this.paper.text(offset + value + this.x_padding_left/2, bargraph.attrs.y - (this.options.font_size*1.5), datalabel);
-        hoverbar.attr({fill: colour2, 'stroke-width': 0, stroke : colour2,opacity:0});
-        text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_colour,opacity: 1});
+        hoverbar.attr({fill: color2, 'stroke-width': 0, stroke : color2,opacity:0});
+        text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1});
         if(value < 0) {text.translate(text.getBBox().width, 0);}
 
         var textbox = text.getBBox(),
@@ -247,12 +247,12 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
         }
 
         hoverbar.node.onmouseover = function (e) {
-          bargraphset.animate({fill: hover_colour,stroke:hover_colour}, 200);
+          bargraphset.animate({fill: hover_color,stroke:hover_color}, 200);
           hoverSet.animate({opacity:1}, 200);
         }.bind(this);
 
         hoverbar.node.onmouseout = function (e) {
-          bargraphset.animate({fill: colour2,stroke:colour2}, 200);
+          bargraphset.animate({fill: color2,stroke:color2}, 200);
           hoverSet.animate({opacity:0}, 200);
         };
       }
@@ -265,7 +265,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
     var length = 5,
         x = this.x_padding_left+length*2,
         y = this.options.height - this.y_padding_bottom-length/2,
-        cursor = this.paper.path().attr({stroke: this.options.label_colour, 'stroke-width': 2}).moveTo(x, y).lineTo(x - length, y + length).moveTo(x - length, y).lineTo(x - (length * 2), y + length);
+        cursor = this.paper.path().attr({stroke: this.options.label_color, 'stroke-width': 2}).moveTo(x, y).lineTo(x - length, y + length).moveTo(x - length, y).lineTo(x - (length * 2), y + length);
   },
 
   drawVerticalLabels: function () {
