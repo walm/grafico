@@ -17,6 +17,10 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
      };
   },
   normaliserOptions: function () {
+    return {
+      start_value : 0,
+      bar : true
+    }
   },
   setChartSpecificOptions: function () {
     this.bar_padding = 5;
@@ -29,6 +33,7 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     return (this.graph_width / this.data_size) - this.bar_padding;
   },
   calculateStep: function () {
+    this.data_size = this.data_size === 1 ? 2 : this.data_size;
     return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
   },
   drawPlot: function (index, cursor, x, y, color, coords, datalabel, element) {
