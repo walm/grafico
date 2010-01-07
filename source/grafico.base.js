@@ -60,7 +60,7 @@ Grafico.Normaliser = Class.create({
     this.max = data.max();
     this.standard_deviation = data.standard_deviation();
     this.range = 0;
-    this.same_values = this.min == this.max;
+    this.same_values = !this.options.bar ? this.min == this.max : false;
     this.step = this.same_values ? this.labelStep(Math.abs(this.min)) : this.labelStep(this.max - this.min);
     this.start_value = this.calculateStart();
     this.process();
