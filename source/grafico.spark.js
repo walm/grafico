@@ -38,8 +38,9 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
     return color;
   },
   normalise: function (value) {
+    var range = (this.data.min() < 0 ) ? this.data.max()-this.data.min() : this.data.max();
     value -= (this.data.min() < 0 ) ? this.data.min() : 0;
-    return (this.options.height / (this.data.max()-this.data.min())) * value;
+    return value/range * this.options.height;
   },
   draw: function () {
     var data = this.normaliseData(this.data),
@@ -133,7 +134,6 @@ Grafico.SparkArea = Class.create(Grafico.SparkLine, {
         .lineTo(0, this.options.height - data.first()),
         line2 = this.paper.path().attr({stroke: strokecolour, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
         x = 0;
-
     data.slice(1).each(function (value) {
       x = x + this.step;
       line.lineTo(x, this.options.height - value);
