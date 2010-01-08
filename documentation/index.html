@@ -170,6 +170,11 @@
         The color of the axis, axis values and hovers (string, example: "#fff")<br>
         <em>Default value: "#000" </em>
     </dd>
+    <dt>label_max_size</dt>
+    <dd>
+        if set, labels will be truncated to that number and an &hellip; will be added. (number, int)<br>
+        <em>Default value: false </em>
+    </dd>
     <dt>label_rotation</dt>
     <dd>
         rotate the horizontal labels, in degrees. known limitation: it rotates around the center of the label (number)<br>
@@ -421,8 +426,9 @@
   markers :               "value",
   meanline :              { 'stroke-width': '2px', stroke: '#000' },
   draw_axis :             false,
-  labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
+  labels :                ['monday', '', 'wednesday', '', 'friday', '', 'sunday'],
   datalabels :            {workload:'My workload'},
+  label_max_size :        4
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
@@ -440,8 +446,9 @@
       markers :               "value",
       meanline :              { 'stroke-width': '2px', stroke: '#000' },
       draw_axis :             false,
-      labels :                ['mon', '', 'wed', '', 'fri', '', 'sun',],
+      labels :                ['monday', '', 'wednesday', '', 'friday', '', 'sunday'],
       datalabels :            {workload:'My workload'},
+      label_max_size : 4
     });
   });
   </script>
@@ -717,7 +724,7 @@
     vertical_label_unit: "%",
     bargraph_lastcolour: "#666666",
     hover_color : "#006677",
-    datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
+    datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]},
     });
   });
   </script>
@@ -793,7 +800,8 @@
   bargraph_lastcolour : "#666666",
   hover_color :        "#006677",
   labels :              ["January", "February", "March", "April", "May", "June", "July"],
-  datalabels :          {one:["January", "February", "March", "April", "May", "June", "July"]}
+  datalabels :          {one:["January", "February", "March", "April", "May", "June", "July"]},
+  label_max_size :      5
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
@@ -810,7 +818,8 @@
         bargraph_lastcolour: "#666666",
         hover_color : "#006677",
         labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
+        datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]},
+        label_max_size : 5
       });
   });
   </script>
