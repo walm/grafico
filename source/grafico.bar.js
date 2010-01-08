@@ -69,7 +69,15 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
   drawHorizontalLabels: function () {
   /* Change the standard options to correctly offset against the bars */
     var x_start = this.bar_padding + this.options.plot_padding,
-        extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {};
+        extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {},
+        labels = this.options.labels;
+
+    if(this.options.label_max_size) {
+      for (var i = 0; i < labels.length; i++) {
+         labels[i] = labels[i].truncate(this.options.label_max_size+1, "…");
+      }
+    }
+
     this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1], extra_options);
   },
   drawGrid: function () {
@@ -275,7 +283,15 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
 
   drawVerticalLabels: function () {
     var y_start = (this.step / 2),
-        extra_options = this.options.label_rotation ? {"text-anchor": 'end', rotation:this.options.label_rotation, translation: "0 " + this.options.font_size/2} : {"text-anchor": 'end'};
+        extra_options = this.options.label_rotation ? {"text-anchor": 'end', rotation:this.options.label_rotation, translation: "0 " + this.options.font_size/2} : {"text-anchor": 'end'},
+        labels = this.options.labels;
+
+    if(this.options.label_max_size) {
+      for (var i = 0; i < labels.length; i++) {
+         labels[i] = labels[i].truncate(this.options.label_max_size+1, "…");
+      }
+    }
+
     this.drawMarkers(this.options.labels.reverse(), [0, -1], this.step, y_start, [-8, -(this.options.font_size / 5)], extra_options);
   },
 

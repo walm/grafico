@@ -157,7 +157,8 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       watermark_location:     false,                                 // determine position of watermark. currently available is bottomright and middle
       hide_empty_label_grid:  false,                                 // hide gridlines for labels with no value
       left_padding:           false,                                  // set a standard leftpadding regardless of label width
-      label_rotation:         0
+      label_rotation:         0,
+      label_max_size:          false
     };
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
@@ -436,10 +437,6 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
     }
 
-    if (this.options.datalabels) {
-        this.drawHover(cursor, datalabel, element, color);
-    }
-
     $A(coords).each(function (coord, index) {
       var x = coord[0],
           y = coord[1];
@@ -457,6 +454,12 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       }.bind(this));
       this.globalAreaLineSet.push(cursor2);
     }
+
+    if (this.options.datalabels) {
+      this.drawHover(cursor, datalabel, element, color);
+      this.globalHoverSet.toFront();
+    }
+
   },
   calculateCoords: function (data) {
     var x = this.x_padding_left + this.options.plot_padding - this.step,
@@ -544,8 +547,16 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
   drawHorizontalLabels: function () {
-    var extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {};
-    this.drawMarkers(this.options.labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1], extra_options);
+    var extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {},
+        labels = this.options.labels;
+
+    if(this.options.label_max_size) {
+      for (var i = 0; i < labels.length; i++) {
+         labels[i] = labels[i].truncate(this.options.label_max_size+1, "…");
+      }
+    }
+
+    this.drawMarkers(labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1], extra_options);
   },
   drawHover: function(cursor, datalabel, element, color) {
     var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke",
