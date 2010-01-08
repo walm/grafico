@@ -402,10 +402,6 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
     }
 
-    if (this.options.datalabels) {
-        this.drawHover(cursor, datalabel, element, color);
-    }
-
     $A(coords).each(function (coord, index) {
       var x = coord[0],
           y = coord[1];
@@ -423,6 +419,12 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       }.bind(this));
       this.globalAreaLineSet.push(cursor2);
     }
+
+    if (this.options.datalabels) {
+      this.drawHover(cursor, datalabel, element, color);
+      this.globalHoverSet.toFront();
+    }
+
   },
   calculateCoords: function (data) {
     var x = this.x_padding_left + this.options.plot_padding - this.step,
