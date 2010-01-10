@@ -30,7 +30,6 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
     this.draw();
   },
   drawBackground : function () {
-
     this.background = this.options.acceptable_range ?
                         this.paper.rect(
                           0,
