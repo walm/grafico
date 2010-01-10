@@ -708,7 +708,7 @@
   meanline :            true,
   label_rotation :      -30,
   vertical_label_unit : "%",
-  bargraph_lastcolour : "#666666",
+  bargraph_lastcolor : "#666666",
   hover_color :        "#006677",
   datalabels :          {one: ["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
@@ -722,7 +722,7 @@
     meanline: true,
     label_rotation :      -30,
     vertical_label_unit: "%",
-    bargraph_lastcolour: "#666666",
+    bargraph_lastcolor: "#666666",
     hover_color : "#006677",
     datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]},
     });
@@ -738,7 +738,7 @@
   color:                   '#4b80b6',
   meanline :                true,
   hover_color :            "#006677",
-  bargraph_negativecolour : "#660000",
+  bargraph_negativecolor : "#660000",
   datalabels :              {one: ["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
   <script>
@@ -750,7 +750,7 @@
      color: '#4b80b6',
      hover_color : "#006677",
      meanline : true,
-     bargraph_negativecolour : "#660000",
+     bargraph_negativecolor : "#660000",
      datalabels: {one: ["January", "February", "March", "April", "May", "June", "July"]}
     });
   });
@@ -758,12 +758,12 @@
 
     <h3>Bar graph options</h3>
   <dl>
-    <dt>bargraph_lastcolour</dt>
+    <dt>bargraph_lastcolor</dt>
     <dd>
         select a different color for the last bar in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
-    <dt>bargraph_negativecolour</dt>
+    <dt>bargraph_negativecolor</dt>
     <dd>
         select a different color for negative values in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
@@ -797,7 +797,7 @@
   color :              '#4b80b6',
   meanline :            true,
   vertical_label_unit : "%",
-  bargraph_lastcolour : "#666666",
+  bargraph_lastcolor : "#666666",
   hover_color :        "#006677",
   labels :              ["January", "February", "March", "April", "May", "June", "July"],
   datalabels :          {one:["January", "February", "March", "April", "May", "June", "July"]},
@@ -815,7 +815,7 @@
         color: '#4b80b6',
         meanline: true,
         vertical_label_unit: "%",
-        bargraph_lastcolour: "#666666",
+        bargraph_lastcolor: "#666666",
         hover_color : "#006677",
         labels: ["January", "February", "March", "April", "May", "June", "July"],
         datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]},
@@ -828,7 +828,7 @@
   <pre><code>var horizgraph = new Grafico.HorizontalBarGraph($('horizgraph3'),
 [30, -12, 12, 10, -6, -4, 26],
 {
-  bargraph_negativecolour:"#f00",
+  bargraph_negativecolor:"#f00",
   horizontal_rounded:true,
   datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
 });</code></pre>
@@ -837,7 +837,7 @@
     var horizgraph3 = new Grafico.HorizontalBarGraph($('horizgraph3'),
     [30, -12, 12, 10, -6, -4, 26],
     {
-      bargraph_negativecolour:"#f00",
+      bargraph_negativecolor:"#f00",
       horizontal_rounded:true,
       datalabels: {one:["January", "February", "March", "April", "May", "June", "July"]}
     });
@@ -846,12 +846,12 @@
 
     <h3>Horizontal bar options</h3>
   <dl>
-    <dt>bargraph_lastcolour</dt>
+    <dt>bargraph_lastcolor</dt>
     <dd>
         select a different color for the last bar in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
     </dd>
-    <dt>bargraph_negativecolour</dt>
+    <dt>bargraph_negativecolor</dt>
     <dd>
         select a different color for negative values in a bargraph (string, example: "#fff")<br />
         <em>Default value: false</em>
@@ -959,8 +959,8 @@
 {
   color :            '#4b80b6',
   acceptable_range :  [0,20],
-  background_color : "#ddd"
-  bargraph_lastcolour: "#000"
+  background_color : "#ddd",
+  bargraph_lastcolor: "#000"
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
@@ -969,7 +969,7 @@
       color: '#4b80b6',
       acceptable_range: [0,20],
       background_color: "#ddd",
-      bargraph_lastcolour: "#000"
+      bargraph_lastcolor: "#000"
     });
   });
   </script>
@@ -978,14 +978,14 @@
 [30, -12, 12, -10, -6, -4, 26],
 {
   zeroline : true,
-  bargraph_negativecolour : "#660"
+  bargraph_negativecolor : "#660"
 });</code></pre>
   <script>
   Event.observe(window, 'load', function() {
     var sparkbar3 = new Grafico.SparkBar($('sparkbar3'), [30, -12, 12, -10, -6, -4, 26],
     {
       zeroline : true,
-      bargraph_negativecolour : "#660"
+      bargraph_negativecolor : "#660"
     });
   });
   </script>
@@ -997,12 +997,12 @@
           draws the background between two value to denote an acceptable range (array, example: [0,10]) <br />
           <em>Default value: false, needs an explicit background color</em>
       </dd>
-      <dt>bargraph_lastcolour</dt>
+      <dt>bargraph_lastcolor</dt>
       <dd>
           select a different color for the last bar in a bargraph (string, example: "#fff")<br />
           <em>Default value: false</em>
       </dd>
-      <dt>bargraph_negativecolour</dt>
+      <dt>bargraph_negativecolor</dt>
       <dd>
           select a different color for negative values in a bargraph (string, example: "#fff")<br />
           <em>Default value: false</em>

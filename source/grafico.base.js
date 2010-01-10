@@ -141,7 +141,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       show_horizontal_labels: true,
       show_vertical_labels:   true,
       vertical_label_unit:    '',
-      colors:                this.makeRandomColours(),             // Line colors
+      colors:                this.makeRandomColors(),             // Line colors
       background_color:      element.getStyle('backgroundColor'),
       label_color:           '#000',                               // Label text color
       grid_color:            '#ccc',                               // Grid line color
@@ -239,7 +239,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     mousepos = {x : posx , y : posy};
     return mousepos;
   },
-  makeRandomColours: function (number) {
+  makeRandomColors: function (number) {
     var colors = {};
     this.data_sets.each(function (data) {
       colors[data[0]] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
