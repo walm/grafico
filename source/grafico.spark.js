@@ -15,7 +15,7 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
     this.options = {
       highlight:              false,
       stroke_width:           1,
-      color : this.makeRandomColour(),
+      color : this.makeRandomcolor(),
       width: parseInt(element.getStyle('width'), 10),
       height: parseInt(element.getStyle('height'), 10),
       acceptable_range : false,
@@ -25,15 +25,25 @@ Grafico.SparkLine = Class.create(Grafico.Base, {
 
     this.step = this.calculateStep();
     this.paper = new Raphael(this.element, this.options.width, this.options.height);
-    this.background = this.options.acceptable_range ? this.paper.rect(0, this.options.height - this.normalise(this.options.acceptable_range[1]), this.options.width, this.normalise(this.options.acceptable_range[0])) : this.background = this.paper.rect(0, 0, this.options.width, this.options.height);
 
-    this.background.attr({fill: this.options.background_color, stroke: 'none' });
+    this.drawBackground();
     this.draw();
+  },
+  drawBackground : function () {
+
+    this.background = this.options.acceptable_range ?
+                        this.paper.rect(
+                          0,
+                          this.options.height - this.normalise(this.options.acceptable_range[1]),
+                          this.options.width,
+                          this.normalise(this.options.acceptable_range[1]) - this.normalise(this.options.acceptable_range[0])) :
+                        this.background = this.paper.rect(0, 0, this.options.width, this.options.height);
+    this.background.attr({fill: this.options.background_color, stroke: 'none' });
   },
   calculateStep: function () {
     return this.options.width / (this.data.length - 1);
   },
-  makeRandomColour: function () {
+  makeRandomcolor: function () {
     var color = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
     return color;
   },
@@ -93,7 +103,7 @@ Grafico.SparkBar = Class.create(Grafico.SparkLine, {
   },
   drawLines: function (color, data) {
 
-    var lastcolor = this.options.bargraph_lastcolour,
+    var lastcolor = this.options.bargraph_lastcolor,
         width = this.step > 2 ? this.step - 1 : this.step,
         x = width/2,
         zero_value = this.normalise(0);
@@ -106,8 +116,8 @@ Grafico.SparkBar = Class.create(Grafico.SparkLine, {
       line.moveTo(x, this.options.height - value);
       line.lineTo(x, this.options.height - zero_value);
       if(value < zero_value) {
-        var negcolour = this.options.bargraph_negativecolour || color2;
-        line.attr({stroke:negcolour});
+        var negcolor = this.options.bargraph_negativecolor || color2;
+        line.attr({stroke:negcolor});
       }
       x = x + this.step;
     }.bind(this));
@@ -118,21 +128,21 @@ Grafico.SparkBar = Class.create(Grafico.SparkLine, {
 });
 Grafico.SparkArea = Class.create(Grafico.SparkLine, {
   drawLines: function (color, data) {
-    var fillcolour = color,
-        strokecolour = color,
+    var fillcolor = color,
+        strokecolor = color,
         fillopacity = 0.2,
         zero_value = this.normalise(0);
 
     if(typeof color == "object") { //if two colors are specified
-      fillcolour = color[1];
-      strokecolour = color[0];
+      fillcolor = color[1];
+      strokecolor = color[0];
       fillopacity = 1;
     }
 
-    var line = this.paper.path().attr({fill: fillcolour,  stroke: fillcolour, "stroke-width" : 0, "stroke-opacity" : 0, opacity: fillopacity})
+    var line = this.paper.path().attr({fill: fillcolor,  stroke: fillcolor, "stroke-width" : 0, "stroke-opacity" : 0, opacity: fillopacity})
         .moveTo(0,this.options.height - zero_value)
         .lineTo(0, this.options.height - data.first()),
-        line2 = this.paper.path().attr({stroke: strokecolour, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
+        line2 = this.paper.path().attr({stroke: strokecolor, "stroke-width" : this.options.stroke_width }).moveTo(0, this.options.height - data.first()),
         x = 0;
     data.slice(1).each(function (value) {
       x = x + this.step;

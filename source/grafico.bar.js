@@ -12,8 +12,8 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     return {
       bar : true,
       plot_padding : 0,
-      bargraph_lastcolour : false,
-      bargraph_negativecolour : false
+      bargraph_lastcolor : false,
+      bargraph_negativecolor : false
      };
   },
   normaliserOptions: function () {
@@ -38,8 +38,8 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
   },
   drawPlot: function (index, cursor, x, y, color, coords, datalabel, element) {
     var start_y = this.options.height - this.y_padding_bottom - (this.zero_value * (this.graph_height / this.y_label_count)),
-        lastcolor = this.options.bargraph_lastcolour,
-        negativecolor = this.options.bargraph_negativecolour,
+        lastcolor = this.options.bargraph_lastcolor,
+        negativecolor = this.options.bargraph_negativecolor,
         color2;
 
     x = x + this.bar_padding;
@@ -165,7 +165,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
       horizontalbar : true,
       plot_padding : 0,
       horizontal_rounded : false,
-      bargraph_lastcolour : false
+      bargraph_lastcolor : false
     };
   },
   setChartSpecificOptions: function () {
@@ -195,8 +195,8 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
     var y = this.y_padding_top + (this.bar_padding/2) -0.5,
         offset = this.zero_value * (this.graph_width / this.y_label_count),
         x = this.x_padding_left + offset - 0.5,
-        lastcolor = this.options.bargraph_lastcolour,
-        negativecolor = this.options.bargraph_negativecolour;
+        lastcolor = this.options.bargraph_lastcolor,
+        negativecolor = this.options.bargraph_negativecolor;
     this.datalabel = datalabel;
 
     $A(data).each(function (value, index) {
