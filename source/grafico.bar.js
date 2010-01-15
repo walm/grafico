@@ -136,9 +136,7 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
         roundRect= this.drawRoundRect(text, textbox, textpadding),
         nib = this.drawNib(text, textbox, textpadding);
 
-    text.toFront();
-    hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
-    hoverbar.toFront();
+    hoverSet.push(roundRect,nib,text).attr({opacity:0});
     this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
     this.globalHoverSet.push(hoverSet);
     this.globalBlockSet.push(hoverbar);
@@ -221,7 +219,6 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
         var bargraphset = this.paper.set();
             bargraph2 = this.paper.rect(x, y, value - this.bar_width/2, this.bar_width);
             bargraph2.attr({fill: color2, 'stroke-width': 0, stroke : color2});
-        bargraph.toFront();
         bargraphset.push(bargraph2, bargraph);
 
         if(value < 0) {
@@ -232,26 +229,21 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
       if (this.options.datalabels) {
       var hover_color = this.options.hover_color || color2,
           hoverSet = this.paper.set(),
-          text,
+          datalabel = this.datalabel[index].toString();
+          text = this.paper.text(offset + value + this.x_padding_left/2, bargraph.attrs.y - (this.options.font_size*1.5), datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
           hoverbar = this.paper.rect(this.x_padding_left,
                                     y,
                                     this.graph_width,
-                                    this.bar_width);
+                                    this.bar_width).attr({fill: color2, 'stroke-width': 0, stroke : color2,opacity:0}),
+          textbox = text.getBBox();
 
-        datalabel = this.datalabel[index].toString();
-        text = this.paper.text(offset + value + this.x_padding_left/2, bargraph.attrs.y - (this.options.font_size*1.5), datalabel);
-        hoverbar.attr({fill: color2, 'stroke-width': 0, stroke : color2,opacity:0});
-        text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1});
-        if(value < 0) {text.translate(text.getBBox().width, 0);}
+        if(value < 0) {text.translate(textbox.width, 0);}
 
-        var textbox = text.getBBox(),
-            textpadding = 4,
+        var textpadding = 4,
             roundRect= this.drawRoundRect(text, textbox, textpadding),
             nib = this.drawNib(text, textbox, textpadding);
 
-        text.toFront();
-        hoverSet.push(roundRect,nib,text).attr({opacity:0}).toFront();
-        hoverbar.toFront();
+        hoverSet.push(roundRect,nib,text).attr({opacity:0});
         this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
         this.globalHoverSet.push(hoverSet);
         this.globalBlockSet.push(hoverbar);

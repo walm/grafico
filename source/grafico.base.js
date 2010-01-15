@@ -498,7 +498,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
         cursor.moveTo(parseInt(x, 10), parseInt(y, 10)+0.5);
         cursor.lineTo(parseInt(x, 10) + y_offset(5), parseInt(y, 10)+0.5 + x_offset(5));
       }
-      this.paper.text(x + font_offsets[0], y - 2 - font_offsets[1], label.toString()).attr(font_options).toFront();
+      this.paper.text(x + font_offsets[0], y - 2 - font_offsets[1], label.toString()).attr(font_options);
       x = x + x_offset(step);
       y = y + y_offset(step);
     }.bind(this));
@@ -532,8 +532,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
         textbox = text.getBBox(),
         roundRect = this.drawRoundRect(text, textbox, textpadding);
 
-    text.toFront();
-    hoverSet.push(roundRect,text).attr({opacity:0}).toFront();
+    hoverSet.push(roundRect,text).attr({opacity:0});
     this.checkHoverPos({rect:roundRect,set:hoverSet});
     this.globalHoverSet.push(hoverSet);
 
@@ -572,12 +571,15 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     };
   },
   checkHoverPos: function (elements) {
-    var diff, rect, rectsize, set, marker, nib, textpadding;
+    var diff, rect, rectsize, set, setsize, marker, nib, textpadding;
     if (elements.rect) {
       rect = elements.rect;
       rectsize = rect.getBBox();
     }
-    if (elements.set) {    set = elements.set;}
+    if (elements.set) {
+      set = elements.set;
+      setbox = set.getBBox();
+    }
     if (elements.marker) { marker = elements.marker;}
     if (elements.nib) {    nib = elements.nib;}
     if (elements.textpadding) { textpadding = elements.textpadding;}
@@ -586,8 +588,8 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       /*top*/
       if (rect.attrs.y < 0) {
         if (nib && marker) {
-          set.translate(0,set.getBBox().height+(textpadding*2));
-          marker.translate(0,-set.getBBox().height-(textpadding*2));
+          set.translate(0,setbox.height+(textpadding*2));
+          marker.translate(0,-setbox.height-(textpadding*2));
           nib.translate(0,-rectsize.height-textpadding+1.5).scale(1,-1);
         } else {
           diff = rect.attrs.y;

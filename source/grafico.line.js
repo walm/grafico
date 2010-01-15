@@ -87,7 +87,7 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
           block = this.paper.rect(rectx, recty, rectw, recth);
 
       circle.attr({ 'stroke-width': '1px', stroke: this.options.background_color, fill: color,opacity:0});
-      block.attr({fill:color, 'stroke-width': 0, stroke : color,opacity:0}).toFront();
+      block.attr({fill:color, 'stroke-width': 0, stroke : color,opacity:0});
 
       if (this.options.datalabels) {
         datalabel = datalabel+": "+currentvalue;
@@ -103,8 +103,7 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
           roundRect= this.drawRoundRect(text, textbox, textpadding),
           nib = this.drawNib(text, textbox, textpadding);
 
-      text.toFront();
-      hoverSet.push(circle,roundRect,nib,text).attr({opacity:0}).toFront();
+      hoverSet.push(circle,roundRect,nib,text).attr({opacity:0});
       this.checkHoverPos({rect:roundRect,set:hoverSet,marker:circle,nib:nib,textpadding:textpadding});
       this.globalHoverSet.push(hoverSet);
       this.globalBlockSet.push(block);
