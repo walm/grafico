@@ -571,15 +571,12 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     };
   },
   checkHoverPos: function (elements) {
-    var diff, rect, rectsize, set, setsize, marker, nib, textpadding;
+    var diff, rect, rectsize, set, setbox, marker, nib, textpadding;
     if (elements.rect) {
       rect = elements.rect;
       rectsize = rect.getBBox();
     }
-    if (elements.set) {
-      set = elements.set;
-      setbox = set.getBBox();
-    }
+    if (elements.set) { set = elements.set; }
     if (elements.marker) { marker = elements.marker;}
     if (elements.nib) {    nib = elements.nib;}
     if (elements.textpadding) { textpadding = elements.textpadding;}
@@ -588,6 +585,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       /*top*/
       if (rect.attrs.y < 0) {
         if (nib && marker) {
+          setbox = set.getBBox();
           set.translate(0,setbox.height+(textpadding*2));
           marker.translate(0,-setbox.height-(textpadding*2));
           nib.translate(0,-rectsize.height-textpadding+1.5).scale(1,-1);
