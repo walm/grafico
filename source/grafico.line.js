@@ -46,12 +46,11 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
     var circle = this.paper.circle(x, y, this.options.marker_size),
         old_marker_size = this.options.marker_size,
         color2 = this.options.hover_color || color,
-        new_marker_size;
+        new_marker_size = parseInt(1.7*old_marker_size, 10);
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_color, fill: color });
     this.globalMarkerSet.push(circle);
 
     circle.hover(function (event) {
-      new_marker_size = parseInt(1.7*old_marker_size, 10);
       circle.animate({r : new_marker_size,fill : color2}, 200);
     }, function (event) {
       circle.animate({r : old_marker_size, fill : color}, 200);
@@ -59,13 +58,11 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
 
   },
   drawGraphValueMarkers: function (index, x, y, color, datalabel, element, graphindex) {
-    if (this.options.odd_horizontal_offset>1) {
-          index += this.options.odd_horizontal_offset;
-      }
-    index -= this.options.stacked_fill || this.options.area ? 1 : 0;
     var currentset = this.options.stacked ? this.real_data : this.data_sets,
-        currentvalue = currentset.collect(function (data_set) {return data_set[1][index];})[graphindex],
-        vertical_label_unit = this.options.vertical_label_unit||"";
+        currentvalue = currentset.collect(function (data_set) {return data_set[1][index];})[graphindex];
+
+    index += this.options.odd_horizontal_offset>1 ? this.options.odd_horizontal_offset : 0;
+    index -= this.options.stacked_fill || this.options.area ? 1 : 0;
 
     if (currentvalue) {
       currentvalue = ""+currentvalue.toString().split('.');
@@ -82,19 +79,13 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
           recty = this.options.stacked ? y-(this.graph_height/18): y-(this.graph_height/6),
           rectw = this.step,
           recth = this.options.stacked ? this.graph_height/9     : this.graph_height/3,
-          circle = this.paper.circle(x, y, this.options.marker_size),
-          block = this.paper.rect(rectx, recty, rectw, recth);
+          circle = this.paper.circle(x, y, this.options.marker_size).attr({ 'stroke-width': '1px', stroke: this.options.background_color, fill: color,opacity:0}),
+          block = this.paper.rect(rectx, recty, rectw, recth).attr({fill:color, 'stroke-width': 0, stroke : color,opacity:0});
 
-      circle.attr({ 'stroke-width': '1px', stroke: this.options.background_color, fill: color,opacity:0});
-      block.attr({fill:color, 'stroke-width': 0, stroke : color,opacity:0});
-
-      if (this.options.datalabels) {
-        datalabel = datalabel+": "+currentvalue;
-        datalabel += this.options.vertical_label_unit ? " "+this.options.vertical_label_unit:"";
-      } else {
-        datalabel = currentvalue.toString();
-        datalabel += this.options.vertical_label_unit ? " "+this.options.vertical_label_unit:"";
+      if (this.options.datalabels) {datalabel = datalabel+": "+currentvalue;
+      } else {                      datalabel = ""+currentvalue;
       }
+      datalabel += this.options.vertical_label_unit ? " "+this.options.vertical_label_unit:"";
 
       var hoverSet = this.paper.set(),
           textpadding = 4,
@@ -113,7 +104,6 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
       }, function (event) {
         hoverSet.animate({opacity:0},200);
       });
-
     }
   }
 });
