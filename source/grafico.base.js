@@ -319,9 +319,8 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     }
   },
   drawLinesInit: function (thisgraph) {
-
     thisgraph.data_sets.each(function (data, index) {
-      thisgraph.drawLines(data[0], thisgraph.options.colors[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element,index);
+      thisgraph.drawLines(data[0], thisgraph.options.colors[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element, index);
     }.bind(thisgraph));
   },
   drawWatermark: function () {
@@ -455,7 +454,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       this.globalAreaLineSet.push(cursor2);
     }
 
-    if (this.options.datalabels) {
+    if (this.options.datalabels && this.options.draw_hovers) {
       this.drawHover(cursor, datalabel, element, color);
       this.globalHoverSet.toFront();
     }
@@ -559,7 +558,8 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.drawMarkers(labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1], extra_options);
   },
   drawHover: function(cursor, datalabel, element, color) {
-    var colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke",
+    var thisgraph = this,
+        colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke",
         hover_color = this.options.hover_color|| color,
         hoverSet = this.paper.set(),
         textpadding = 4,
@@ -571,50 +571,46 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.checkHoverPos({rect:roundRect,set:hoverSet});
     this.globalHoverSet.push(hoverSet);
 
-    cursor.node.onmouseover = function (e) {
+    cursor.hover(function (event) {
       if (colorattr==="fill") { cursor.animate({fill : hover_color,stroke : hover_color}, 200);}
       else {                    cursor.animate({stroke : hover_color}, 200);}
 
-      var mousepos = this.getMousePos(e);
+      var mousepos = thisgraph.getMousePos(event);
       hoverSet[0].attr({
         x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
-        y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
+        y:mousepos.y-(textbox.height/2)-(thisgraph.options.font_size*1.5)-textpadding-element.offsetTop,
         opacity:1});
       hoverSet[1].attr({
         x:mousepos.x-element.offsetLeft,
-        y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
+        y:mousepos.y-(thisgraph.options.font_size*1.5)-element.offsetTop,
         opacity:1});
 
-      cursor.node.onmousemove = function (e) {
-        var mousepos = this.getMousePos(e);
+      cursor.mousemove(function (event) {
+        var mousepos = thisgraph.getMousePos(event);
         hoverSet[0].attr({
           x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
-          y:mousepos.y-(textbox.height/2)-(this.options.font_size*1.5)-textpadding-element.offsetTop,
+          y:mousepos.y-(textbox.height/2)-(thisgraph.options.font_size*1.5)-textpadding-element.offsetTop,
           opacity:1});
         hoverSet[1].attr({
           x:mousepos.x-element.offsetLeft,
-          y:mousepos.y-(this.options.font_size*1.5)-element.offsetTop,
+          y:mousepos.y-(thisgraph.options.font_size*1.5)-element.offsetTop,
           opacity:1});
-        this.checkHoverPos(roundRect,hoverSet);
-      }.bind(this);
-    }.bind(this);
+        thisgraph.checkHoverPos(roundRect,hoverSet);
+      });
 
-    cursor.node.onmouseout = function () {
+    }, function (event) {
       if (colorattr==="fill") { cursor.animate({fill : color,stroke : color}, 200);}
       else {                    cursor.animate({stroke : color}, 200);}
       hoverSet.attr({opacity:0});
-    };
+    });
   },
   checkHoverPos: function (elements) {
-    var diff, rect, rectsize, set, setsize, marker, nib, textpadding;
+    var diff, rect, rectsize, set, setbox, marker, nib, textpadding;
     if (elements.rect) {
       rect = elements.rect;
       rectsize = rect.getBBox();
     }
-    if (elements.set) {
-      set = elements.set;
-      setbox = set.getBBox();
-    }
+    if (elements.set) { set = elements.set; }
     if (elements.marker) { marker = elements.marker;}
     if (elements.nib) {    nib = elements.nib;}
     if (elements.textpadding) { textpadding = elements.textpadding;}
@@ -623,6 +619,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       /*top*/
       if (rect.attrs.y < 0) {
         if (nib && marker) {
+          setbox = set.getBBox();
           set.translate(0,setbox.height+(textpadding*2));
           marker.translate(0,-setbox.height-(textpadding*2));
           nib.translate(0,-rectsize.height-textpadding+1.5).scale(1,-1);

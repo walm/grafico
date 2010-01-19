@@ -144,15 +144,13 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
       hoverSet.translate(0,1+(roundRect.attrs.y*-1));
     }
 
-    hoverbar.node.onmouseover = function (e) {
+    hoverbar.hover(function (event) {
       bargraph.animate({fill: hover_color,stroke:hover_color}, 200);
       hoverSet.animate({opacity:1}, 200);
-    }.bind(this);
-
-    hoverbar.node.onmouseout = function (e) {
+    }, function (event) {
       bargraph.animate({fill: color,stroke:color}, 200);
       hoverSet.animate({opacity:0}, 200);
-    };
+    });
   }
 });
 
@@ -251,15 +249,13 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
           hoverSet.translate(0,1+(roundRect.attrs.y*-1));
         }
 
-        hoverbar.node.onmouseover = function (e) {
+        hoverbar.hover(function (event) {
           bargraphset.animate({fill: hover_color,stroke:hover_color}, 200);
           hoverSet.animate({opacity:1}, 200);
-        }.bind(this);
-
-        hoverbar.node.onmouseout = function (e) {
+        }, function (event) {
           bargraphset.animate({fill: color2,stroke:color2}, 200);
           hoverSet.animate({opacity:0}, 200);
-        };
+        });
       }
       y = y + this.step;
     }.bind(this));
