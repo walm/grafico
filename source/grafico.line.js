@@ -26,12 +26,6 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
   },
   drawPlot: function (index, cursor, x, y, color, coords, datalabel, element, graphindex) {
 
-    if (this.options.markers === 'circle') {
-      this.drawGraphMarkers(index, x, y, color, datalabel, element);
-    } else if (this.options.markers === 'value') {
-      this.drawGraphValueMarkers(index, x, y, color, datalabel, element, graphindex);
-    }
-
     if (index === 0) {
       return this.startPlot(cursor, x-0.5, y, color);
     }
@@ -40,6 +34,12 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
       cursor.cplineTo(x, y, this.options.curve_amount);
     } else {
       cursor.lineTo(x, y);
+    }
+
+    if (this.options.markers === 'circle') {
+      this.drawGraphMarkers(index, x, y, color, datalabel, element);
+    } else if (this.options.markers === 'value') {
+      this.drawGraphValueMarkers(index, x, y, color, datalabel, element, graphindex);
     }
   },
   drawGraphMarkers: function (index, x, y, color, datalabel, element) {
@@ -50,14 +50,13 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
     circle.attr({ 'stroke-width': '1px', stroke: this.options.background_color, fill: color });
     this.globalMarkerSet.push(circle);
 
-    circle.node.onmouseover = function (e) {
+    circle.hover(function (event) {
       new_marker_size = parseInt(1.7*old_marker_size, 10);
       circle.animate({r : new_marker_size,fill : color2}, 200);
-    }.bind(this);
-
-    circle.node.onmouseout = function () {
+    }, function (event) {
       circle.animate({r : old_marker_size, fill : color}, 200);
-    };
+    });
+
   },
   drawGraphValueMarkers: function (index, x, y, color, datalabel, element, graphindex) {
     if (this.options.odd_horizontal_offset>1) {
@@ -96,6 +95,7 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
         datalabel = currentvalue.toString();
         datalabel += this.options.vertical_label_unit ? " "+this.options.vertical_label_unit:"";
       }
+
       var hoverSet = this.paper.set(),
           textpadding = 4,
           text = this.paper.text(circle.attrs.cx, circle.attrs.cy-(this.options.font_size*1.5)-2*textpadding, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
@@ -108,13 +108,12 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
       this.globalHoverSet.push(hoverSet);
       this.globalBlockSet.push(block);
 
-      block.node.onmouseover = function (e) {
+      block.hover(function (event) {
         hoverSet.animate({opacity:1},200);
-      };
-
-      block.node.onmouseout = function (e) {
+      }, function (event) {
         hoverSet.animate({opacity:0},200);
-      };
+      });
+
     }
   }
 });
@@ -172,7 +171,7 @@ Grafico.StackGraph = Class.create(Grafico.AreaGraph, {
     return {
       stacked:true,
       stacked_fill:true,
-      stroke_width : 5
+      stroke_width : 0
     };
   },
   normaliserOptions: function () {
