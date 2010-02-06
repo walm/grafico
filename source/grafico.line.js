@@ -58,11 +58,12 @@ Grafico.LineGraph = Class.create(Grafico.BaseGraph, {
 
   },
   drawGraphValueMarkers: function (index, x, y, color, datalabel, element, graphindex) {
-    var currentset = this.options.stacked ? this.real_data : this.data_sets,
-        currentvalue = currentset.collect(function (data_set) {return data_set[1][index];})[graphindex];
 
     index += this.options.odd_horizontal_offset>1 ? this.options.odd_horizontal_offset : 0;
     index -= this.options.stacked_fill || this.options.area ? 1 : 0;
+
+    var currentset = this.options.stacked ? this.real_data : this.data_sets,
+        currentvalue = currentset.collect(function (data_set) {return data_set[1][index];})[graphindex];
 
     if (currentvalue) {
       currentvalue = ""+currentvalue.toString().split('.');
