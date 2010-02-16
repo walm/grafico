@@ -16,6 +16,7 @@ var Grafico = {
   LineGraph: {},
   AreaGraph: {},
   StackGraph: {},
+  StreamGraph: {},
   BarGraph: {},
   HorizontalBarGraph: {},
   SparkLine: {},
@@ -106,40 +107,15 @@ Grafico.Normaliser = Class.create({
 
 Grafico.BaseGraph = Class.create(Grafico.Base, {
   initialize: function (element, data, options) {
-    this.element = element;
-    this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
-    if (this.chartDefaults().stacked === true) {
-      this.real_data = this.deepCopy(this.data_sets);
-      this.stackData(this.data_sets);
-    }
-    this.flat_data = this.data_sets.collect(function (data_set) {return data_set[1]; }).flatten();
-    this.normaliser = new Grafico.Normaliser(this.flat_data, this.normaliserOptions());
-    this.label_step = this.normaliser.step;
-    this.range = this.normaliser.range;
-    this.start_value = this.normaliser.start_value;
-    this.zero_value = this.normaliser.zero_value;
-    this.data_size = this.longestDataSetLength();
-
-
-    /* If one color is specified, map it to a compatible set */
-    if (options && options.color) {
-      options.colors = {};
-      this.data_sets.keys().each(function (key) {
-        options.colors[key] = options.color;
-      });
-    }
-
     this.options = {
       width:                  parseInt(element.getStyle('width'), 10),
       height:                 parseInt(element.getStyle('height'), 10),
-      labels:                 $A($R(1, this.data_size)),            // Label data
       grid:                   true,
       plot_padding:           10,                                   // Padding for the graph line/bar plots
       font_size:              10,                                   // Label font size
       show_horizontal_labels: true,
       show_vertical_labels:   true,
       vertical_label_unit:    '',
-      colors:                this.makeRandomColors(),             // Line colors
       background_color:      element.getStyle('backgroundColor'),
       label_color:           '#000',                               // Label text color
       grid_color:            '#ccc',                               // Grid line color
@@ -158,6 +134,45 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       label_rotation:         0,
       label_max_size:          false
     };
+    
+    Object.extend(this.options, this.chartDefaults() || { });
+    Object.extend(this.options, options || { });
+    
+    this.element = element;
+    this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
+    if (this.chartDefaults().stacked === true) {
+      this.real_data = this.deepCopy(this.data_sets);
+      this.data_sets = this.stackData(this.data_sets);
+    }
+    
+    this.flat_data = this.data_sets.collect(function (data_set) {return data_set[1]; }).flatten();
+    if (this.hasBaseLine()) {
+    	this.flat_data.push(this.base_line);
+    	this.flat_data = this.flat_data.flatten();
+    }
+    this.normaliser = new Grafico.Normaliser(this.flat_data, this.normaliserOptions());
+    this.label_step = this.normaliser.step;
+    this.range = this.normaliser.range;
+    this.start_value = this.normaliser.start_value;
+    this.zero_value = this.normaliser.zero_value;
+    this.data_size = this.longestDataSetLength();
+    
+    /* If one color is specified, map it to a compatible set */
+    if (options && options.color) {
+      options.colors = {};
+      this.data_sets.keys().each(function (key) {
+        options.colors[key] = options.color;
+      });
+    }
+    
+    /* overwrite some defaults and then add the options AGAIN */
+    this.options.colors = this.makeRandomColors();
+    this.options.labels = $A($R(1, this.data_size));
+    
+    /* add the options again, because some defaults (labels, colors) could not be
+     * generated withouth first knowing the user options (which is kind of a 
+     * chicken-and-egg problem)
+     */
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
 
@@ -212,6 +227,21 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   normaliserOptions: function () {
     return {graph_height : parseInt(this.element.getStyle('height'), 10)};
   },
+  hasBaseLine: function () {
+    return false;
+  },
+  getNormalizedBaseLine: function () {
+    if (this.normalized_base_line == undefined) {
+      this.normalized_base_line = this.normaliseData(this.base_line); 
+    }
+    return this.normalized_base_line;
+  },
+  getNormalizedRealData: function () {
+    if (this.normalized_real_data == undefined) {
+      this.normalized_real_data = this.real_data.collect(function(data) { return this.normaliseData(data[1]); }.bind(this));
+    }
+    return this.normalized_real_data;
+  },
   chartDefaults: function () {
     /* Define in child class */
   },
@@ -239,8 +269,11 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   },
   makeRandomColors: function (number) {
     var colors = {};
+    var step = 1/this.data_sets.size();
+    var hue = Math.random();
     this.data_sets.each(function (data) {
-      colors[data[0]] = Raphael.hsb2rgb(Math.random(), 1, 0.75).hex;
+      colors[data[0]] = Raphael.hsb2rgb(hue, 0.85, 0.75).hex;
+      hue = (hue + step)%1;
     });
     return colors;
   },
@@ -394,9 +427,11 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
         cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0'});
       }
 
-      //add first and last to fill the area
-      coords.unshift([coords[0][0] , y_offset]);
-      coords.push([coords[coords.length-1][0] , y_offset]);
+      /* add first and last to fill the area */
+      if (!this.hasBaseLine()) {
+        coords.unshift([coords[0][0] , y_offset]);
+        coords.push([coords[coords.length-1][0] , y_offset]);
+      }
     } else {
       cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
     }
@@ -429,11 +464,21 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     var x = this.x_padding_left + this.options.plot_padding - this.step,
         y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
 
-    return $A(data).collect(function (value) {
-      var y = y_offset - value;
-      x = x + this.step;
-      return [x, y];
+    var top = $A(data).collect(function (value) {
+      x += this.step;
+      return [x, y_offset - value];
     }.bind(this));
+    
+    if (!this.hasBaseLine()) return top;
+    
+    x += this.step;
+    var bottom = this.getNormalizedBaseLine();
+    
+    for (var i=bottom.length-1; i>=0; i--) {
+    	x -= this.step;
+    	top.push([x, y_offset - bottom[i]]);
+    }
+    return top;
   },
   drawFocusHint: function () {
     var length = 5,
@@ -693,7 +738,15 @@ Raphael.el.lineTo = function (x, y) {
     return this.attr({path: this.attrs.path + ["l", "L"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
 };
 Raphael.el.cplineTo = function (x, y, w) {
-    this.attr({path: this.attrs.path + ["C", this._last.x + w, this._last.y, x - w, y, x, y]});
+    if (x > this._last.x) {
+      this.attr({path: this.attrs.path + ["C", this._last.x + w, this._last.y, x - w, y, x, y]});
+    }
+    else if (x == this._last.x) {
+      this.lineTo(x, y);
+    }
+    else {
+      this.attr({path: this.attrs.path + ["C", this._last.x - w, this._last.y, x + w, y, x, y]});
+    }
     this._last = {x: x, y: y};
     return this;
 };

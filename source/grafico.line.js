@@ -114,13 +114,9 @@ Grafico.AreaGraph = Class.create(Grafico.LineGraph, {
     return {
       area:true,
       area_opacity:false,
-      stroke_width : 0
+      stroke_width: 0,
+      curve_amount: 10
     };
-  },
-  setChartSpecificOptions: function () {
-    if (typeof this.options.curve_amount === 'undefined') {
-      this.options.curve_amount = 10;
-    }
   },
   drawPlot: function (index, cursor, x, y, color, coords, datalabel, element, graphindex, dontdraw) {
     var filltype = this.options.area||this.options.stacked_fill;
@@ -162,25 +158,182 @@ Grafico.StackGraph = Class.create(Grafico.AreaGraph, {
     return {
       stacked:true,
       stacked_fill:true,
-      stroke_width : 0
+      stroke_width : 0,
+      curve_amount : 10
     };
   },
-  normaliserOptions: function () {
+  setChartSpecificOptions: function () {
+    if (!this.options.stacked_fill) {
+      this.options.stroke_width = 5;
+    }
   },
   stackData: function (stacked_data) {
-    this.stacked_data = stacked_data.collect(
+	// apparently the arrays are pointers
+	// which is the only reason this actually works
+    var stacked_data_array = stacked_data.collect(
       function (data_set) {
         return data_set[1];
       });
 
-    this.stacked_data.reverse();
-    for (var i=1;i<this.stacked_data.length;i++) {
-      for(var j=0;j<this.stacked_data[0].length; j++) {
-        this.stacked_data[i][j] += this.stacked_data[i-1][j];
+    for (var i=stacked_data_array.length-2;i>=0;i--) {
+      for (var j=0;j<stacked_data_array[0].length; j++) {
+    	  stacked_data_array[i][j] += stacked_data_array[i+1][j];
       }
     }
-    this.stacked_data.reverse();
-    return this.stacked_data;
+    return stacked_data;
+  }
+});
+
+Grafico.StreamGraph = Class.create(Grafico.StackGraph, {
+  chartDefaults: function () {
+    return {
+      stacked:true,
+      stacked_fill:true,
+      stroke_width:5,
+      grid: false,
+      draw_axis: false,
+      show_horizontal_labels: false,
+      show_vertical_labels:   false,
+      stream: true,
+      stream_line_smoothing: false, // false, simple, weighted
+      stream_smart_insertion: false,
+      curve_amount: 4,
+      stream_label_threshold: 0
+    };
+  },
+  hasBaseLine: function() {
+    return true;
+  },
+  calcBaseLine: function (stacked_data) {
+    var base_line_data = stacked_data.collect(
+      function (data_set) {
+        return data_set[1];
+      });
+
+    var base_line = [];
+    for(var j=0;j<base_line_data[0].length; j++) {
+      sum = 0;
+      for (var i=0;i<base_line_data.length;i++) {
+        if (this.options.stream_line_smoothing == false) {
+          sum += base_line_data[i][j];
+        }
+        else {
+          sum += (i+1)*base_line_data[i][j];
+        }
+      }
+      if (this.options.stream_line_smoothing == false) {
+        base_line[j] = -sum / 2;
+      }
+      else {
+  	    base_line[j] = -sum / (base_line_data.length + 1);
+      }
+    }
+
+    var base_line_min = base_line.min();
+    for(var i=0;i<base_line.length; i++) base_line[i] -= base_line_min;
+
+    this.base_line = base_line;
+  },
+  stackData: function (stacked_data) {
+    if (this.options.stream_smart_insertion) {
+      stacked_data = $A(stacked_data);
+      stacked_data.each(function(data_set) {
+        var i=0;
+        while(i<data_set[1].length && data_set[1][i] <= 0.0000001) i++;
+        data_set[2] = i;
+      });
+
+      var sorted_data = stacked_data.sortBy(function(data_set) {
+      	return data_set[2];
+      });
+
+      var final_data = [];
+      var bottom = false;
+      sorted_data.each(function(data_set) {
+        if (bottom) {
+          final_data.push(data_set);
+        }
+        else {
+          final_data.unshift(data_set);
+        }
+        bottom = !bottom;
+      });
+
+      stacked_data = $H();
+      final_data.each(function(data_set) { stacked_data.set(data_set[0], data_set[1]); });
+    }
+
+    this.real_data = this.deepCopy(stacked_data);
+    this.calcBaseLine(stacked_data);
+
+    var stacked_data_array = stacked_data.collect(
+      function (data_set) {
+        return data_set[1];
+      });
+
+    for(var j=0;j<stacked_data_array[0].length; j++) {
+  	  stacked_data_array[stacked_data_array.length-1][j] += this.base_line[j];
+    }
+
+    for (var i=stacked_data_array.length-2;i>=0;i--) {
+      for(var j=0;j<stacked_data_array[0].length; j++) {
+        stacked_data_array[i][j] += stacked_data_array[i+1][j];
+      }
+    }
+
+    return stacked_data;
+  },
+  drawPlot: function (index, cursor, x, y, color, coords, datalabel, element, graphindex, dontdraw) {
+    if(this.options.datalabels && !dontdraw) {
+      var real_data = this.getNormalizedRealData();
+      var best_positions = this.bestMarkerPositions();
+
+      if (index < coords.length/2) {
+        if (best_positions[graphindex] >= index && best_positions[graphindex] < index+1) {
+          this.drawStreamMarker(index+1, x + (best_positions[graphindex]-index)*this.step,
+              y + real_data[graphindex][index]/2, color, datalabel, element);
+        }
+      }
+    }
+    x -= 0.5;
+    if (index === 0) {
+      return this.startPlot(cursor, x, y, color);
+    }
+
+    cursor.cplineTo(x, y, this.options.curve_amount);
+  },
+  bestMarkerPositions: function () {
+    if (this.best_marker_positions == undefined) {
+      this.best_marker_positions = this.real_data.collect(function (data) {
+        var best_index = -1, best_value = 0, streak_counter = 0;
+        for (var i=0; i<data[1].length; i++) {
+          var value = data[1][i];
+          if (value > best_value && value >= this.options.stream_label_threshold) {
+            best_value = value;
+            best_index = i;
+            streak_counter = 0;
+          }
+          else if (value == best_value && best_value > 0) {
+            streak_counter++;
+          }
+        }
+        return best_index + streak_counter / 2;
+      }.bind(this));
+    }
+    return this.best_marker_positions;
+  },
+  drawStreamMarker: function (index, x, y, color, datalabel, element, graphindex) {
+    if (this.options.datalabels) {
+      var hoverSet = this.paper.set(),
+          textpadding = 4,
+          text = this.paper.text(x, y-2*textpadding+this.options.font_size/2, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
+          textbox = text.getBBox(),
+          roundRect= this.drawRoundRect(text, textbox, textpadding);
+
+      hoverSet.push(roundRect,text);
+      this.checkHoverPos({rect:roundRect,set:hoverSet,textpadding:textpadding});
+      this.globalHoverSet.push(hoverSet);
+    }
   }
 });
 
