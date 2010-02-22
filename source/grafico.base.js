@@ -134,17 +134,17 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       label_rotation:         0,
       label_max_size:          false
     };
-    
+
     Object.extend(this.options, this.chartDefaults() || { });
     Object.extend(this.options, options || { });
-    
+
     this.element = element;
     this.data_sets = Object.isArray(data) ? new Hash({ one: data }) : $H(data);
     if (this.chartDefaults().stacked === true) {
       this.real_data = this.deepCopy(this.data_sets);
       this.data_sets = this.stackData(this.data_sets);
     }
-    
+
     this.flat_data = this.data_sets.collect(function (data_set) {return data_set[1]; }).flatten();
     if (this.hasBaseLine()) {
     	this.flat_data.push(this.base_line);
@@ -156,7 +156,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.start_value = this.normaliser.start_value;
     this.zero_value = this.normaliser.zero_value;
     this.data_size = this.longestDataSetLength();
-    
+
     /* If one color is specified, map it to a compatible set */
     if (options && options.color) {
       options.colors = {};
@@ -164,13 +164,13 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
         options.colors[key] = options.color;
       });
     }
-    
+
     /* overwrite some defaults and then add the options AGAIN */
     this.options.colors = this.makeRandomColors();
     this.options.labels = $A($R(1, this.data_size));
-    
+
     /* add the options again, because some defaults (labels, colors) could not be
-     * generated withouth first knowing the user options (which is kind of a 
+     * generated withouth first knowing the user options (which is kind of a
      * chicken-and-egg problem)
      */
     Object.extend(this.options, this.chartDefaults() || { });
@@ -193,13 +193,18 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
 
     /* Calculate how many labels are required */
     this.y_label_count = (this.range / this.label_step).round();
+    if(isNaN(this.y_label_count)) {
+        this.y_label_count = 1;
+        this.options.show_vertical_labels = false;
+    }
+
     if ((this.normaliser.min + (this.y_label_count * this.normaliser.step)) < this.normaliser.max) {
       this.y_label_count += 1;
     }
 
     this.value_labels = this.makeValueLabels(this.y_label_count);
-    this.top_value = this.value_labels.last();
 
+    this.top_value = this.value_labels.last();
     /* Grid control options */
     this.grid_start_offset = -1;
 
@@ -232,7 +237,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   },
   getNormalizedBaseLine: function () {
     if (this.normalized_base_line == undefined) {
-      this.normalized_base_line = this.normaliseData(this.base_line); 
+      this.normalized_base_line = this.normaliseData(this.base_line);
     }
     return this.normalized_base_line;
   },
@@ -315,6 +320,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   },
   normalise: function (value) {
     var total = this.start_value === 0 ? this.top_value : this.range;
+    if (total === 0) {total = 1;}
     return ((value / total) * this.graph_height);
   },
   draw: function () {
@@ -444,6 +450,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
 
     if(this.options.area && this.options.stroke_width > 0) {
       cursor2 = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
+      console.log(coords);
       coords.remove(0);
       coords.remove(-1);
       $A(coords).each(function (coord, index) {
@@ -468,12 +475,12 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       x += this.step;
       return [x, y_offset - value];
     }.bind(this));
-    
+
     if (!this.hasBaseLine()) return top;
-    
+
     x += this.step;
     var bottom = this.getNormalizedBaseLine();
-    
+
     for (var i=bottom.length-1; i>=0; i--) {
     	x -= this.step;
     	top.push([x, y_offset - bottom[i]]);
