@@ -450,7 +450,6 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
 
     if(this.options.area && this.options.stroke_width > 0) {
       cursor2 = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
-      console.log(coords);
       coords.remove(0);
       coords.remove(-1);
       $A(coords).each(function (coord, index) {
