@@ -70,6 +70,7 @@
         <li><a href="#stack">Stacked area graphs</a></li>
         <li><a href="#stream">Stream graphs</a></li>
         <li><a href="#bar">Bar graphs</a></li>
+        <li><a href="#stackbar">Stacked Bar graphs</a></li>
         <li><a href="#horizontalbar">Horizontal bar graphs</a></li>
         <li><a href="#sparkline">Sparklines</a></li>
         <li><a href="#sparkbar">Sparkbars</a></li>
@@ -113,6 +114,7 @@
   <ul>
     <li><a href="http://wakoopa.com/menno">Menno van der Sman</a> provided a rake minifier script</li>
     <li><a href="http://janpaulposma.nl">Jan Paul Posma</a> provided Stream graphs and improvements to the drawing code</li>
+    <li><a href="http://github.com/suranyami">David Parry</a> provided Stacked bar charts and improvements to the grid drawing</li>
   </ul>
 
 
@@ -215,15 +217,30 @@
         Padding at the start and end of the graph (number)<br>
         <em>Default value: 10</em>
     </dd>
+    <dt>show_ticks</dt>
+    <dd>
+      Show the tick marks along the x and y axes<br>
+      <em>Default value: true</em>
+    </dd>
     <dt>show_horizontal_labels</dt>
     <dd>
-        Show the horizontal axis and gridline (boolean)<br>
-        <em>Default value: true</em>
+      Show the horizontal axis and gridline (boolean)<br>
+      <em>Default value: true</em>
+    </dd>
+    <dt>show_horizontal_grid</dt>
+    <dd>
+      Show the horizontal grid lines (boolean)<br>
+      <em>Default value: true</em>
+    </dd>
+    <dt>show_vertical_grid</dt>
+    <dd>
+      Show the vertical grid lines (boolean)<br>
+      <em>Default value: true</em>
     </dd>
     <dt>show_vertical_labels</dt>
     <dd>
-        Show the vertical axis and gridlines (boolean)<br>
-        <em>Default value: true</em>
+      Show the vertical axis and gridlines (boolean)<br>
+      <em>Default value: true</em>
     </dd>
     <dt>vertical_label_unit</dt>
     <dd>
@@ -923,6 +940,78 @@
         <em>Default value: random color</em>
     </dd>
   </dl>
+
+  <h2 id="stackbar">Stacked bar graphs</h2>
+  <p>Stacked bar graphs only support positive ranges.</p>
+  <p style="clear:both"><strong>Stacked Bar graph:</strong></p>
+  <div id="stackbargraph" class="example"></div>
+  <pre><code>var stackbargraph = new Grafico.StackedBarGraph($('stackbargraph'), {
+  a: [31, 12, 12, 10, 6, 4, 26],
+  b: [20, 4,  12, 21, 15,16,5 ]
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+var stackbargraph = new Grafico.StackedBarGraph($('stackbargraph'), {
+  a: [31, 12, 12, 10, 6,  4,  26],
+  b: [20, 4,  12, 21, 15, 16, 5 ]
+});
+  });
+  </script>
+
+  <p style="clear:both"><strong>Stacked Bar graph with custom options:</strong></p>
+  <div id="stackbargraph2" class="example"></div>
+  <pre><code>var stackedbargraph2 = new Grafico.StackedBarGraph($('stackbargraph2'),
+  {
+    workload:       [8, 10, 6, 12, 7, 6, 9],
+    your_workload:  [6, 8, 4, 8, 12, 6, 2],
+    his_workload:   [2, 9, 12, 7, 8, 9, 8]
+  },
+  {
+    labels:               ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    colors:               {
+      workload: '#f60',
+      your_workload: '#5f3',
+      his_workload: '#08c'
+    },
+    show_ticks:           false,
+    hover_color:          "#CC0000",
+    datalabels:           {
+      workload: ["8hrs", "10hrs", "6hrs", "12hrs", "7hrs", "6hrs", "9hrs"],
+      your_workload: ["6hrs", "8hrs", "4hrs", "8hrs", "12hrs", "6hrs", "2hrs"],
+      his_workload: ["2hrs", "9hrs", "12hrs", "7hrs", "8hrs", "9hrs", "8hrs"]
+    },
+  });
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var stackedbargraph2 = new Grafico.StackedBarGraph($('stackbargraph2'),
+    {
+      workload:       [8, 10, 6, 12, 7, 6, 9],
+      your_workload:  [6, 8, 4, 8, 12, 6, 2],
+      his_workload:   [2, 9, 12, 7, 8, 9, 8]
+    },
+    {
+      labels:               ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+      colors:               {
+        workload: '#f60',
+        your_workload: '#5f3',
+        his_workload: '#08c'
+      },
+      show_ticks:           false,
+      hover_color:          "#CC0000",
+      datalabels:           {
+        workload: ["8hrs", "10hrs", "6hrs", "12hrs", "7hrs", "6hrs", "9hrs"],
+        your_workload: ["6hrs", "8hrs", "4hrs", "8hrs", "12hrs", "6hrs", "2hrs"],
+        his_workload: ["2hrs", "9hrs", "12hrs", "7hrs", "8hrs", "9hrs", "8hrs"]
+      },
+    });
+  });
+  </script>
+
+
+
+    <h3>Stacked Bar graph options</h3>
+    <p> no specific options.</p>
 
   <h2 id="horizontalbar">Horizontal bar graphs</h2>
   <p style="clear:both"><strong>Horizontal Bar graph:</strong></p>

@@ -16,12 +16,14 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
       bargraph_negativecolor : false
      };
   },
+
   normaliserOptions: function () {
     return {
       start_value : 0,
       bar : true
     }
   },
+
   setChartSpecificOptions: function () {
     this.bar_padding = 5;
     this.bar_width = this.calculateBarWidth();
@@ -29,13 +31,16 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     this.step = this.calculateStep();
     this.grid_start_offset = this.bar_padding - 1;
   },
+
   calculateBarWidth: function () {
     return (this.graph_width / this.data_size) - this.bar_padding;
   },
+
   calculateStep: function () {
     this.data_size = this.data_size === 1 ? 2 : this.data_size;
     return (this.graph_width - (this.options.plot_padding * 2) - (this.bar_padding * 2)) / (this.data_size - 1);
   },
+
   drawPlot: function (index, cursor, x, y, color, coords, datalabel, element) {
     var start_y = this.options.height - this.y_padding_bottom - (this.zero_value * (this.graph_height / this.y_label_count)),
         lastcolor = this.options.bargraph_lastcolor,
@@ -51,12 +56,12 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
       color2 = y < 0 ? negativecolor : color;
     }
 
-    var bargraph = this.paper.rect(x-(this.bar_width/2), start_y, this.bar_width, y).attr({fill: color2, 'stroke-width': 0, stroke : color2});
+    var bargraph = this.paper.rect(x - (this.bar_width / 2), start_y, this.bar_width, y).attr({fill: color2, 'stroke-width': this.options.stroke_width, stroke : this.options.color});
 
     if( y < 0) {
       bargraph.attr({height:-bargraph.attrs.height});
     } else {
-      bargraph.translate(0,-y);
+      bargraph.translate(0, -y);
     }
 
     if (this.options.datalabels) {
@@ -66,6 +71,7 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     x = x + this.step;
     this.options.count++;
   },
+
   drawHorizontalLabels: function () {
   /* Change the standard options to correctly offset against the bars */
     var x_start = this.bar_padding + this.options.plot_padding,
@@ -74,31 +80,35 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
 
     if(this.options.label_max_size) {
       for (var i = 0; i < labels.length; i++) {
-         labels[i] = labels[i].truncate(this.options.label_max_size+1, "…");
+         labels[i] = labels[i].truncate(this.options.label_max_size + 1, "…");
       }
     }
 
     this.drawMarkers(this.options.labels, [1, 0], this.step, x_start, [0, (this.options.font_size + 7) * -1], extra_options);
   },
+
   drawGrid: function () {
-    var path = this.paper.path().attr({ stroke: this.options.grid_color}),
+    var path = this.paper.path().attr({ stroke: this.options.grid_color, 'stroke-width': 1}),
         y = this.graph_height + this.y_padding_top,
         x, x_labels, x_step;
 
-    if(!this.options.horizontalbar) {
-      for (var i = 0; i < this.y_label_count+1; i++) {
-        path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
-        path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y, 10)+0.5);
-        y = y - (this.graph_height / this.y_label_count);
+    if (!this.options.horizontalbar) {
+      if(this.options.show_horizontal_grid) {
+        for (var i = 0; i < this.y_label_count+1; i++) {
+          path.moveTo(this.x_padding_left - 0.5, parseInt(y, 10) + 0.5);
+          path.lineTo(this.x_padding_left + this.graph_width - 0.5, parseInt(y, 10) + 0.5);
+          y = y - (this.graph_height / this.y_label_count);
+        }
       }
     } else {
-      path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
-      path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y, 10)+0.5);
+      path.moveTo(this.x_padding_left - 0.5, parseInt(y, 10) + 0.5);
+      path.lineTo(this.x_padding_left + this.graph_width - 0.5, parseInt(y, 10) + 0.5);
 
       y -= this.graph_height;
-      path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
-      path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y, 10)+0.5);
+      path.moveTo(this.x_padding_left - 0.5, parseInt(y, 10) + 0.5);
+      path.lineTo(this.x_padding_left + this.graph_width - 0.5, parseInt(y, 10) + 0.5);
     }
+
     if(this.options.horizontalbar) {
       x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset;
       x_labels = this.y_label_count;
@@ -106,8 +116,8 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
 
       for (i = 0; i < x_labels; i++) {
         if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
-          path.moveTo(parseInt(x, 10), this.y_padding_top);
-          path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
+          path.moveTo(parseInt(x, 10) - 0.6, this.y_padding_top);
+          path.lineTo(parseInt(x, 10) - 0.6, this.y_padding_top + this.graph_height);
         }
         x = x + x_step;
       }
@@ -120,16 +130,17 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     path.moveTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top);
     path.lineTo(parseInt(this.x_padding_left + this.graph_width, 10)-0.5, this.y_padding_top + this.graph_height);
   },
+
   drawGraphValueMarkers: function(x, index, bargraph, datalabel, color) {
-   var hover_color = this.options.hover_color || color,
+    var hover_color = this.options.hover_color || color,
         hoverSet = this.paper.set(),
         text,
-        hoverbar = this.paper.rect(x-(this.bar_width/2), this.y_padding_top, this.bar_width, this.options.height);
+        hoverbar = this.paper.rect(x - (this.bar_width / 2), this.y_padding_top, this.bar_width, this.options.height);
 
-    datalabel = datalabel[index].toString();
-    text = this.paper.text(bargraph.attrs.x+(this.bar_width/2), bargraph.attrs.y-(this.options.font_size*1.5), datalabel);
+    datalabel = datalabel ? datalabel[index].toString() : '';
+    text = this.paper.text(bargraph.attrs.x + (this.bar_width / 2), bargraph.attrs.y - (this.options.font_size * 1.5), datalabel);
     hoverbar.attr({fill: color, 'stroke-width': 0, stroke : color,opacity:0});
-    text.attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1});
+    text.attr({'font-size': this.options.font_size, fill: this.options.hover_text_color, opacity: 1});
 
     var textbox = text.getBBox(),
         textpadding = 4,
@@ -140,16 +151,162 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
     this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
     this.globalHoverSet.push(hoverSet);
     this.globalBlockSet.push(hoverbar);
+
     if (roundRect.attrs.y < 0) {
-      hoverSet.translate(0,1+(roundRect.attrs.y*-1));
+      hoverSet.translate(0, 1 + (roundRect.attrs.y * -1));
     }
 
     hoverbar.hover(function (event) {
-      bargraph.animate({fill: hover_color,stroke:hover_color}, 200);
-      hoverSet.animate({opacity:1}, 200);
+      bargraph.animate({fill: hover_color, stroke: hover_color}, 200);
+      hoverSet.animate({opacity: 1}, 200);
     }, function (event) {
-      bargraph.animate({fill: color,stroke:color}, 200);
-      hoverSet.animate({opacity:0}, 200);
+      bargraph.animate({fill: color,stroke: color}, 200);
+      hoverSet.animate({opacity: 0}, 200);
+    });
+  }
+});
+
+Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
+  chartDefaults: function () {
+    return {
+			opacity: 100,
+			bar : true,
+			plot_padding : 0,
+			stacked: true,
+			stacked_fill: true
+    };
+  },
+
+  setChartSpecificOptions: function () {
+    this.bar_padding = 5;
+    this.bar_width = this.calculateBarWidth();
+    this.options.plot_padding = (this.bar_width / 2);
+    this.step = this.calculateStep();
+    this.grid_start_offset = this.bar_padding - 1;
+    this.options.stroke_width = 1;
+  },
+
+  stackData: function (stacked_data) {
+	// apparently the arrays are pointers
+	// which is the only reason this actually works
+    var stacked_data_array = stacked_data.collect(
+      function (data_set) {
+        return data_set[1];
+      });
+
+    for (var i = stacked_data_array.length - 2; i >= 0; i--) {
+      for (var j = 0; j < stacked_data_array[0].length; j++) {
+    	  stacked_data_array[i][j] += stacked_data_array[i + 1][j];
+      }
+    }
+    return stacked_data;
+  },
+
+  calculateCoords: function (data) {
+    var x = this.x_padding_left + this.options.plot_padding - this.step,
+        y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
+
+    var top = $A(data).collect(function (value) {
+      x += this.step;
+      return [x, y_offset - value];
+    }.bind(this));
+
+    x += this.step;
+    var bottom = this.getNormalizedBaseLine();
+
+    for (var i = bottom.length - 1; i >= 0; i--) {
+    	x -= this.step;
+    	top.push([x, y_offset - bottom[i]]);
+    }
+    return top;
+  },
+
+  drawLines: function (label, color, data, datalabel, element, graphindex) {
+	var coords = this.calculateCoords(data),
+	y_offset = (this.graph_height + this.y_padding_top),
+	cursor,
+	cursor2,
+	odd_horizontal_offset,
+	rel_opacity;
+
+	cursor = this.paper.path().attr({stroke: color, 'stroke-width': 0});
+
+	$A(coords).each(function (coord, index) {
+		var x = coord[0],
+		y = coord[1];
+    	this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
+	}.bind(this));
+
+    if (this.options.datalabels && this.options.draw_hovers) {
+      this.drawHover(cursor, datalabel, element, color);
+      this.globalHoverSet.toFront();
+    }
+
+  },
+
+  drawPlot: function (index, cursor, x, y, color, coords, datalabel, element, graphindex) {
+    var start_y = this.options.height - this.y_padding_bottom - (this.zero_value * (this.graph_height / this.y_label_count)),
+        color2 = color;
+
+    x = x + this.bar_padding;
+    y = this.options.height - this.y_padding_bottom - y - (this.zero_value * (this.graph_height / this.y_label_count));
+
+	var attributes = {fill: color2,
+		'stroke-width': 0,
+		stroke : this.options.color2,
+		opacity: this.options.opacity};
+    var bargraph = this.paper.rect(x - (this.bar_width / 2), start_y, this.bar_width, y).attr(attributes);
+
+    if (y < 0) {
+      bargraph.attr({height: -bargraph.attrs.height});
+    } else {
+      bargraph.translate(0, -y);
+    }
+
+    if (this.options.datalabels) {
+      this.drawGraphValueMarkers(x, index, bargraph, datalabel, color2);
+    }
+
+    x = x + this.step;
+    this.options.count++;
+  },
+
+  drawGraphValueMarkers: function(x, index, bargraph, datalabel, color) {
+	var hx = x - (this.bar_width / 2),
+		hy = bargraph.attrs.y,
+		hw = this.bar_width,
+		hh = bargraph.attrs.height;
+
+    var hover_color = this.options.hover_color || color,
+        hoverSet = this.paper.set(),
+        text,
+        hoverbar = this.paper.rect(hx, hy, hw, hh);
+
+    datalabel = datalabel && datalabel.length > index ? datalabel[index].toString() : '';
+    text = this.paper.text(bargraph.attrs.x + (this.bar_width / 2), bargraph.attrs.y - (this.options.font_size * 1.5), datalabel);
+    hoverbar.attr({fill: color, 'stroke-width': 0, stroke : color, opacity:0});
+    text.attr({'font-size': this.options.font_size, fill: this.options.hover_text_color, opacity: 1});
+
+    var textbox = text.getBBox(),
+        textpadding = 4,
+        roundRect= this.drawRoundRect(text, textbox, textpadding),
+        nib = this.drawNib(text, textbox, textpadding);
+
+    hoverSet.push(roundRect,nib,text).attr({opacity:0});
+    this.checkHoverPos({rect:roundRect,set:hoverSet,nib:nib});
+    this.globalHoverSet.push(hoverSet);
+    this.globalBlockSet.push(hoverbar);
+
+    if (roundRect.attrs.y < 0) {
+      hoverSet.translate(0, 1 + (roundRect.attrs.y * -1));
+    }
+
+    hoverbar.hover(function (event) {
+      bargraph.animate({fill: hover_color}, 200);
+      hoverSet.animate({opacity: 1}, 200);
+    }, function (event) {
+      bargraph.animate({fill: color}, 200);
+      hoverSet.animate({opacity: 0}, 200);
     });
   }
 });
@@ -164,6 +321,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
       bargraph_lastcolor : false
     };
   },
+
   setChartSpecificOptions: function () {
     // Approximate the width required by the labels
     this.x_padding_left = 20 + this.longestLabel() * (this.options.font_size / 2);
@@ -172,21 +330,26 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
     this.step = this.calculateStep();
     this.graph_width = this.options.width - this.x_padding_right - this.x_padding_left;
   },
+
   normalise: function (value) {
     var range = this.makeValueLabels(this.y_label_count);
     range = range[range.length-1];
     return ((value / range) * this.graph_width);
   },
+
   longestLabel: function () {
     return $A(this.options.labels).sort(function (a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
   },
+
   /* Height */
   calculateBarHeight: function () {
     return (this.graph_height / this.data_size) - this.bar_padding;
   },
+
   calculateStep: function () {
     return (this.graph_height - (this.options.plot_padding * 2)) / this.data_size;
   },
+
   drawLines: function (label, color, data, datalabel, element, graphindex) {
     var y = this.y_padding_top + (this.bar_padding/2) -0.5,
         offset = this.zero_value * (this.graph_width / this.y_label_count),
@@ -293,6 +456,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
     }
     this.drawMarkers(x_labels, [1, 0], x_step, x_step, [0, (this.options.font_size + 7) * -1]);
   },
+
   drawMeanLine: function (data) {
   var cursor = this.paper.path().attr(this.options.meanline),
       offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length;
