@@ -1,12 +1,13 @@
 h2. Grafico graphing library
 
-Grafico is a graphing library based on "Raphaël":http://raphaeljs.com and "Prototype.js":http://prototypejs.org. It is originally developed as Ico by "Alex Young":http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael, but this version was developed by "Kilian Valkhof":http://kilianvalkhof.com at "Wakoopa":http://wakoopa.com . Grafico's basic principles are to provide *good, clean looking graphs*  inspired by work of Stephen Few and Edward Tufte, while still being *flexible to implement*  and providing *numerous api options*  to tweak the look of the graphs.
+Grafico is a javascript charting library based on "Raphaël":http://raphaeljs.com and "Prototype.js":http://prototypejs.org. It is originally developed as Ico by "Alex Young":http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael, but this version was developed by "Kilian Valkhof":http://kilianvalkhof.com at "Wakoopa":http://wakoopa.com . Grafico's basic principles are to provide *good, clean looking graphs*  inspired by work of Stephen Few and Edward Tufte, while still being *flexible to implement*  and providing *numerous api options*  to tweak the look of the graphs.
 
 h3. Supported graph types:
 
 * Line graphs
 * Area graphs
 * Stacked area graphs
+* Stream graphs
 * Bar graphs
 * Horizontal bar graphs
 * Sparklines

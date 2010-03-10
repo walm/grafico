@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf8">
-    <title>Grafico graphing library documentation</title>
+    <title>Grafico javascript charting library documentation</title>
 
-    <link href="http://github.com/Kilian/sencss/raw/master/sen.css" rel="stylesheet" type="text/css">
+    <link href="http://github.com/Kilian/sencss/raw/master/source/sen.css" rel="stylesheet" type="text/css">
     <style>
     #wrap {
       width:700px;
@@ -43,7 +43,7 @@
 
 <body>
   <div id="wrap">
-  <h1>Grafico graphing library Documentation</h1>
+  <h1>Grafico javascript charting library Documentation</h1>
   <p>Grafico is a graphing library based on <a href="http://raphaeljs.com">Raphaël</a> and <a href="http://prototypejs.org">Prototype.js</a>.
   It is originally developed as Ico by <a href="http://alexyoung.org/2009/01/21/ico-svg-graphs-with-prototype-and-raphael/">Alex Young</a>,
   but this version was developed by <a href="http://kilianvalkhof.com">Kilian Valkhof</a> at <a href="http://wakoopa.com">Wakoopa</a>.
@@ -68,6 +68,7 @@
         <li><a href="#line">Line graphs</a></li>
         <li><a href="#area">Area graphs</a></li>
         <li><a href="#stack">Stacked area graphs</a></li>
+        <li><a href="#stream">Stream graphs</a></li>
         <li><a href="#bar">Bar graphs</a></li>
         <li><a href="#horizontalbar">Horizontal bar graphs</a></li>
         <li><a href="#sparkline">Sparklines</a></li>
@@ -106,6 +107,15 @@
     <li>Safari 4/ Qt-webkit</li>
     <li>Opera (slow, has hover problems)</li>
   </ul>
+
+
+  <h3>Notable additions</h3>
+  <ul>
+    <li><a href="http://wakoopa.com/menno">Menno van der Sman</a> provided a rake minifier script</li>
+    <li><a href="http://janpaulposma.nl">Jan Paul Posma</a> provided Stream graphs and improvements to the drawing code</li>
+  </ul>
+
+
   <h3>Base graph options:</h3>
 
   <dl>
@@ -695,6 +705,138 @@
         <em>Default value: 5</em>
     </dd>
   </dl>
+
+  <h2 id="stream">Stream graphs</h2>
+  <p>Stream graphs are a special kind of stack graphs designed to show large amounts of volitile data,
+  especially trends. The implementation is based on <a href="http://www.leebyron.com/else/streamgraph/">this paper</a>.</p>
+
+  <p style="clear:both"><strong>Simple stream graph:</strong></p>
+  <div id="streamgraph" class="example"></div>
+  <pre><code>var streamgraph = new Grafico.StreamGraph($('streamgraph'),
+{
+  workload:       [8, 10, 6, 1,7, 6, 9],
+  your_workload:  [6, 8,  4, 1, 12,6, 2],
+  his_workload:   [2, 9,  12,2, 8, 9, 8]
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var streamgraph = new Grafico.StreamGraph($('streamgraph'),
+      {
+      workload:       [8, 10, 6, 1,7, 6, 9],
+      your_workload:  [6, 8,  4, 1, 12,6, 2],
+      his_workload:   [2, 9,  12,2, 8, 9, 8]
+      });
+  });
+  </script>
+
+  <p style="clear:both"><strong>Example with labels:</strong></p>
+  <div id="streamgraph2" class="example"></div>
+  <pre><code>var streamgraph2 = new Grafico.StreamGraph($('streamgraph2'),
+{
+  ie6:            [10, 9, 5, 3, 2, 1, 1],
+  firefox:        [0,  2, 4, 4, 5, 5, 5],
+  chrome:         [0,  0, 0, 0, 1, 3, 3]
+},
+{
+  datalabels: {
+    ie:      "Internet Explorer",
+    firefox: "Mozilla Firefox",
+    chrome:  "Google Chrome"
+  }
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var streamgraph = new Grafico.StreamGraph($('streamgraph2'),
+      {
+      ie:             [10, 9, 5, 3, 2, 1, 1],
+      firefox:        [0,  2, 4, 4, 5, 5, 5],
+      chrome:         [0,  0, 0, 0, 1, 3, 3],
+      },
+      {
+        datalabels: {
+          ie:      "Internet Explorer",
+          firefox: "Mozilla Firefox",
+          chrome:  "Google Chrome"
+        }
+      }
+      );
+  });
+  </script>
+
+  <p style="clear:both"><strong>More complex stream graph:</strong></p>
+  <p style="clear:both">The label for Harry Potter is not shown, as it does not reach
+  the label threshold.</p>
+  <div id="streamgraph3" class="example"></div>
+  <pre><code>var streamgraph = new Grafico.StreamGraph($('streamgraph3'),
+{
+  movie1: [30, 33, 20, 10, 05, 03, 02, 01, 00, 00, 00, 00, 00, 00, 00, 00],
+  movie2: [10, 15, 25, 28, 29, 26, 20, 10, 03, 01, 01, 00, 00, 00, 00, 00],
+  movie3: [00, 04, 06, 08, 11, 13, 11, 09, 03, 00, 00, 00, 00, 00, 00, 00],
+  movie4: [00, 00, 00, 01, 04, 09, 19, 28, 35, 44, 45, 45, 35, 18, 06, 03],
+  movie5: [00, 00, 00, 00, 00, 00, 00, 01, 02, 02, 08, 20, 26, 29, 30, 31]
+},
+{
+  stream_line_smoothing: 'simple',
+  stream_smart_insertion: true,
+  stream_label_threshold: 20,
+  datalabels: {
+    movie1: "James Bond",
+    movie2: "Bourne Ultimatum",
+    movie3: "Harry Potter",
+    movie4: "Kill Bill",
+    movie5: "Return of the Mummie"
+  }
+}
+});</code></pre>
+  <script>
+  Event.observe(window, 'load', function() {
+    var streamgraph = new Grafico.StreamGraph($('streamgraph3'),
+      {
+      movie1: [30, 33, 20, 10, 05, 03, 02, 01, 00, 00, 00, 00, 00, 00, 00, 00],
+      movie2: [10, 15, 25, 28, 29, 26, 20, 10, 03, 01, 01, 00, 00, 00, 00, 00],
+      movie3: [00, 04, 06, 08, 11, 13, 11, 09, 03, 00, 00, 00, 00, 00, 00, 00],
+      movie4: [00, 00, 00, 01, 04, 09, 19, 28, 35, 44, 45, 45, 35, 18, 06, 03],
+      movie5: [00, 00, 00, 00, 00, 00, 00, 01, 02, 02, 08, 20, 26, 29, 30, 31]
+      },
+      {
+      stream_line_smoothing: 'simple',
+      stream_smart_insertion: true,
+      stream_label_threshold: 20,
+      datalabels: {
+    	  movie1: "James Bond",
+          movie2: "Bourne Ultimatum",
+          movie3: "Harry Potter",
+          movie4: "Kill Bill",
+          movie5: "Return of the Mummie"
+        }
+      });
+  });
+  </script>
+  <h3>Stream graph options</h3>
+  <dl>
+    <dt>stream_label_threshold</dt>
+    <dd>
+        Minimum value for a stream to have it's label shown.
+        Note that labels are automatically shown when the datalabels are defined.
+        <em>Default value: 0</em>
+    </dd>
+    <dt>stream_line_smoothing</dt>
+    <dd>
+        Different algorithms for line smoothing. (string)<br>
+        Possible options:
+        <ul>
+          <li>"simple" - simple smoothener of data</li>
+          <li>"weighted" - weights the thickness of data (not yet implemented)</li>
+        </ul>
+        <em>Default value: false</em>
+    </dd>
+    <dt>stream_smart_insertion</dt>
+    <dd>
+        Tries to determine a smart order for data based on the first moment a dataset becomes larger than 0.<br />
+        <em>Default value: false</em>
+    </dd>
+  </dl>
+
   <h2 id="bar">Bar graphs</h2>
   <p style="clear:both"><strong>Bar graph:</strong></p>
   <div id="bargraph" class="example"></div>
