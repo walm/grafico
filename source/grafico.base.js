@@ -18,6 +18,7 @@ var Grafico = {
   StackGraph: {},
   StreamGraph: {},
   BarGraph: {},
+  StackedBarGraph: {},
   HorizontalBarGraph: {},
   SparkLine: {},
   SparkBar: {}
@@ -31,6 +32,7 @@ Grafico.Base = Class.create({
       return this.normalise(value);
     }.bind(this));
   },
+
   deepCopy: function (obj) {
     var out, i, len;
     if (Object.prototype.toString.call(obj) === '[object Array]') {
@@ -113,10 +115,13 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       width:                  parseInt(element.getStyle('width'), 10),
       height:                 parseInt(element.getStyle('height'), 10),
       grid:                   true,
+      show_vertical_grid:     true,
+      show_horizontal_grid:   true,
       plot_padding:           10,                                   // Padding for the graph line/bar plots
       font_size:              10,                                   // Label font size
       show_horizontal_labels: true,
       show_vertical_labels:   true,
+      show_ticks:  			  true,
       vertical_label_unit:    '',
       background_color:      element.getStyle('backgroundColor'),
       label_color:           '#000',                               // Label text color
@@ -128,13 +133,15 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       padding_top:            20,
       draw_axis:              true,
       datalabels:             '',                                    // interactive, filled with same # of elements as graph items.
-      hover_color:           '',                                    // hover color if there are datalabels
+      hover_color:            '',                                    // hover color if there are datalabels
       watermark:              false,
       watermark_location:     false,                                 // determine position of watermark. currently available is bottomright and middle
       hide_empty_label_grid:  false,                                 // hide gridlines for labels with no value
       left_padding:           false,                                  // set a standard leftpadding regardless of label width
       label_rotation:         0,
-      label_max_size:          false
+      label_max_size:         false,
+	  min: 					  0,
+	  max: 					  null
     };
 
     Object.extend(this.options, this.chartDefaults() || { });
@@ -231,33 +238,41 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.globalHoverSet.toFront();
     this.globalBlockSet.toFront();
   },
+
   normaliserOptions: function () {
     return {graph_height : parseInt(this.element.getStyle('height'), 10)};
   },
+
   hasBaseLine: function () {
     return false;
   },
+
   getNormalizedBaseLine: function () {
     if (this.normalized_base_line == undefined) {
       this.normalized_base_line = this.normaliseData(this.base_line);
     }
     return this.normalized_base_line;
   },
+
   getNormalizedRealData: function () {
     if (this.normalized_real_data == undefined) {
       this.normalized_real_data = this.real_data.collect(function(data) { return this.normaliseData(data[1]); }.bind(this));
     }
     return this.normalized_real_data;
   },
+
   chartDefaults: function () {
     /* Define in child class */
   },
+
   drawPlot: function (index, cursor, x, y, color, coords, datalabel, element, graphindex) {
     /* Define in child class */
   },
+
   calculateStep: function () {
     /* Define in child classes */
   },
+
   getMousePos: function (e) {
     var posx = 0,
         posy = 0,
@@ -274,6 +289,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     mousepos = {x : posx , y : posy};
     return mousepos;
   },
+
   makeRandomColors: function (number) {
     var colors = {};
     var step = 1/this.data_sets.size();
@@ -284,6 +300,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     });
     return colors;
   },
+
   longestDataSetLength: function () {
     var length = 0;
     this.data_sets.each(function (data_set) {
@@ -291,77 +308,85 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     });
     return length;
   },
+
   roundValue: function (value, length) {
     var multiplier = Math.pow(10, length);
     value *= multiplier;
     value = Math.round(value) / multiplier;
     return value;
   },
+
   roundValues: function (data, length) {
     return $A(data).collect(function (value) { return this.roundValue(value, length); }.bind(this));
   },
+
   paddingLeftOffset: function () {
     if (this.options.show_vertical_labels) {
       /* Find the longest label and multiply it by the font size */
       var data = this.flat_data,
-          longest_label_length;
+		  longest_label_length;
 
-      // Round values
-      data = this.roundValues(data, 2);
+	    // Round values
+	    data = this.roundValues(data, 2);
 
-      longest_label_length = $A(data).sort(function (a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
-      longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
-      return longest_label_length * this.options.font_size;
+	    longest_label_length = $A(data).sort(function (a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
+	    longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
+	    return longest_label_length * this.options.font_size;
     } else {
-      return 0;
+	    return 0;
     }
-  },
-  paddingBottomOffset: function () {
-    /* height of the text */
-    return this.options.font_size;
-  },
-  normalise: function (value) {
-    var total = this.start_value === 0 ? this.top_value : this.range;
-    if (total === 0) {total = 1;}
-    return ((value / total) * this.graph_height);
-  },
-  draw: function () {
-    if (this.options.grid) {
-      this.drawGrid();
-    }
-    if (this.options.watermark) {
-      this.drawWatermark();
-    }
+},
 
-    if (this.options.show_vertical_labels) {
-      this.drawVerticalLabels();
-    }
+paddingBottomOffset: function () {
+	/* height of the text */
+	return this.options.font_size;
+},
 
-    if (this.options.show_horizontal_labels) {
-      this.drawHorizontalLabels();
-    }
+normalise: function (value) {
+	var total = this.start_value === 0 ? this.top_value : this.range;
+	if (total === 0) {total = 1;}
+	return ((value / total) * this.graph_height);
+},
 
-    if (!this.options.watermark) {
-        this.drawLinesInit(this);
-    }
+draw: function () {
+	if (this.options.grid) {
+		this.drawGrid();
+	}
+	if (this.options.watermark) {
+		this.drawWatermark();
+	}
 
-    if (this.options.draw_axis) {
-      this.drawAxis();
-    }
+	if (this.options.show_vertical_labels) {
+		this.drawVerticalLabels();
+	}
 
-    if (this.start_value !== 0) {
-      this.drawFocusHint();
-    }
+	if (this.options.show_horizontal_labels) {
+		this.drawHorizontalLabels();
+	}
 
-    if (this.options.meanline) {
-      this.drawMeanLine(this.normaliseData(this.flat_data));
-    }
-  },
-  drawLinesInit: function (thisgraph) {
-    thisgraph.data_sets.each(function (data, index) {
-      thisgraph.drawLines(data[0], thisgraph.options.colors[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element, index);
-    }.bind(thisgraph));
-  },
+	if (!this.options.watermark) {
+		this.drawLinesInit(this);
+	}
+
+	if (this.options.draw_axis) {
+		this.drawAxis();
+	}
+
+	if (this.start_value !== 0) {
+		this.drawFocusHint();
+	}
+
+	if (this.options.meanline) {
+		this.drawMeanLine(this.normaliseData(this.flat_data));
+	}
+},
+
+drawLinesInit: function (thisgraph) {
+	thisgraph.data_sets.each(function (data, index) {
+		thisgraph.drawLines(data[0], thisgraph.options.colors[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element, index);
+	}.bind(thisgraph));
+},
+
   drawWatermark: function () {
     if(this.options.watermark == 'wakoopa') {
       this.drawWakoopaWatermark(this, this.data);
@@ -418,72 +443,81 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       po.toFront();
     }
   },
-  drawGrid: function () {
-    var path = this.paper.path().attr({ stroke: this.options.grid_color}),
-        y, x, x_labels;
+drawGrid: function () {
+	var path = this.paper.path().attr({ stroke: this.options.grid_color}),
+	y, x, x_labels;
 
-      y = this.graph_height + this.y_padding_top;
-      for (var i = 0; i < this.y_label_count+1; i++) {
-          path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
-          path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y, 10)+0.5);
-        y = y - (this.graph_height / this.y_label_count);
-      }
+	if (this.options.show_horizontal_grid) {
+		y = this.graph_height + this.y_padding_top;
+		for (var i = 0; i < this.y_label_count+1; i++) {
+			path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
+			path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y, 10)+0.5);
+			y = y - (this.graph_height / this.y_label_count);
+		}
+	}
+	if (this.options.show_vertical_grid) {
+		x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset;
+		x_labels = this.options.labels.length;
 
-      x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset;
-      x_labels = this.options.labels.length;
+		for (var i = 0; i < x_labels; i++) {
+			if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
+				path.moveTo(parseInt(x, 10), this.y_padding_top);
+				path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
+			}
+			x = x + this.step;
+		}
+	}
+},
 
-      for (var i = 0; i < x_labels; i++) {
-        if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
-          path.moveTo(parseInt(x, 10), this.y_padding_top);
-          path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
-        }
-        x = x + this.step;
-      }
-  },
-  drawLines: function (label, color, data, datalabel, element,graphindex) {
-    var coords = this.calculateCoords(data),
-        y_offset = (this.graph_height + this.y_padding_top),
-        cursor,
-        cursor2,
-        odd_horizontal_offset,
-        rel_opacity;
+drawLines: function (label, color, data, datalabel, element, graphindex) {
+	var coords = this.calculateCoords(data),
+	y_offset = (this.graph_height + this.y_padding_top),
+	cursor,
+	cursor2,
+	odd_horizontal_offset,
+	rel_opacity;
 
-    if (this.options.start_at_zero === false) {
-      odd_horizontal_offset=0;
-      $A(coords).each(function (coord, index) {
-        if (coord[1] === y_offset) {odd_horizontal_offset++;}
-      });
-      this.options.odd_horizontal_offset = odd_horizontal_offset;
+	if (this.options.start_at_zero === false) {
+		odd_horizontal_offset=0;
+		$A(coords).each(function (coord, index) {
+			if (coord[1] === y_offset) {odd_horizontal_offset++;}
+		});
+		this.options.odd_horizontal_offset = odd_horizontal_offset;
 
-      if (this.options.odd_horizontal_offset > 1 && this.options.odd_horizontal_offset < coords.length) {
-        coords.splice(0,this.options.odd_horizontal_offset);
-      }
-    }
+		if (this.options.odd_horizontal_offset > 1) {
+			coords.splice(0, this.options.odd_horizontal_offset);
+		}
+	}
 
-    if (this.options.stacked_fill||this.options.area) {
-      if (this.options.area) {
-        rel_opacity = this.options.area_opacity ? this.options.area_opacity : 1.5/this.data_sets.collect(function (data_set){return data_set.length;}).length;
-        cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0', opacity:rel_opacity, 'stroke-opacity':0});
-      } else {
-        cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0'});
-      }
+	if (this.options.stacked_fill||this.options.area) {
+		if (this.options.area) {
+			rel_opacity = this.options.area_opacity ? this.options.area_opacity : 1.5/this.data_sets.collect(function (data_set){return data_set.length;}).length;
+			cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0', opacity:rel_opacity, 'stroke-opacity':0});
+		} else {
+			cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0'});
+		}
 
-      /* add first and last to fill the area */
-      if (!this.hasBaseLine()) {
-        coords.unshift([coords[0][0] , y_offset]);
-        coords.push([coords[coords.length-1][0] , y_offset]);
-      }
-    } else {
-      cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
-    }
+		/* add first and last to fill the area */
+		if (!this.hasBaseLine()) {
+			coords.unshift([coords[0][0] , y_offset]);
+			coords.push([coords[coords.length-1][0] , y_offset]);
+		}
+	} else {
+		cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
+	}
 
-    $A(coords).each(function (coord, index) {
-      var x = coord[0],
-          y = coord[1];
-      this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
-    }.bind(this));
+	$A(coords).each(function (coord, index) {
+		var x = coord[0],
+		y = coord[1];
+		if (color instanceof Array) {
+			var color_index = index % color.length;
+			this.drawPlot(index, cursor, x, y, color[color_index], coords, datalabel, element, graphindex);
+		} else {
+			this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
+		}
+	}.bind(this));
 
-    if(this.options.area && this.options.stroke_width > 0) {
+    if (this.options.area && this.options.stroke_width > 0) {
       cursor2 = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
       coords.remove(0);
       coords.remove(-1);
@@ -501,6 +535,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     }
 
   },
+
   calculateCoords: function (data) {
     var x = this.x_padding_left + this.options.plot_padding - this.step,
         y_offset = (this.graph_height + this.y_padding_top) + this.normalise(this.start_value);
@@ -515,12 +550,13 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     x += this.step;
     var bottom = this.getNormalizedBaseLine();
 
-    for (var i=bottom.length-1; i>=0; i--) {
+    for (var i = bottom.length - 1; i >= 0; i--) {
     	x -= this.step;
     	top.push([x, y_offset - bottom[i]]);
     }
     return top;
   },
+
   drawFocusHint: function () {
     var length = 5,
         x = this.x_padding_left + (length / 2) - 1,
@@ -532,6 +568,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     cursor.moveTo(x, y - length);
     cursor.lineTo(x - length, y - (length * 2));
   },
+
   drawMeanLine: function (data) {
     var cursor = this.paper.path().attr(this.options.meanline),
         offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length - 0.5;
@@ -539,17 +576,19 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
 
     cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset).lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom - offset);
   },
+
   drawAxis: function () {
     var cursor = this.paper.path().attr({stroke: this.options.label_color});
 
     //horizontal
-    cursor.moveTo(parseInt(this.x_padding_left, 10)-0.5,                    this.options.height - parseInt(this.y_padding_bottom, 10) + 0.5);
-    cursor.lineTo(parseInt(this.graph_width + this.x_padding_left, 10)-0.5, this.options.height - parseInt(this.y_padding_bottom, 10) + 0.5);
+    cursor.moveTo(parseInt(this.x_padding_left, 10) - 0.5, this.options.height - parseInt(this.y_padding_bottom, 10) + 0.5);
+    cursor.lineTo(parseInt(this.graph_width + this.x_padding_left, 10) - 0.5, this.options.height - parseInt(this.y_padding_bottom, 10) + 0.5);
 
     //vertical
-    cursor.moveTo(parseInt(this.x_padding_left, 10)-0.5, parseInt(this.options.height - this.y_padding_bottom, 10)+0.5);
-    cursor.lineTo(parseInt(this.x_padding_left, 10)-0.5, parseInt(this.y_padding_top, 10));
+    cursor.moveTo(parseInt(this.x_padding_left, 10) - 0.5, parseInt(this.options.height - this.y_padding_bottom, 10) + 0.5);
+    cursor.lineTo(parseInt(this.x_padding_left, 10) - 0.5, parseInt(this.y_padding_top, 10));
   },
+
   makeValueLabels: function (steps) {
     var step = this.label_step,
         label = this.start_value,
@@ -560,6 +599,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     }
     return labels;
   },
+
   drawMarkers: function (labels, direction, step, start_offset, font_offsets, extra_font_options) {
   /* Axis label markers */
     function x_offset(value) {
@@ -579,23 +619,27 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     Object.extend(font_options, extra_font_options || {});
 
     labels.each(function (label) {
-      if (this.options.draw_axis && ((this.options.hide_empty_label_grid === true && label !== "") || this.options.hide_empty_label_grid === false)) {
-        cursor.moveTo(parseInt(x, 10), parseInt(y, 10)+0.5);
-        cursor.lineTo(parseInt(x, 10) + y_offset(5), parseInt(y, 10)+0.5 + x_offset(5));
+      if (this.options.draw_axis &&
+		  ((this.options.hide_empty_label_grid === true && label !== "") || this.options.hide_empty_label_grid === false) &&
+		  this.options.show_ticks) {
+        cursor.moveTo(parseInt(x, 10), parseInt(y, 10) + 0.5);
+        cursor.lineTo(parseInt(x, 10) + y_offset(5), parseInt(y, 10) + 0.5 + x_offset(5));
       }
       this.paper.text(x + font_offsets[0], y - 2 - font_offsets[1], label.toString()).attr(font_options);
       x = x + x_offset(step);
       y = y + y_offset(step);
     }.bind(this));
   },
+
   drawVerticalLabels: function () {
     var y_step = this.graph_height / this.y_label_count;
-    var vertical_label_unit = this.options.vertical_label_unit ? " "+this.options.vertical_label_unit : "";
+    var vertical_label_unit = this.options.vertical_label_unit ? " " + this.options.vertical_label_unit : "";
     for (var i = 0; i < this.value_labels.length; i++) {
       this.value_labels[i] += vertical_label_unit;
     }
     this.drawMarkers(this.value_labels, [0, -1], y_step, y_step, [-8, -2], { "text-anchor": 'end' });
   },
+
   drawHorizontalLabels: function () {
     var extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {},
         labels = this.options.labels;
@@ -608,39 +652,40 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
 
     this.drawMarkers(labels, [1, 0], this.step, this.options.plot_padding, [0, (this.options.font_size + 7) * -1], extra_options);
   },
+
   drawHover: function(cursor, datalabel, element, color) {
     var thisgraph = this,
-        colorattr = (this.options.stacked_fill||this.options.area) ? "fill" : "stroke",
-        hover_color = this.options.hover_color|| color,
+        colorattr = (this.options.stacked_fill || this.options.area) ? "fill" : "stroke",
+        hover_color = this.options.hover_color || color,
         hoverSet = this.paper.set(),
         textpadding = 4,
-        text = this.paper.text(cursor.attrs.x, cursor.attrs.y-(this.options.font_size*1.5)-textpadding, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
+        text = this.paper.text(cursor.attrs.x, cursor.attrs.y - (this.options.font_size * 1.5) - textpadding, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
         textbox = text.getBBox(),
         roundRect = this.drawRoundRect(text, textbox, textpadding);
 
-    hoverSet.push(roundRect,text).attr({opacity:0});
+    hoverSet.push(roundRect,text).attr({opacity: 0});
     this.checkHoverPos({rect:roundRect,set:hoverSet});
     this.globalHoverSet.push(hoverSet);
 
     cursor.hover(function (event) {
-      if (colorattr==="fill") { cursor.animate({fill : hover_color,stroke : hover_color}, 200);}
+      if (colorattr === "fill") { cursor.animate({fill : hover_color,stroke : hover_color}, 200);}
       else {                    cursor.animate({stroke : hover_color}, 200);}
 
       var mousepos = thisgraph.getMousePos(event);
       hoverSet[0].attr({
-        x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
-        y:mousepos.y-(textbox.height/2)-(thisgraph.options.font_size*1.5)-textpadding-element.offsetTop,
+        x:mousepos.x - (textbox.width / 2 ) - textpadding - element.offsetLeft,
+        y:mousepos.y - (textbox.height / 2) - (thisgraph.options.font_size * 1.5) - textpadding - element.offsetTop,
         opacity:1});
       hoverSet[1].attr({
-        x:mousepos.x-element.offsetLeft,
-        y:mousepos.y-(thisgraph.options.font_size*1.5)-element.offsetTop,
+        x:mousepos.x - element.offsetLeft,
+        y:mousepos.y - (thisgraph.options.font_size * 1.5) - element.offsetTop,
         opacity:1});
 
       cursor.mousemove(function (event) {
         var mousepos = thisgraph.getMousePos(event);
         hoverSet[0].attr({
-          x:mousepos.x-(textbox.width/2)-textpadding-element.offsetLeft,
-          y:mousepos.y-(textbox.height/2)-(thisgraph.options.font_size*1.5)-textpadding-element.offsetTop,
+          x:mousepos.x - (textbox.width / 2) - textpadding-element.offsetLeft,
+          y:mousepos.y - (textbox.height / 2) - (thisgraph.options.font_size * 1.5) - textpadding-element.offsetTop,
           opacity:1});
         hoverSet[1].attr({
           x:mousepos.x-element.offsetLeft,
@@ -655,6 +700,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       hoverSet.attr({opacity:0});
     });
   },
+
   checkHoverPos: function (elements) {
     var diff, rect, rectsize, set, setbox, marker, nib, textpadding;
     if (elements.rect) {
@@ -701,6 +747,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       }
     }
   },
+
   drawNib: function (text, textbox, textpadding) {
     return this.paper.path()
     .attr({fill: this.options.label_color, opacity: 1, stroke: this.options.label_color, 'stroke-width':'0px'})
@@ -709,6 +756,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     .lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding-1)
     .andClose();
   },
+
   drawRoundRect : function(text, textbox, textpadding) {
     return this.paper.rect(
     text.attrs.x-(textbox.width/2)-textpadding,
@@ -754,6 +802,7 @@ Array.prototype.variance = function () {
 Array.prototype.standard_deviation = function () {
   return Math.sqrt(this.variance());
 };
+
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
   this.length = from < 0 ? this.length + from : from;
@@ -766,18 +815,22 @@ Raphael.el.absolutely = function () {
     this.isAbsolute = 1;
     return this;
 };
+
 Raphael.el.relatively = function () {
     this.isAbsolute = 0;
     return this;
 };
+
 Raphael.el.moveTo = function (x, y) {
     this._last = {x: x, y: y};
     return this.attr({path: this.attrs.path + ["m", "M"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
 };
+
 Raphael.el.lineTo = function (x, y) {
     this._last = {x: x, y: y};
     return this.attr({path: this.attrs.path + ["l", "L"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
 };
+
 Raphael.el.cplineTo = function (x, y, w) {
     if (x > this._last.x) {
       this.attr({path: this.attrs.path + ["C", this._last.x + w, this._last.y, x - w, y, x, y]});
@@ -791,6 +844,7 @@ Raphael.el.cplineTo = function (x, y, w) {
     this._last = {x: x, y: y};
     return this;
 };
+
 Raphael.el.andClose = function () {
     return this.attr({path: this.attrs.path + "z"});
 };
