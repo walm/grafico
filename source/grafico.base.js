@@ -420,7 +420,7 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       });
       this.options.odd_horizontal_offset = odd_horizontal_offset;
 
-      if (this.options.odd_horizontal_offset > 1) {
+      if (this.options.odd_horizontal_offset > 1 && this.options.odd_horizontal_offset < coords.length) {
         coords.splice(0,this.options.odd_horizontal_offset);
       }
     }
