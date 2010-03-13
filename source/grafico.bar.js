@@ -116,13 +116,12 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
 
       for (i = 0; i < x_labels; i++) {
         if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
-          path.moveTo(parseInt(x, 10) - 0.6, this.y_padding_top);
-          path.lineTo(parseInt(x, 10) - 0.6, this.y_padding_top + this.graph_height);
+          path.moveTo(parseInt(x, 10) + 0.5, this.y_padding_top);
+          path.lineTo(parseInt(x, 10) + 0.5, this.y_padding_top + this.graph_height);
         }
         x = x + x_step;
       }
     }
-
     //left side
     path.moveTo(parseInt(this.x_padding_left, 10)-0.5, this.y_padding_top);
     path.lineTo(parseInt(this.x_padding_left, 10)-0.5, this.y_padding_top + this.graph_height);
@@ -169,11 +168,11 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
 Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
   chartDefaults: function () {
     return {
-			opacity: 100,
-			bar : true,
-			plot_padding : 0,
-			stacked: true,
-			stacked_fill: true
+      opacity: 100,
+      bar : true,
+      plot_padding : 0,
+      stacked: true,
+      stacked_fill: true
     };
   },
 
@@ -187,8 +186,6 @@ Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
   },
 
   stackData: function (stacked_data) {
-	// apparently the arrays are pointers
-	// which is the only reason this actually works
     var stacked_data_array = stacked_data.collect(
       function (data_set) {
         return data_set[1];
@@ -196,7 +193,7 @@ Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
 
     for (var i = stacked_data_array.length - 2; i >= 0; i--) {
       for (var j = 0; j < stacked_data_array[0].length; j++) {
-    	  stacked_data_array[i][j] += stacked_data_array[i + 1][j];
+        stacked_data_array[i][j] += stacked_data_array[i + 1][j];
       }
     }
     return stacked_data;
@@ -215,27 +212,27 @@ Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
     var bottom = this.getNormalizedBaseLine();
 
     for (var i = bottom.length - 1; i >= 0; i--) {
-    	x -= this.step;
-    	top.push([x, y_offset - bottom[i]]);
+      x -= this.step;
+      top.push([x, y_offset - bottom[i]]);
     }
     return top;
   },
 
   drawLines: function (label, color, data, datalabel, element, graphindex) {
-	var coords = this.calculateCoords(data),
-	y_offset = (this.graph_height + this.y_padding_top),
-	cursor,
-	cursor2,
-	odd_horizontal_offset,
-	rel_opacity;
+  var coords = this.calculateCoords(data),
+  y_offset = (this.graph_height + this.y_padding_top),
+  cursor,
+  cursor2,
+  odd_horizontal_offset,
+  rel_opacity;
 
-	cursor = this.paper.path().attr({stroke: color, 'stroke-width': 0});
+  cursor = this.paper.path().attr({stroke: color, 'stroke-width': 0});
 
-	$A(coords).each(function (coord, index) {
-		var x = coord[0],
-		y = coord[1];
-    	this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
-	}.bind(this));
+  $A(coords).each(function (coord, index) {
+    var x = coord[0],
+    y = coord[1];
+      this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
+  }.bind(this));
 
     if (this.options.datalabels && this.options.draw_hovers) {
       this.drawHover(cursor, datalabel, element, color);
@@ -251,10 +248,10 @@ Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
     x = x + this.bar_padding;
     y = this.options.height - this.y_padding_bottom - y - (this.zero_value * (this.graph_height / this.y_label_count));
 
-	var attributes = {fill: color2,
-		'stroke-width': 0,
-		stroke : this.options.color2,
-		opacity: this.options.opacity};
+  var attributes = {fill: color2,
+    'stroke-width': 0,
+    stroke : this.options.color2,
+    opacity: this.options.opacity};
     var bargraph = this.paper.rect(x - (this.bar_width / 2), start_y, this.bar_width, y).attr(attributes);
 
     if (y < 0) {
@@ -272,10 +269,10 @@ Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
   },
 
   drawGraphValueMarkers: function(x, index, bargraph, datalabel, color) {
-	var hx = x - (this.bar_width / 2),
-		hy = bargraph.attrs.y,
-		hw = this.bar_width,
-		hh = bargraph.attrs.height;
+  var hx = x - (this.bar_width / 2),
+    hy = bargraph.attrs.y,
+    hw = this.bar_width,
+    hh = bargraph.attrs.height;
 
     var hover_color = this.options.hover_color || color,
         hoverSet = this.paper.set(),
