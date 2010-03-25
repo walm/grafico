@@ -321,21 +321,20 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
   },
 
   paddingLeftOffset: function () {
+    var result = 0;
     if (this.options.show_vertical_labels) {
       /* Find the longest label and multiply it by the font size */
       var data = this.flat_data,
-		  longest_label_length;
+           longest_label_length;
 
-	    // Round values
-	    data = this.roundValues(data, 2);
-
-	    longest_label_length = $A(data).sort(function (a, b) { return a.toString().length < b.toString().length; }).first().toString().length;
-	    longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
-	    return longest_label_length * this.options.font_size;
-    } else {
-	    return 0;
+        // Round values
+      data = this.roundValues(data, 2);
+      longest_label_length = $A(data).max(function (value,i) { return value.toString().length; });
+      longest_label_length = longest_label_length > 2 ? longest_label_length - 1 : longest_label_length;
+      result = longest_label_length * this.options.font_size;
     }
-},
+    return result;
+  },
 
 paddingBottomOffset: function () {
 	/* height of the text */
