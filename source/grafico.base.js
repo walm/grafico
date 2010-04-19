@@ -53,61 +53,141 @@ Grafico.Base = Class.create({
 });
 
 Grafico.Normaliser = Class.create({
-  initialize: function (data, options) {
+  initialize: function(data, options) {
     this.options = {
-      start_value: null
+      start_value: undefined, // override start_value
+      number_of_tickmarks: 10 // number of labels to aim for
     };
-    Object.extend(this.options, options || { });
+    Object.extend(this.options, options || {});
 
+    // Data range
     this.min = data.min();
     this.max = data.max();
-    this.standard_deviation = data.standard_deviation();
-    this.range = 0;
-    this.same_values = !this.options.bar ? this.min == this.max : false;
-    this.step = this.same_values ? this.labelStep(Math.abs(this.min)) : this.labelStep(this.max - this.min);
-    this.start_value = this.calculateStart();
-    this.process();
-  },
 
-  calculateStart: function () {
-    var min = this.options.start_value !== null && this.min >= 0 ? this.options.start_value : this.min,
-        start_value = this.same_values ? (this.min - this.step * 5) : this.round(min, 1);
+    // Bottom of graph
+    this.start_value = undefined;
+    // Used in barcharts
+    this.zero_value  = undefined;
+    // Range displayed on the axis
+    this.range = undefined;
+    // Difference between labels
+    this.step = undefined;
 
-    /* This is a boundary condition */
-    if (this.min > 0 && start_value > this.min) {
-      return 0;
+    // Override start_value with options value
+    if (this.options.start_value !== undefined) {
+      this.start_value = this.options.start_value;
+      this.zero_value  = this.options.start_value;
     }
-    return start_value;
+
+    // Edgecase of zero values
+    if (this.min == 0 && this.min == this.max) {
+      this.start_value = 0;
+      this.zero_value  = 0;
+      this.range       = 1;
+      this.step        = 1;
+    } else {
+      var normalized_min;
+
+      if (this.start_value !== undefined && this.min >= 0) {
+        normalized_min = this.start_value;
+      } else {
+        normalized_min = this.min;
+      }
+      this.looseLabels(normalized_min, this.max);
+    }
   },
 
-  /* Given a value, this method rounds it to the nearest good value for an origin */
-  round: function (value, offset) {
-    var roundedValue = value,
-        multiplier;
-        offset = offset || 1;
+  // Based on:
+  // http://books.google.com/books?id=fvA7zLEFWZgC&pg=PA61&lpg=PA61#v=onepage&q&f=false
+  looseLabels: function(min, max) {
+    var range = min == max ? this.niceNumber(Math.abs(max), false) : this.niceNumber(max - min, false),
+        d     = this.niceNumber(range / (this.options.number_of_tickmarks - 1), true),
+        precision = [(-Math.floor(Math.LOG10E * Math.log(d))), 0].max(),
+        graphmin  = this.floorToPrecision(min / d , precision) * d,
+        graphmax  = this.ceilToPrecision(max / d, precision) * d,
+        margin    = this.roundToPrecision(this.niceNumber(0.5 * d, true), precision);
 
-    if (this.standard_deviation > 0.1) {
-      multiplier = Math.pow(10, -offset);
-      roundedValue = Math.round(value * multiplier) / multiplier;
+    this.step = this.roundToPrecision(d, precision);
 
-      if (roundedValue > this.min) {
-        return this.round(value - this.step);
+    // Leave some headroom on top
+    // handle cases of negative values
+    if (this.max <= 0) {
+      graphmax = [graphmax + margin, 0].min();
+    } else {
+      graphmax = graphmax + margin;
+    }
+
+    // Add some headroom to the bottom
+    if (this.min <= 0) {
+      graphmin = graphmin - margin;
+    } else {
+      graphmin = [graphmin - margin, 0].max();
+    }
+
+    // Round to a proper origin value
+    if (min !== max) {
+      graphmin = this.roundToOrigin(graphmin, 1);
+    }
+
+    this.range = this.roundToPrecision(Math.abs( this.ceilToPrecision(graphmax, precision) - this.floorToPrecision(graphmin, precision)), precision);
+    this.start_value = this.floorToPrecision(graphmin, precision);
+    this.zero_value = this.roundToPrecision(Math.abs(graphmin) / this.step, precision);
+  },
+
+  roundToPrecision: function(x, precision) {
+    var exp = Math.pow(10, precision);
+    return Math.round(x * exp) / exp;
+  },
+
+  floorToPrecision: function(x, precision) {
+    var exp = Math.pow(10, precision);
+    return Math.floor(x * exp) / exp;
+  },
+
+  ceilToPrecision: function(x, precision) {
+    var exp = Math.pow(10, precision);
+    return Math.ceil(x * exp) / exp;
+  },
+
+  niceNumber: function(x, round) {
+    var exp = Math.floor(Math.LOG10E * Math.log(x)), // exponent of x
+        f   = x / Math.pow(10, exp), // fractional part of x
+        nf; // nice, rounded fraction
+
+    if (round) {
+      if (f < 1.5) {
+        nf = 1.0;
+      } else if (f < 3) {
+        nf = 2.0;
+      } else if (f < 7) {
+        nf = 5.0;
+      } else {
+        nf = 10.0;
+      }
+    } else {
+      if (f <= 1) {
+        nf = 1.0;
+      } else if (f <= 2) {
+        nf = 2.0;
+      } else if (f <= 5) {
+        nf = 5.0;
+      } else {
+        nf = 10.0;
       }
     }
-    return roundedValue;
+
+    return nf * Math.pow(10, exp);
   },
 
-  process: function () {
-    this.range = this.same_values ? Math.abs(this.max) : this.max - this.start_value;
-    this.step = this.labelStep(this.range);
-    if (this.range / this.step > 15) {
-      this.step *= 3;
-    }
-    this.zero_value = (0 - this.start_value) / this.step;
-  },
+  roundToOrigin: function (value, offset) {
+    var rounded_value = value,
+        multiplier;
 
-  labelStep: function (value) {
-    return Math.pow(10, (Math.log(value) / Math.LN10).round() - 1);
+    offset = offset || 1;
+    multiplier = Math.pow(10, -offset);
+    rounded_value = Math.round(value * multiplier) / multiplier;
+
+    return (rounded_value > this.min) ? this.roundToOrigin(value - this.step) : rounded_value;
   }
 });
 
