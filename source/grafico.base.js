@@ -34,19 +34,19 @@ Grafico.Base = Class.create({
   deepCopy: function (obj) {
     var out, i, len;
     if (Object.prototype.toString.call(obj) === '[object Array]') {
-        out = [];
-        len = obj.length;
-        for (i = 0; i < len; i++) {
-            out[i] = arguments.callee(obj[i]);
-        }
-        return out;
+      out = [];
+      len = obj.length;
+      for (i = 0; i < len; i++) {
+        out[i] = arguments.callee(obj[i]);
+      }
+      return out;
     }
     if (typeof obj === 'object') {
-        out = {};
-        for (i in obj) {
-            out[i] = arguments.callee(obj[i]);
-        }
-        return out;
+      out = {};
+      for (i in obj) {
+        out[i] = arguments.callee(obj[i]);
+      }
+      return out;
     }
     return obj;
   }
@@ -68,6 +68,7 @@ Grafico.Normaliser = Class.create({
     this.start_value = this.calculateStart();
     this.process();
   },
+
   calculateStart: function () {
     var min = this.options.start_value !== null && this.min >= 0 ? this.options.start_value : this.min,
         start_value = this.same_values ? (this.min - this.step * 5) : this.round(min, 1);
@@ -78,6 +79,7 @@ Grafico.Normaliser = Class.create({
     }
     return start_value;
   },
+
   /* Given a value, this method rounds it to the nearest good value for an origin */
   round: function (value, offset) {
     var roundedValue = value,
@@ -94,6 +96,7 @@ Grafico.Normaliser = Class.create({
     }
     return roundedValue;
   },
+
   process: function () {
     this.range = this.same_values ? Math.abs(this.max) : this.max - this.start_value;
     this.step = this.labelStep(this.range);
@@ -102,6 +105,7 @@ Grafico.Normaliser = Class.create({
     }
     this.zero_value = (0 - this.start_value) / this.step;
   },
+
   labelStep: function (value) {
     return Math.pow(10, (Math.log(value) / Math.LN10).round() - 1);
   }
@@ -153,10 +157,10 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
       this.data_sets = this.stackData(this.data_sets);
     }
 
-    this.flat_data = this.data_sets.collect(function (data_set) {return data_set[1]; }).flatten();
+    this.flat_data = this.data_sets.collect(function (data_set) { return data_set[1]; }).flatten();
     if (this.hasBaseLine()) {
-    	this.flat_data.push(this.base_line);
-    	this.flat_data = this.flat_data.flatten();
+      this.flat_data.push(this.base_line);
+      this.flat_data = this.flat_data.flatten();
     }
     this.normaliser = new Grafico.Normaliser(this.flat_data, this.normaliserOptions());
     this.label_step = this.normaliser.step;
@@ -201,9 +205,9 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
 
     /* Calculate how many labels are required */
     this.y_label_count = (this.range / this.label_step).round();
-    if(isNaN(this.y_label_count)) {
-        this.y_label_count = 1;
-        this.options.show_vertical_labels = false;
+    if (isNaN(this.y_label_count)) {
+      this.y_label_count = 1;
+      this.options.show_vertical_labels = false;
     }
 
     if ((this.normaliser.min + (this.y_label_count * this.normaliser.step)) < this.normaliser.max) {
@@ -227,7 +231,6 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     this.globalHoverSet = this.paper.set();
     this.globalBlockSet = this.paper.set();
     this.globalAreaLineSet = this.paper.set();
-
 
     this.setChartSpecificOptions();
     this.draw();
@@ -276,12 +279,14 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     var posx = 0,
         posy = 0,
         mousepos;
-    if (!e) {e = window.event; }
-    if (e.pageX || e.pageY)   {
+    if (!e) {
+      e = window.event;
+    }
+    if (e.pageX || e.pageY) {
       posx = e.pageX;
       posy = e.pageY;
     }
-    else if (e.clientX || e.clientY)   {
+    else if (e.clientX || e.clientY) {
       posx = e.clientX + document.body.scrollLeft - document.documentElement.scrollLeft;
       posy = e.clientY + document.body.scrollTop - document.documentElement.scrollTop;
     }
@@ -335,153 +340,154 @@ Grafico.BaseGraph = Class.create(Grafico.Base, {
     return result;
   },
 
-paddingBottomOffset: function () {
-	/* height of the text */
-	return this.options.font_size;
-},
+  paddingBottomOffset: function () {
+    /* height of the text */
+    return this.options.font_size;
+  },
 
-normalise: function (value) {
-	var total = this.start_value === 0 ? this.top_value : this.range;
-	if (total === 0) {total = 1;}
-	return ((value / total) * this.graph_height);
-},
+  normalise: function (value) {
+    var total = this.start_value === 0 ? this.top_value : this.range;
+    if (total === 0) {total = 1;}
+    return ((value / total) * this.graph_height);
+  },
 
-draw: function () {
-	if (this.options.grid) {
-		this.drawGrid();
-	}
-	if (this.options.watermark) {
-		this.drawWatermark();
-	}
+  draw: function () {
+    if (this.options.grid) {
+      this.drawGrid();
+    }
+    if (this.options.watermark) {
+      this.drawWatermark();
+    }
 
-	if (this.options.show_vertical_labels) {
-		this.drawVerticalLabels();
-	}
+    if (this.options.show_vertical_labels) {
+      this.drawVerticalLabels();
+    }
 
-	if (this.options.show_horizontal_labels) {
-		this.drawHorizontalLabels();
-	}
+    if (this.options.show_horizontal_labels) {
+      this.drawHorizontalLabels();
+    }
 
-	if (!this.options.watermark) {
-		this.drawLinesInit(this);
-	}
+    if (!this.options.watermark) {
+      this.drawLinesInit(this);
+    }
 
-	if (this.options.draw_axis) {
-		this.drawAxis();
-	}
+    if (this.options.draw_axis) {
+      this.drawAxis();
+    }
 
-	if (this.start_value !== 0 && this.options.focus_hint) {
-		this.drawFocusHint();
-	}
+    if (this.start_value !== 0 && this.options.focus_hint) {
+      this.drawFocusHint();
+    }
 
-	if (this.options.meanline) {
-		this.drawMeanLine(this.normaliseData(this.flat_data));
-	}
-},
+    if (this.options.meanline) {
+      this.drawMeanLine(this.normaliseData(this.flat_data));
+    }
+  },
 
-drawLinesInit: function (thisgraph) {
-	thisgraph.data_sets.each(function (data, index) {
-		thisgraph.drawLines(data[0], thisgraph.options.colors[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element, index);
-	}.bind(thisgraph));
-},
+  drawLinesInit: function (thisgraph) {
+    thisgraph.data_sets.each(function (data, index) {
+      thisgraph.drawLines(data[0], thisgraph.options.colors[data[0]], thisgraph.normaliseData(data[1]), thisgraph.options.datalabels[data[0]], thisgraph.element, index);
+    }.bind(thisgraph));
+  },
 
-drawWatermark: function () {
-	var watermark = this.options.watermark,
-	watermarkimg = new Image(),
-	thisgraph = this;
-	watermarkimg.onload = function (){
-		var right, bottom, image;
-		if (thisgraph.options.watermark_location === "middle") {
-			right = (thisgraph.graph_width - watermarkimg.width)/2 + thisgraph.x_padding_left;
-			bottom = (thisgraph.graph_height - watermarkimg.height)/2 + thisgraph.y_padding_top;
-		} else {
-			right = thisgraph.graph_width - watermarkimg.width + thisgraph.x_padding_left - 2;
-			bottom = thisgraph.graph_height - watermarkimg.height + thisgraph.y_padding_top - 2;
-		}
-		image = thisgraph.paper.image(watermarkimg.src, right, bottom, watermarkimg.width, watermarkimg.height).attr({'opacity': '0.4'});
+  drawWatermark: function () {
+    var watermark = this.options.watermark,
+        watermarkimg = new Image(),
+        thisgraph = this;
 
-		thisgraph.drawLinesInit(thisgraph, thisgraph.data);
+    watermarkimg.onload = function (){
+      var right, bottom, image;
+      if (thisgraph.options.watermark_location === "middle") {
+        right = (thisgraph.graph_width - watermarkimg.width) / 2 + thisgraph.x_padding_left;
+        bottom = (thisgraph.graph_height - watermarkimg.height) / 2 + thisgraph.y_padding_top;
+      } else {
+        right = thisgraph.graph_width - watermarkimg.width + thisgraph.x_padding_left - 2;
+        bottom = thisgraph.graph_height - watermarkimg.height + thisgraph.y_padding_top - 2;
+      }
+      image = thisgraph.paper.image(watermarkimg.src, right, bottom, watermarkimg.width, watermarkimg.height).attr({'opacity': '0.4'});
 
-		if (thisgraph.options.stacked_fill||thisgraph.options.area) {
-			image.toFront();
-		}
-	};
-	watermarkimg.src = watermark.src || watermark;
-},
+      thisgraph.drawLinesInit(thisgraph, thisgraph.data);
 
-drawGrid: function () {
-	var path = this.paper.path().attr({ stroke: this.options.grid_color}),
-	y, x, x_labels;
+      if (thisgraph.options.stacked_fill||thisgraph.options.area) {
+        image.toFront();
+      }
+    };
+    watermarkimg.src = watermark.src || watermark;
+  },
 
-	if (this.options.show_horizontal_grid) {
-		y = this.graph_height + this.y_padding_top;
-		for (var i = 0; i < this.y_label_count+1; i++) {
-			path.moveTo(this.x_padding_left-0.5, parseInt(y, 10)+0.5);
-			path.lineTo(this.x_padding_left + this.graph_width-0.5, parseInt(y, 10)+0.5);
-			y = y - (this.graph_height / this.y_label_count);
-		}
-	}
-	if (this.options.show_vertical_grid) {
-		x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset;
-		x_labels = this.options.labels.length;
+  drawGrid: function () {
+    var path = this.paper.path().attr({ stroke: this.options.grid_color}),
+        y, x, x_labels, i;
 
-		for (var i = 0; i < x_labels; i++) {
-			if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
-				path.moveTo(parseInt(x, 10), this.y_padding_top);
-				path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
-			}
-			x = x + this.step;
-		}
-	}
-},
+    if (this.options.show_horizontal_grid) {
+      y = this.graph_height + this.y_padding_top;
+      for (i = 0; i < this.y_label_count + 1; i++) {
+        path.moveTo(this.x_padding_left - 0.5, parseInt(y, 10) + 0.5);
+        path.lineTo(this.x_padding_left + this.graph_width - 0.5, parseInt(y, 10) + 0.5);
+        y = y - (this.graph_height / this.y_label_count);
+      }
+    }
+    if (this.options.show_vertical_grid) {
+      x = this.x_padding_left + this.options.plot_padding + this.grid_start_offset;
+      x_labels = this.options.labels.length;
 
-drawLines: function (label, color, data, datalabel, element, graphindex) {
-	var coords = this.calculateCoords(data),
-	y_offset = (this.graph_height + this.y_padding_top),
-	cursor,
-	cursor2,
-	odd_horizontal_offset,
-	rel_opacity;
+      for (i = 0; i < x_labels; i++) {
+        if ((this.options.hide_empty_label_grid === true && this.options.labels[i] !== "") || this.options.hide_empty_label_grid === false) {
+          path.moveTo(parseInt(x, 10), this.y_padding_top);
+          path.lineTo(parseInt(x, 10), this.y_padding_top + this.graph_height);
+        }
+        x = x + this.step;
+      }
+    }
+  },
 
-	if (this.options.start_at_zero === false) {
-		odd_horizontal_offset=0;
-		$A(coords).each(function (coord, index) {
-			if (coord[1] === y_offset) {odd_horizontal_offset++;}
-		});
-		this.options.odd_horizontal_offset = odd_horizontal_offset;
+  drawLines: function (label, color, data, datalabel, element, graphindex) {
+    var coords = this.calculateCoords(data),
+        y_offset = (this.graph_height + this.y_padding_top),
+        cursor,
+        cursor2,
+        odd_horizontal_offset,
+        rel_opacity;
 
-		if (this.options.odd_horizontal_offset > 1) {
-			coords.splice(0, this.options.odd_horizontal_offset);
-		}
-	}
+    if (this.options.start_at_zero === false) {
+      odd_horizontal_offset = 0;
+      $A(coords).each(function (coord, index) {
+        if (coord[1] === y_offset) {odd_horizontal_offset++;}
+      });
+      this.options.odd_horizontal_offset = odd_horizontal_offset;
 
-	if (this.options.stacked_fill||this.options.area) {
-		if (this.options.area) {
-			rel_opacity = this.options.area_opacity ? this.options.area_opacity : 1.5/this.data_sets.collect(function (data_set){return data_set.length;}).length;
-			cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0', opacity:rel_opacity, 'stroke-opacity':0});
-		} else {
-			cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0'});
-		}
+      if (this.options.odd_horizontal_offset > 1) {
+        coords.splice(0, this.options.odd_horizontal_offset);
+      }
+    }
 
-		/* add first and last to fill the area */
-		if (!this.hasBaseLine()) {
-			coords.unshift([coords[0][0] , y_offset]);
-			coords.push([coords[coords.length-1][0] , y_offset]);
-		}
-	} else {
-		cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
-	}
+    if (this.options.stacked_fill || this.options.area) {
+      if (this.options.area) {
+        rel_opacity = this.options.area_opacity ? this.options.area_opacity : 1.5 / this.data_sets.collect(function (data_set) { return data_set.length; }).length;
+        cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0', opacity: rel_opacity, 'stroke-opacity': 0});
+      } else {
+        cursor = this.paper.path().attr({stroke: color, fill: color, 'stroke-width': '0'});
+      }
 
-	$A(coords).each(function (coord, index) {
-		var x = coord[0],
-		y = coord[1];
-		if (color instanceof Array) {
-			var color_index = index % color.length;
-			this.drawPlot(index, cursor, x, y, color[color_index], coords, datalabel, element, graphindex);
-		} else {
-			this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
-		}
-	}.bind(this));
+      /* add first and last to fill the area */
+      if (!this.hasBaseLine()) {
+        coords.unshift([coords[0][0] , y_offset]);
+        coords.push([coords[coords.length-1][0] , y_offset]);
+      }
+    } else {
+      cursor = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
+    }
+
+    $A(coords).each(function (coord, index) {
+      var x = coord[0],
+      y = coord[1];
+      if (color instanceof Array) {
+        var color_index = index % color.length;
+        this.drawPlot(index, cursor, x, y, color[color_index], coords, datalabel, element, graphindex);
+      } else {
+        this.drawPlot(index, cursor, x, y, color, coords, datalabel, element, graphindex);
+      }
+    }.bind(this));
 
     if (this.options.area && this.options.stroke_width > 0) {
       cursor2 = this.paper.path().attr({stroke: color, 'stroke-width': this.options.stroke_width + "px"});
@@ -511,14 +517,16 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
       return [x, y_offset - value];
     }.bind(this));
 
-    if (!this.hasBaseLine()) return top;
+    if (!this.hasBaseLine()) {
+      return top;
+    }
 
     x += this.step;
     var bottom = this.getNormalizedBaseLine();
 
     for (var i = bottom.length - 1; i >= 0; i--) {
-    	x -= this.step;
-    	top.push([x, y_offset - bottom[i]]);
+      x -= this.step;
+      top.push([x, y_offset - bottom[i]]);
     }
     return top;
   },
@@ -540,7 +548,8 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
         offset = $A(data).inject(0, function (value, sum) { return sum + value; }) / data.length - 0.5;
         offset = this.options.bar ? offset + (this.zero_value * (this.graph_height / this.y_label_count)) : offset;
 
-    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset).lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom - offset);
+    cursor.moveTo(this.x_padding_left - 1, this.options.height - this.y_padding_bottom - offset).
+           lineTo(this.graph_width + this.x_padding_left, this.options.height - this.y_padding_bottom - offset);
   },
 
   drawAxis: function () {
@@ -586,8 +595,8 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
 
     labels.each(function (label) {
       if (this.options.draw_axis &&
-		  ((this.options.hide_empty_label_grid === true && label !== "") || this.options.hide_empty_label_grid === false) &&
-		  this.options.show_ticks) {
+          ((this.options.hide_empty_label_grid === true && label !== "") || this.options.hide_empty_label_grid === false) &&
+          this.options.show_ticks) {
         cursor.moveTo(parseInt(x, 10), parseInt(y, 10) + 0.5);
         cursor.lineTo(parseInt(x, 10) + y_offset(5), parseInt(y, 10) + 0.5 + x_offset(5));
       }
@@ -610,9 +619,9 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
     var extra_options = this.options.label_rotation ? {rotation:this.options.label_rotation, translation: -this.options.font_size + " 0"} : {},
         labels = this.options.labels;
 
-    if(this.options.label_max_size) {
+    if (this.options.label_max_size) {
       for (var i = 0; i < labels.length; i++) {
-         labels[i] = labels[i].truncate(this.options.label_max_size+1, "…");
+        labels[i] = labels[i].truncate(this.options.label_max_size+1, "…");
       }
     }
 
@@ -625,17 +634,21 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
         hover_color = this.options.hover_color || color,
         hoverSet = this.paper.set(),
         textpadding = 4,
-        text = this.paper.text(cursor.attrs.x, cursor.attrs.y - (this.options.font_size * 1.5) - textpadding, datalabel).attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
+        text = this.paper.text(cursor.attrs.x, cursor.attrs.y - (this.options.font_size * 1.5) - textpadding, datalabel).
+                          attr({'font-size': this.options.font_size, fill:this.options.hover_text_color,opacity: 1}),
         textbox = text.getBBox(),
         roundRect = this.drawRoundRect(text, textbox, textpadding);
 
     hoverSet.push(roundRect,text).attr({opacity: 0});
-    this.checkHoverPos({rect:roundRect,set:hoverSet});
+    this.checkHoverPos({rect: roundRect, set: hoverSet});
     this.globalHoverSet.push(hoverSet);
 
     cursor.hover(function (event) {
-      if (colorattr === "fill") { cursor.animate({fill : hover_color,stroke : hover_color}, 200);}
-      else {                    cursor.animate({stroke : hover_color}, 200);}
+      if (colorattr === "fill") {
+        cursor.animate({fill : hover_color,stroke : hover_color}, 200);
+      } else {
+        cursor.animate({stroke : hover_color}, 200);
+      }
 
       var mousepos = thisgraph.getMousePos(event);
       hoverSet[0].attr({
@@ -661,8 +674,11 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
       });
 
     }, function (event) {
-      if (colorattr==="fill") { cursor.animate({fill : color,stroke : color}, 200);}
-      else {                    cursor.animate({stroke : color}, 200);}
+      if (colorattr === "fill") {
+        cursor.animate({fill : color,stroke : color}, 200);
+      } else {
+        cursor.animate({stroke : color}, 200);
+      }
       hoverSet.attr({opacity:0});
     });
   },
@@ -679,37 +695,37 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
     if (elements.textpadding) { textpadding = elements.textpadding;}
 
     if (rect && set) {
-      /*top*/
+      /* top */
       if (rect.attrs.y < 0) {
         if (nib && marker) {
           setbox = set.getBBox();
-          set.translate(0,setbox.height+(textpadding*2));
-          marker.translate(0,-setbox.height-(textpadding*2));
-          nib.translate(0,-rectsize.height-textpadding+1.5).scale(1,-1);
+          set.translate(0,     setbox.height + (textpadding * 2));
+          marker.translate(0, -setbox.height - (textpadding * 2));
+          nib.translate(0,    -rectsize.height - textpadding + 1.5).scale(1, -1);
         } else {
           diff = rect.attrs.y;
-          set.translate(0,1+(diff*-1));
+          set.translate(0, 1 - diff);
         }
       }
-      /*bottom*/
-      if ((rect.attrs.y +rectsize.height) > this.options.height) {
-        diff = (rect.attrs.y +rectsize.height) - this.options.height;
-        set.translate(0,(diff*-1)-1);
-        if (marker) {marker.translate(0,diff+1);}
+      /* bottom */
+      if ((rect.attrs.y + rectsize.height) > this.options.height) {
+        diff = (rect.attrs.y + rectsize.height) - this.options.height;
+        set.translate(0, -diff - 1);
+        if (marker) { marker.translate(0, diff + 1); }
       }
-      /*left*/
+      /* left */
       if (rect.attrs.x < 0) {
         diff = rect.attrs.x;
-        set.translate((diff*-1)+1,0);
-        if (nib) {nib.translate(diff-1,0);}
-        if (marker) {marker.translate(diff-1,0);}
+        set.translate(-diff + 1, 0);
+        if (nib)    { nib.translate(diff - 1, 0); }
+        if (marker) { marker.translate(diff - 1, 0); }
       }
-      /*right*/
-      if ((rect.attrs.x +rectsize.width) > this.options.width) {
-        diff = (rect.attrs.x +rectsize.width) - this.options.width;
-        set.translate((diff*-1)-1,0);
-        if (nib) {nib.translate(diff+1,0);}
-        if (marker) {marker.translate(diff+1,0);}
+      /* right */
+      if ((rect.attrs.x + rectsize.width) > this.options.width) {
+        diff = (rect.attrs.x + rectsize.width) - this.options.width;
+        set.translate(-diff - 1, 0);
+        if (nib)    { nib.translate(diff + 1, 0); }
+        if (marker) { marker.translate(diff + 1, 0); }
       }
     }
   },
@@ -717,19 +733,19 @@ drawLines: function (label, color, data, datalabel, element, graphindex) {
   drawNib: function (text, textbox, textpadding) {
     return this.paper.path()
     .attr({fill: this.options.label_color, opacity: 1, stroke: this.options.label_color, 'stroke-width':'0px'})
-    .moveTo(text.attrs.x-textpadding,text.attrs.y+(textbox.height/2)+textpadding-1)
-    .lineTo(text.attrs.x,text.attrs.y+(textbox.height/2)+(textpadding*2))
-    .lineTo(text.attrs.x+textpadding,text.attrs.y+(textbox.height/2)+textpadding-1)
+    .moveTo(text.attrs.x - textpadding, text.attrs.y + (textbox.height / 2) + textpadding - 1)
+    .lineTo(text.attrs.x, text.attrs.y + (textbox.height / 2) + (textpadding * 2))
+    .lineTo(text.attrs.x + textpadding, text.attrs.y + (textbox.height / 2) + textpadding - 1)
     .andClose();
   },
 
   drawRoundRect : function(text, textbox, textpadding) {
     return this.paper.rect(
-    text.attrs.x-(textbox.width/2)-textpadding,
-    text.attrs.y-(textbox.height/2)-textpadding,
-    textbox.width+(textpadding*2),
-    textbox.height+(textpadding*2),
-    textpadding*1.5).attr({fill: this.options.label_color,opacity: 1, stroke: this.options.label_color, 'stroke-width':'0px'});
+    text.attrs.x - (textbox.width / 2) - textpadding,
+    text.attrs.y - (textbox.height / 2) - textpadding,
+    textbox.width + (textpadding * 2),
+    textbox.height + (textpadding * 2),
+    textpadding * 1.5).attr({fill: this.options.label_color,opacity: 1, stroke: this.options.label_color, 'stroke-width':'0px'});
   }
 });
 
@@ -778,40 +794,39 @@ Array.prototype.remove = function(from, to) {
 /* Raphael path methods. Supporting methods to make dealing with arrays easier */
 Raphael.el.isAbsolute = true;
 Raphael.el.absolutely = function () {
-    this.isAbsolute = 1;
-    return this;
+  this.isAbsolute = 1;
+  return this;
 };
 
 Raphael.el.relatively = function () {
-    this.isAbsolute = 0;
-    return this;
+  this.isAbsolute = 0;
+  return this;
 };
 
 Raphael.el.moveTo = function (x, y) {
-    this._last = {x: x, y: y};
-    return this.attr({path: this.attrs.path + ["m", "M"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
+  this._last = {x: x, y: y};
+  return this.attr({path: this.attrs.path + ["m", "M"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
 };
 
 Raphael.el.lineTo = function (x, y) {
-    this._last = {x: x, y: y};
-    return this.attr({path: this.attrs.path + ["l", "L"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
+  this._last = {x: x, y: y};
+  return this.attr({path: this.attrs.path + ["l", "L"][+this.isAbsolute] + parseFloat(x) + " " + parseFloat(y)});
 };
 
 Raphael.el.cplineTo = function (x, y, w) {
-    if (x > this._last.x) {
-      this.attr({path: this.attrs.path + ["C", this._last.x + w, this._last.y, x - w, y, x, y]});
-    }
-    else if (x == this._last.x) {
-      this.lineTo(x, y);
-    }
-    else {
-      this.attr({path: this.attrs.path + ["C", this._last.x - w, this._last.y, x + w, y, x, y]});
-    }
-    this._last = {x: x, y: y};
-    return this;
+  if (x > this._last.x) {
+    this.attr({path: this.attrs.path + ["C", this._last.x + w, this._last.y, x - w, y, x, y]});
+  }
+  else if (x == this._last.x) {
+    this.lineTo(x, y);
+  }
+  else {
+    this.attr({path: this.attrs.path + ["C", this._last.x - w, this._last.y, x + w, y, x, y]});
+  }
+  this._last = {x: x, y: y};
+  return this;
 };
 
 Raphael.el.andClose = function () {
-    return this.attr({path: this.attrs.path + "z"});
+  return this.attr({path: this.attrs.path + "z"});
 };
-
