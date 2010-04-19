@@ -44,7 +44,7 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
   drawPlot: function (index, cursor, x, y, color, coords, datalabel, element) {
     var start_y = this.options.height - this.y_padding_bottom - (this.zero_value * (this.graph_height / this.y_label_count)),
         lastcolor = this.options.bargraph_lastcolor,
-        negativecolor = this.options.bargraph_negativecolor,
+        negativecolor = this.options.bargraph_negativecolor || color,
         color2;
 
     x = x + this.bar_padding;
@@ -352,7 +352,7 @@ Grafico.HorizontalBarGraph = Class.create(Grafico.BarGraph, {
         offset = this.zero_value * (this.graph_width / this.y_label_count),
         x = this.x_padding_left + offset - 0.5,
         lastcolor = this.options.bargraph_lastcolor,
-        negativecolor = this.options.bargraph_negativecolor;
+        negativecolor = this.options.bargraph_negativecolor || color;
     this.datalabel = datalabel;
 
     $A(data).each(function (value, index) {
