@@ -118,7 +118,7 @@ Grafico.Normaliser = Class.create({
     }
 
     // Add some headroom to the bottom
-    if (this.min <= 0) {
+    if (this.min < 0) {
       graphmin = graphmin - margin;
     } else {
       graphmin = [graphmin - margin, 0].max();
@@ -186,7 +186,6 @@ Grafico.Normaliser = Class.create({
     offset = offset || 1;
     multiplier = Math.pow(10, -offset);
     rounded_value = Math.round(value * multiplier) / multiplier;
-
     return (rounded_value > this.min) ? this.roundToOrigin(value - this.step) : rounded_value;
   }
 });
