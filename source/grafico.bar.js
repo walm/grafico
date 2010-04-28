@@ -155,12 +155,28 @@ Grafico.BarGraph = Class.create(Grafico.BaseGraph, {
       hoverSet.translate(0, 1 + (roundRect.attrs.y * -1));
     }
 
+	var hasClickAction = this.options.onclick && Object.isFunction(this.options.onclick);
+    if (hasClickAction) {
+      var data_sets = this.data_sets, 
+          labels = this.options.labels,
+          clickAction = this.options.onclick;
+
+       hoverbar.click(function (event) {
+          clickAction(index, labels[index], datalabel);
+      });
+    }	
+
+	var element = this.element;	
     hoverbar.hover(function (event) {
       bargraph.animate({fill: hover_color, stroke: hover_color}, 200);
       hoverSet.animate({opacity: 1}, 200);
+      if (hasClickAction)
+        element.setStyle({ 'cursor':'pointer' });
     }, function (event) {
       bargraph.animate({fill: color,stroke: color}, 200);
       hoverSet.animate({opacity: 0}, 200);
+      if (hasClickAction)
+        element.setStyle({ 'cursor':'default' });
     });
   }
 });
@@ -297,13 +313,29 @@ Grafico.StackedBarGraph = Class.create(Grafico.BarGraph, {
     if (roundRect.attrs.y < 0) {
       hoverSet.translate(0, 1 + (roundRect.attrs.y * -1));
     }
+	
+    var hasClickAction = this.options.onclick && Object.isFunction(this.options.onclick);
+    if (hasClickAction) {
+      var data_sets = this.data_sets, 
+          labels = this.options.labels,
+          clickAction = this.options.onclick;
 
+       hoverbar.click(function (event) {
+          clickAction(index, labels[index], datalabel);
+      });
+    }
+	
+	var element = this.element;	
     hoverbar.hover(function (event) {
       bargraph.animate({fill: hover_color}, 200);
       hoverSet.animate({opacity: 1}, 200);
+      if (hasClickAction)
+        element.setStyle({ 'cursor':'pointer' });
     }, function (event) {
       bargraph.animate({fill: color}, 200);
       hoverSet.animate({opacity: 0}, 200);
+	  if (hasClickAction)
+        element.setStyle({ 'cursor':'default' });
     });
   }
 });
